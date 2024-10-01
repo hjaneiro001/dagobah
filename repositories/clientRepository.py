@@ -4,11 +4,12 @@ class ClientRepository:
     def __init__(self):
         pass
 
-    def save(self, postClientDto):
+    def save(self, client):
+        print(client)
         return
 
-    def find_client_by_taxId(self, taxID):
-        return None
+    def find_client_by_tax_id(self, taxID):
+        return
 
     def get_all(self):
 
@@ -64,4 +65,3 @@ class ClientRepository:
         )
 
         return client
-
