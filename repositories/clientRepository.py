@@ -1,67 +1,122 @@
-from entities.client import Client
+from entities.client import Client, ClientBuilder
+import pymysql.cursors
 
 class ClientRepository:
-    def __init__(self):
-        pass
 
-    def save(self, client):
-        print(client)
-        return
+    def __init__(self, connection):
+        self.conn = connection
 
-    def find_client_by_tax_id(self, taxID):
-        return
+
+    def create(self, client):
+            sql: str = """
+                INSERT INTO clients (client_name, client_address, client_city, client_state, client_country, client_email, client_phone, client_type_id, client_tax_id, client_tax_condition, client_status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+
+            values = (
+                client.name, client.address, client.city, client.state, client.country,
+                client.email, client.phone, client.type_id, client.tax_id,
+                client.tax_condition, client.status
+            )
+
+            cursor = self.conn.cursor()
+            cursor.execute(sql, values)
+            self.conn.commit()
+
+
+    def find_by_tax_id(self, taxid: str):
+            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s"
+            cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+            cursor.execute(sql, (taxid,))
+            row = cursor.fetchone()
+            return row
+
+
+    def modify(self,client: Client):
+        sql: str = """
+                UPDATE clients
+                SET client_name = %s, client_address = %s, client_city = %s, client_state = %s,
+                    client_country = %s, client_email = %s, client_phone = %s, client_type_id = %s,
+                    client_tax_id = %s, client_tax_condition = %s, client_status = %s
+                WHERE client_id = %s
+            """
+
+        values = (
+            client.name, client.address, client.city, client.state, client.country,
+            client.email, client.phone, client.type_id, client.tax_id,
+            client.tax_condition, client.status, client.pk_client
+        )
+
+        cursor = self.conn.cursor()
+        cursor.execute(sql, values)
+        self.conn.commit()
+        cursor.close()
+
+
+    def get_id(self, id: int):
+        sql = "SELECT * FROM clients WHERE client_id = %s"
+        cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(sql, (id,))
+        row = cursor.fetchone()
+
+        client = (ClientBuilder()
+                .pk_client(row.get('client_id'))
+                .name(row.get('client_name'))
+                .address(row.get('client_address'))
+                .city(row.get('client_city'))
+                .state(row.get('client_state'))
+                .country(row.get('client_country'))
+                .email(row.get('client_email'))
+                .phone(row.get('client_phone'))
+                .type_id(row.get('client_type_id'))
+                .tax_id(row.get('client_tax_id'))
+                .tax_condition(row.get('client_tax_condition'))
+                .status(row.get('client_status'))
+                .build())
+
+        return client
+
 
     def get_all(self):
 
-        client1 = Client(
-            pk_client=1,
-            name="John Doe",
-            address="123 Fake Street",
-            city="Springfield",
-            state="Illinois",
-            country="USA",
-            email="john.doe@fakemail.com",
-            phone="+1 555 123 4567",
-            type_id=1,
-            tax_id="US123456789",
-            tax_condition="Individual",
-            status="Active"
-        )
+            sql = "SELECT * FROM clients WHERE client_status = 1"
+            cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+            cursor.execute(sql)
+            rows = cursor.fetchall()
 
-        client2 = Client(
-            pk_client=2,
-            name="Jane Smith",
-            address="456 Mock Ave",
-            city="Metropolis",
-            state="New York",
-            country="USA",
-            email="jane.smith@mockmail.com",
-            phone="+1 555 987 6543",
-            type_id=2,
-            tax_id="US987654321",
-            tax_condition="Company",
-            status="Active"
-        )
+            clients:  list[Client] = []
+            for row in rows:
+                client = (ClientBuilder()
+                          .pk_client(row.get('client_id'))
+                          .name(row.get('client_name'))
+                          .address(row.get('client_address'))
+                          .city(row.get('client_city'))
+                          .state(row.get('client_state'))
+                          .country(row.get('client_country'))
+                          .email(row.get('client_email'))
+                          .phone(row.get('client_phone'))
+                          .type_id(row.get('client_type_id'))
+                          .tax_id(row.get('client_tax_id'))
+                          .tax_condition(row.get('client_tax_condition'))
+                          .status(row.get('client_status'))
+                          .build())
 
-        clients = [client1, client2]
+                clients.append(client)
 
-        return clients
+            return clients
 
-    def get_id(self, id):
+    def delete(self, id: int):
 
-        client = Client(
-            pk_client=1,
-            name="John Doe",
-            address="123 Fake Street",
-            city="Springfield",
-            state="Illinois",
-            country="USA",
-            email="john.doe@fakemail.com",
-            phone="+1 555 123 4567",
-            type_id=1,
-            tax_id="US123456789",
-            tax_condition="Individual",
-            status="Active"
-        )
+        sql: str = """
+                   UPDATE clients
+                   SET client_status = 0
+                   WHERE client_id = %s
+               """
 
-        return client
+        cursor = self.conn.cursor()
+        cursor.execute(sql, id)
+        self.conn.commit()
+        cursor.close()
+
+
+

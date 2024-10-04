@@ -1,16 +1,12 @@
 from flask import Blueprint
 from flask import request, jsonify
-
 from dtos.clientDto import ClientDto
 from dtos.responseClientDto import ResponseClientDto
-
 from exceptions.wrapperExceptions import handle_exceptions
-from services.clientService import ClientService
-from repositories.clientRepository import  ClientRepository
 from entities.client import Client, ClientBuilder
+from modules import clientService
 
 clientsBp = Blueprint('clients', __name__)
-clientService = ClientService(ClientRepository())
 
 @clientsBp.route("/", methods=['GET'])
 @handle_exceptions
@@ -25,7 +21,7 @@ def get_all():
 @handle_exceptions
 def get_id(id):
     client = clientService.get_id(id)
-    result = ResponseClientDto().dump(client)
+    result: Client = ResponseClientDto().dump(client)
     return jsonify(result)
 
 
@@ -46,7 +42,7 @@ def create():
                       .tax_condition(post_client_dto["tax_condition"])
                       .build())
     clientService.create(client)
-    return jsonify({"message": "User created successfully"}), 201
+    return jsonify({"message": "Client created successfully"}), 201
 
 
 @clientsBp.route("/<int:id>", methods=['PUT'])

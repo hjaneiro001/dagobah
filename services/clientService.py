@@ -8,9 +8,9 @@ class ClientService:
         self.client_repository = client_repository
 
     def create(self, client: Client):
-        if not self.client_repository.find_client_by_tax_id(client.tax_id):
-            client.status = "A"
-            self.client_repository.save(client)
+        if not self.client_repository.find_by_tax_id(client.tax_id):
+            client.status = 1
+            self.client_repository.create(client)
         else:
             raise ClientAlreadyExistsException
 
@@ -23,18 +23,17 @@ class ClientService:
             raise ClientNotFoundException
         return client
 
-    def modify(self,id,client: Client):
+    def modify(self,id: int,client: Client):
         client_to_modify: Client = self.client_repository.get_id(id)
         if client_to_modify is None:
             raise ClientNotFoundException
         client.status = client_to_modify.status
-        self.client_repository.save(client)
+        self.client_repository.modify(client_to_modify)
         return
 
     def delete(self, id):
         client = self.client_repository.get_id(id)
         if client is None:
             raise ClientNotFoundException
-        client.status = "I"
-        self.client_repository.save(client)
-        return client
+        self.client_repository.delete(id)
+        return

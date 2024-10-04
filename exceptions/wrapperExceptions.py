@@ -1,3 +1,4 @@
+import pymysql
 from flask import jsonify
 from marshmallow import ValidationError
 from exceptions.baseException import BaseException
@@ -13,6 +14,9 @@ def handle_exceptions(f):
             print(err)
             message = list(err.messages.values())[0][0]
             return jsonify({"error": message}), 400
+        except pymysql.MySQLError as e:
+            print("Error: An error ocurred when we use database")
+            return jsonify({"error": "An internal server error occurred"}), 500
         except Exception as e:
             print(e)
             return jsonify({"error": "An internal server error occurred"}), 500
