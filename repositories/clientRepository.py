@@ -54,10 +54,13 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = "SELECT * FROM clients WHERE client_id = %s"
+        sql = "SELECT * FROM clients WHERE client_id = %s AND client_status = 1"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
+
+        if row is None:
+            return None
 
         client = (ClientBuilder()
                 .pk_client(row.get('client_id'))
