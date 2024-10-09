@@ -1,13 +1,17 @@
 from entities.client import Client, ClientBuilder
 import pymysql.cursors
 
+from entities.enums.clientStatus import ClientStatus
+from entities.enums.taxCondition import TaxCondition
+
+
 class ClientRepository:
 
     def __init__(self, connection):
         self.conn = connection
 
 
-    def create(self, client):
+    def create(self, client : Client):
             sql: str = """
                 INSERT INTO clients (client_name, client_address, client_city, client_state, client_country, client_email, client_phone, client_type_id, client_tax_id, client_tax_condition, client_status)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -16,7 +20,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id, client.tax_id,
-                client.tax_condition, client.status
+                client.tax_condition.value, client.status.value
             )
 
             cursor = self.conn.cursor()
@@ -25,14 +29,14 @@ class ClientRepository:
 
 
     def find_by_tax_id(self, taxid: str):
-            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s"
+            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s AND client_status = 'ACTIVE'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
             return row
 
 
-    def modify(self,client: Client):
+    def save(self,client: Client):
         sql: str = """
                 UPDATE clients
                 SET client_name = %s, client_address = %s, client_city = %s, client_state = %s,
@@ -44,7 +48,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id, client.tax_id,
-            client.tax_condition, client.status, client.pk_client
+            client.tax_condition.value, client.status.value, client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -54,7 +58,7 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = "SELECT * FROM clients WHERE client_id = %s AND client_status = 1"
+        sql = "SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -73,16 +77,15 @@ class ClientRepository:
                 .phone(row.get('client_phone'))
                 .type_id(row.get('client_type_id'))
                 .tax_id(row.get('client_tax_id'))
-                .tax_condition(row.get('client_tax_condition'))
-                .status(row.get('client_status'))
+                .tax_condition(TaxCondition(row.get('client_tax_condition')))
+                .status(ClientStatus(row.get('client_status')))
                 .build())
 
         return client
 
-
     def get_all(self):
 
-            sql = "SELECT * FROM clients WHERE client_status = 1"
+            sql = "SELECT * FROM clients WHERE client_status = 'ACTIVE'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -100,7 +103,7 @@ class ClientRepository:
                           .phone(row.get('client_phone'))
                           .type_id(row.get('client_type_id'))
                           .tax_id(row.get('client_tax_id'))
-                          .tax_condition(row.get('client_tax_condition'))
+                          .tax_condition(TaxCondition(row.get('client_tax_condition')))
                           .status(row.get('client_status'))
                           .build())
 
@@ -112,7 +115,7 @@ class ClientRepository:
 
         sql: str = """
                    UPDATE clients
-                   SET client_status = 0
+                   SET client_status = "INACTIVE"
                    WHERE client_id = %s
                """
 
