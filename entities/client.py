@@ -1,9 +1,10 @@
 from entities.enums.clientStatus import ClientStatus
+from entities.enums.clientType import ClientType
 from entities.enums.taxCondition import TaxCondition
 from entities.enums.typeId import TypeId
 
 class Client:
-    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, status :ClientStatus):
+    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :ClientStatus):
         self.pk_client :int = pk_client
         self.name :str = name
         self.address :str= address
@@ -15,6 +16,7 @@ class Client:
         self.type_id :TypeId = type_id
         self.tax_id :str= tax_id
         self.tax_condition :TaxCondition = tax_condition
+        self.client_type : ClientType = client_type
         self.status :ClientStatus= status
 
     def __str__(self):
@@ -27,7 +29,8 @@ class Client:
                 f"Phone: {self.phone}\n"
                 f"Phone: {self.type_id.value}\n"
                 f"Tax ID: {self.tax_id}\n"
-                f"Tax Condition: {self.tax_condition.value}")
+                f"Tax Condition: {self.tax_condition.value}\n"
+                f"Type: {self.client_type.value}")
 
     def to_dict(self):
         return {
@@ -42,6 +45,7 @@ class Client:
             "type_id": self.type_id.value,
             "tax_id": self.tax_id,
             "tax_condition": self.tax_condition.value,
+            "client_type": self.client_type.value,
             "status": self.status.value
         }
 
@@ -58,6 +62,7 @@ class ClientBuilder:
         self._type_id = None
         self._tax_id = None
         self._tax_condition = None
+        self._client_type = None
         self._status = None
 
     def pk_client(self, pk_client):
@@ -104,6 +109,10 @@ class ClientBuilder:
         self._tax_condition :TaxCondition = tax_condition
         return self
 
+    def client_type(self, client_type: ClientType):
+        self._client_type :ClientType = client_type
+        return self
+
     def status(self, status :ClientStatus):
         self._status :ClientStatus = status
         return self
@@ -121,5 +130,6 @@ class ClientBuilder:
             type_id=self._type_id,
             tax_id=self._tax_id,
             tax_condition=self._tax_condition,
+            client_type=self._client_type,
             status=self._status
         )

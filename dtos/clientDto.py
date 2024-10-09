@@ -11,3 +11,4 @@ class ClientDto(Schema):
     type_id = fields.String(required=True, error_messages={'required': 'The field type ID is required.'})
     tax_id = fields.String(required=True, error_messages={'required': 'The field tax ID is required.'})
     tax_condition = fields.String(required=True, error_messages={'required': 'The field tax condition is required.'})
+    client_type = fields.String(required=True, error_messages={'required': 'The field type is required.'})

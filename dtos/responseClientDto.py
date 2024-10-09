@@ -13,3 +13,4 @@ class ResponseClientDto(Schema):
     tax_id = fields.String(required=True, error_messages={'required': 'The field tax ID is required.'})
     tax_condition = fields.String(required=True, error_messages={'required': 'The field tax condition is required.'})
     status = fields.String(required=True, error_messages={'required': 'The field status is required.'})
+    client_type = fields.String(required=True, error_messages={'required': 'The field client_type is required.'})

@@ -24,7 +24,8 @@ def handle_exceptions(f):
             print("Error: An error ocurred when we use database")
             return jsonify({"error": "An internal server error occurred"}), 500
         except Exception as e:
-            print(traceback.format_exception())
+            print(e)
+            # print(traceback.format_exception())
             return jsonify({"error": "An internal server error occurred"}), 500
 
     wrapper.__name__ = f"{f.__name__}_wrapper"

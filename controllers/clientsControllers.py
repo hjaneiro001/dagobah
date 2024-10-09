@@ -3,6 +3,7 @@ from flask import request, jsonify
 from dtos.clientDto import ClientDto
 from dtos.responseClientDto import ResponseClientDto
 from entities.enums.taxCondition import TaxCondition
+from entities.enums.clientType import ClientType
 from entities.enums.typeId import TypeId
 from exceptions.wrapperExceptions import handle_exceptions
 from entities.client import Client, ClientBuilder
@@ -42,6 +43,7 @@ def create():
                       .type_id(TypeId(post_client_dto["type_id"]))
                       .tax_id(post_client_dto["tax_id"])
                       .tax_condition(TaxCondition(post_client_dto["tax_condition"]))
+                      .client_type(ClientType(post_client_dto["client_type"]))
                       .build())
     clientService.create(client)
     return jsonify({"message": "Client created successfully"}), 201
@@ -62,6 +64,7 @@ def modify(id :int):
                       .type_id(TypeId(modify_client_dto["type_id"]))
                       .tax_id(modify_client_dto["tax_id"])
                       .tax_condition(TaxCondition(modify_client_dto["tax_condition"]))
+                      .client_type(ClientType(modify_client_dto["client_type"]))
                       .build())
     clientService.modify(id, client)
     return jsonify({"message": "Client modfify successfully"}), 201
