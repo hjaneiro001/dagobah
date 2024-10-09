@@ -3,6 +3,7 @@ import pymysql.cursors
 
 from entities.enums.clientStatus import ClientStatus
 from entities.enums.taxCondition import TaxCondition
+from entities.enums.typeId import TypeId
 
 
 class ClientRepository:
@@ -19,7 +20,7 @@ class ClientRepository:
 
             values = (
                 client.name, client.address, client.city, client.state, client.country,
-                client.email, client.phone, client.type_id, client.tax_id,
+                client.email, client.phone, client.type_id.value, client.tax_id,
                 client.tax_condition.value, client.status.value
             )
 
@@ -47,7 +48,7 @@ class ClientRepository:
 
         values = (
             client.name, client.address, client.city, client.state, client.country,
-            client.email, client.phone, client.type_id, client.tax_id,
+            client.email, client.phone, client.type_id.value, client.tax_id,
             client.tax_condition.value, client.status.value, client.pk_client
         )
 
@@ -75,7 +76,7 @@ class ClientRepository:
                 .country(row.get('client_country'))
                 .email(row.get('client_email'))
                 .phone(row.get('client_phone'))
-                .type_id(row.get('client_type_id'))
+                .type_id(TypeId(row.get('client_type_id')))
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
                 .status(ClientStatus(row.get('client_status')))
@@ -101,7 +102,7 @@ class ClientRepository:
                           .country(row.get('client_country'))
                           .email(row.get('client_email'))
                           .phone(row.get('client_phone'))
-                          .type_id(row.get('client_type_id'))
+                          .type_id(TypeId(row.get('client_type_id')))
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
                           .status(row.get('client_status'))

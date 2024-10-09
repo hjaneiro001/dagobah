@@ -1,9 +1,9 @@
 from entities.enums.clientStatus import ClientStatus
 from entities.enums.taxCondition import TaxCondition
-
+from entities.enums.typeId import TypeId
 
 class Client:
-    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :str, tax_id :str, tax_condition :TaxCondition, status :ClientStatus):
+    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, status :ClientStatus):
         self.pk_client :int = pk_client
         self.name :str = name
         self.address :str= address
@@ -12,7 +12,7 @@ class Client:
         self.country :str= country
         self.email :str= email
         self.phone :str= phone
-        self.type_id :str= type_id
+        self.type_id :TypeId = type_id
         self.tax_id :str= tax_id
         self.tax_condition :TaxCondition = tax_condition
         self.status :ClientStatus= status
@@ -25,7 +25,7 @@ class Client:
                 f"Country: {self.country}\n"
                 f"Email: {self.email}\n"
                 f"Phone: {self.phone}\n"
-                f"Phone: {self.type_id}\n"
+                f"Phone: {self.type_id.value}\n"
                 f"Tax ID: {self.tax_id}\n"
                 f"Tax Condition: {self.tax_condition.value}")
 
@@ -39,10 +39,10 @@ class Client:
             "country": self.country,
             "email": self.email,
             "phone": self.phone,
-            "type_id": self.type_id,
+            "type_id": self.type_id.value,
             "tax_id": self.tax_id,
             "tax_condition": self.tax_condition.value,
-            "status": self.status
+            "status": self.status.value
         }
 
 class ClientBuilder:
@@ -93,7 +93,7 @@ class ClientBuilder:
         return self
 
     def type_id(self, type_id):
-        self._type_id :str = type_id
+        self._type_id :TypeId = type_id
         return self
 
     def tax_id(self, tax_id):
