@@ -1,10 +1,10 @@
-from entities.client import Client, ClientBuilder
+from app.entities.client import Client, ClientBuilder
 import pymysql.cursors
 
-from entities.enums.clientStatus import ClientStatus
-from entities.enums.taxCondition import TaxCondition
-from entities.enums.clientType import ClientType
-from entities.enums.typeId import TypeId
+from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.taxCondition import TaxCondition
+from app.entities.enums.clientType import ClientType
+from app.entities.enums.typeId import TypeId
 
 
 class ClientRepository:

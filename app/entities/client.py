@@ -1,7 +1,7 @@
-from entities.enums.clientStatus import ClientStatus
-from entities.enums.clientType import ClientType
-from entities.enums.taxCondition import TaxCondition
-from entities.enums.typeId import TypeId
+from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.clientType import ClientType
+from app.entities.enums.taxCondition import TaxCondition
+from app.entities.enums.typeId import TypeId
 
 class Client:
     def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :ClientStatus):

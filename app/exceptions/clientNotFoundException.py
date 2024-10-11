@@ -1,4 +1,4 @@
-from exceptions.baseException import BaseException
+from app.exceptions.baseException import BaseException
 
 class ClientNotFoundException(BaseException):
     def __init__(self):

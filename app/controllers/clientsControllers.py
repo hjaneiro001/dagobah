@@ -1,13 +1,13 @@
 from flask import Blueprint
 from flask import request, jsonify
-from dtos.clientDto import ClientDto
-from dtos.responseClientDto import ResponseClientDto
-from entities.enums.taxCondition import TaxCondition
-from entities.enums.clientType import ClientType
-from entities.enums.typeId import TypeId
-from exceptions.wrapperExceptions import handle_exceptions
-from entities.client import Client, ClientBuilder
-from modules import clientService
+from app.dtos.clientDto import ClientDto
+from app.dtos.responseClientDto import ResponseClientDto
+from app.entities.enums.taxCondition import TaxCondition
+from app.entities.enums.clientType import ClientType
+from app.entities.enums.typeId import TypeId
+from app.exceptions.wrapperExceptions import handle_exceptions
+from app.entities.client import Client, ClientBuilder
+from app.modules import clientService
 
 clientsBp = Blueprint('clients', __name__)
 
@@ -15,6 +15,7 @@ clientsBp = Blueprint('clients', __name__)
 @handle_exceptions
 def get_all():
     clients = clientService.get_all()
+    print(clients)
     clients_data = [client.to_dict() for client in clients]
     response = ResponseClientDto(many=True).dump(clients_data)
     return jsonify(response), 200
@@ -25,7 +26,7 @@ def get_all():
 def get_id(id :int):
     client: Client = clientService.get_id(id)
     result = ResponseClientDto().dump(client.to_dict())
-    return jsonify(result)
+    return jsonify(result), 200
 
 
 @clientsBp.route("/", methods=['POST'])

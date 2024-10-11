@@ -1,9 +1,7 @@
-import traceback
-
 import pymysql
 from flask import jsonify
 from marshmallow import ValidationError
-from exceptions.baseException import BaseException
+from app.exceptions.baseException import BaseException
 
 
 def handle_exceptions(f):

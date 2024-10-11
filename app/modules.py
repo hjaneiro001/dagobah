@@ -1,8 +1,8 @@
-from config import Config
+from app.config import Config
 from pymysql import connect,cursors
 
-from repositories.clientRepository import ClientRepository
-from services.clientService import ClientService
+from app.repositories.clientRepository import ClientRepository
+from app.services.clientService import ClientService
 
 connection = connect(host=Config.HOST,
                      port= Config.PORT,

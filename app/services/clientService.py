@@ -1,7 +1,7 @@
-from entities.client import Client
-from entities.enums.clientStatus import ClientStatus
-from exceptions.clientAlreadyExistsException import ClientAlreadyExistsException
-from exceptions.clientNotFoundException import ClientNotFoundException
+from app.entities.client import Client
+from app.entities.enums.clientStatus import ClientStatus
+from app.exceptions.clientAlreadyExistsException import ClientAlreadyExistsException
+from app.exceptions.clientNotFoundException import ClientNotFoundException
 
 
 class ClientService:
