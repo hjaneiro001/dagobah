@@ -14,8 +14,7 @@ clientsBp = Blueprint('clients', __name__)
 @clientsBp.route("/", methods=['GET'])
 @handle_exceptions
 def get_all():
-    clients = clientService.get_all()
-    print(clients)
+    clients :list[Client]= clientService.get_all()
     clients_data = [client.to_dict() for client in clients]
     response = ResponseClientDto(many=True).dump(clients_data)
     return jsonify(response), 200
@@ -46,9 +45,8 @@ def create():
                       .tax_condition(TaxCondition(post_client_dto["tax_condition"]))
                       .client_type(ClientType(post_client_dto["client_type"]))
                       .build())
-    clientService.create(client)
-    return jsonify({"message": "Client created successfully"}), 201
-
+    client_id: int = clientService.create(client)
+    return jsonify({"client_id" : client_id}), 201
 
 @clientsBp.route("/<int:id>", methods=['PUT'])
 @handle_exceptions
@@ -68,11 +66,11 @@ def modify(id :int):
                       .client_type(ClientType(modify_client_dto["client_type"]))
                       .build())
     clientService.modify(id, client)
-    return jsonify({"message": "Client modfify successfully"}), 201
+    return jsonify({"message": "Client modify successfully"}), 200
 
 
 @clientsBp.route("/<int:id>", methods=['DELETE'])
 @handle_exceptions
 def delete(id: int):
     clientService.delete(id)
-    return jsonify({"message": "Client deleted successfully"}), 201
+    return jsonify({"message": "Client deleted successfully"}), 200

@@ -27,7 +27,12 @@ class ClientRepository:
 
             cursor = self.conn.cursor()
             cursor.execute(sql, values)
+
+            client_id = cursor.lastrowid
+
             self.conn.commit()
+
+            return client_id
 
 
     def find_by_tax_id(self, taxid: str):
