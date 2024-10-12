@@ -109,8 +109,8 @@ class ClientControllerTestCase(unittest.TestCase):
             "tax_condition": mocked_client.tax_condition.value,
             "client_type": mocked_client.client_type.value
         }
-        expected_response = {"client_id": mocked_client.pk_client}
         mock_create.return_value = mocked_client.pk_client
+        expected_response = {"client_id": mocked_client.pk_client}
 
         #Act
         result = self.app.post('/clients/', data=json.dumps(client_data_req), content_type='application/json')
