@@ -4,8 +4,3 @@ class ClientStatus(Enum):
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
 
-
-
-
-
-#
