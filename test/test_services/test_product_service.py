@@ -6,8 +6,6 @@ from app.entities.enums.clientStatus import ClientStatus
 from app.services.productService import  ProductService
 from test.mothers.productMother import ProductMother
 
-# importar luego de construir las exception para not found y already exists en product
-
 
 class TestProductService(unittest.TestCase):
     def setUp(self):
