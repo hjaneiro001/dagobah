@@ -59,3 +59,59 @@ class ProductControllerTestCase(unittest.TestCase):
         # Assert
         self.assertEqual(expected_list, result.json)
         self.assertEqual(HTTPStatus.OK.value, result.status_code)
+
+
+    @patch('app.services.productService.ProductService.get_id')
+    def test_get_id(self, mock_get_id):
+
+         id: int = 1
+         mocked_product: Product = ProductMother.normal_product(id)
+         expected_product: json = {
+            'code': mocked_product.code,
+            'bar_code': mocked_product.bar_code,
+            'name': mocked_product.name,
+            'description': mocked_product.description,
+            'pack': mocked_product.pack,
+            'price': mocked_product.price,
+            'currency': mocked_product.currency.value,
+            'iva': mocked_product.iva.value,
+            'product_type': mocked_product.product_type.value,
+            'status': mocked_product.status.value,
+            'product_id': id,
+        }
+
+         mock_get_id.return_value = mocked_product
+
+         #Act
+         result = self.app.get('/products/'+str(id))
+
+         #Assert
+         self.assertEqual(expected_product, result.json)
+         self.assertEqual(HTTPStatus.OK.value, result.status_code)
+
+
+    @patch('app.services.productService.ProductService.create')
+    def test_create(self, mock_create):
+        # Arrange
+        mocked_product :Product = ProductMother.normal_product(random.randint(1, 100))
+        product_data_req = {
+            'code': mocked_product.code,
+            'bar_code': mocked_product.bar_code,
+            'name': mocked_product.name,
+            'description': mocked_product.description,
+            'pack': mocked_product.pack,
+            'price': mocked_product.price,
+            'currency': mocked_product.currency.value,
+            'iva': mocked_product.iva.value,
+            'product_type': mocked_product.product_type.value
+        }
+
+        mock_create.return_value = mocked_product.product_id
+        expected_response = {"product_id": mocked_product.product_id}
+
+        # Act
+        result = self.app.post('/products/', data=json.dumps(product_data_req), content_type='application/json')
+
+        # Assert
+        self.assertEqual(expected_response, result.get_json())
+        self.assertEqual(HTTPStatus.CREATED.value, result.status_code)

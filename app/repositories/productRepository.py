@@ -41,33 +41,75 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        row = {
-            'product_id': 1,
-            'product_code': 'P001',
-            'product_bar_code': '12123',
-            'product_name': 'Producto Ficticio',
-            'product_description': 'producto ficticio',
-            'product_pack': 200,
-            'product_price': 29.99,
-            'product_currency': 'PESOS',
-            'product_iva': '21%',
-            'product_type': 'BIENES DE CAMBIO',
-            'product_status': 'ACTIVE'
-        }
+        sql :str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
+        cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(sql, (id,))
+        row = cursor.fetchone()
+
+        if row is None:
+            return None
 
         product = (ProductBuilder()
-                   .product_id(row.get('product_id'))
-                   .code(row.get('product_code'))
-                   .bar_code(row.get('product_bar_code'))
-                   .name(row.get('product_name'))
-                   .description(row.get('product_description'))
-                   .pack(row.get('product_pack'))
-                   .price(row.get('product_price'))
-                   .currency(Currency(row.get('product_currency')))
-                   .iva(ProductIva(row.get('product_iva')))
-                   .product_type(ProductType(row.get('product_type')))
-                   .status(ClientStatus(row.get('product_status')))
-                   .currency(Currency(row.get('product_currency')))  # Asegúrate de que `Currency` sea manejado correctamente
-                   .build())
+                    .product_id(row.get('product_id'))
+                    .code(row.get('product_code'))
+                    .bar_code(row.get('product_bar_code'))
+                    .name(row.get('product_name'))
+                    .description(row.get('product_description'))
+                    .pack(row.get('product_pack'))
+                    .price(row.get('product_price'))
+                    .currency(Currency(row.get('product_currency')))
+                    .iva(ProductIva(row.get('product_iva')))
+                    .product_type(ProductType(row.get('product_type')))
+                    .status(ClientStatus(row.get('product_status')))
+                    .currency(Currency(row.get('product_currency')))
+                    .build())
 
         return product
+
+    def create(self, product: Product):
+        sql: str = """
+            INSERT INTO products (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        values = (
+            product.code, product.bar_code, product.name, product.description, product.pack,
+            product.price, product.currency.value, product.iva.value,
+            product.product_type.value, product.status.value
+        )
+
+        cursor = self.conn.cursor()
+        cursor.execute(sql, values)
+
+        product_id = cursor.lastrowid
+
+        self.conn.commit()
+
+        return product_id
+
+    def find_by_code(self, product_code: str):
+        sql: str = "SELECT * FROM products WHERE product_code = %s AND product_status = 'ACTIVE'"
+        cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(sql, (product_code,))
+        row = cursor.fetchone()
+        return row
+
+    def save(self, product: Product):
+        sql: str = """
+            UPDATE products
+            SET product_code = %s, product_name = %s, product_description = %s, product_pack = %s, 
+                product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
+                product_status = %s
+            WHERE product_id = %s
+        """
+
+        values = (
+            product.code, product.name, product.description, product.pack, product.price,
+            product.currency.value, product.iva.value, product.product_type.value, product.status.value,
+            product.product_id
+        )
+
+        cursor = self.conn.cursor()
+        cursor.execute(sql, values)
+        self.conn.commit()
+        cursor.close()

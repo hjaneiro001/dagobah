@@ -44,6 +44,21 @@ class Product:
                 "status": self.status.value
             }
 
+    def __eq__(self, other):
+        if isinstance(other, Product):
+            return (self.product_id == other.product_id and
+                    self.code == other.code and
+                    self.bar_code == other.bar_code and
+                    self.name == other.name and
+                    self.description == other.description and
+                    self.pack == other.pack and
+                    self.price == other.price and
+                    self.currency == other.currency and
+                    self.iva == other.iva and
+                    self.product_type == other.product_type and
+                    self.status == other.status)
+        return False
+
 class ProductBuilder:
     def __init__(self):
         self._product_id = None
