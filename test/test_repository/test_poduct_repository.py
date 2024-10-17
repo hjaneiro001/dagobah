@@ -25,6 +25,7 @@ def test_get_all():
             'product_status': expected_product.status.value
         }
     ]
+
     mock_connection = MagicMock()
     mock_cursor = MagicMock()
     mock_connection.cursor.return_value = mock_cursor
@@ -57,7 +58,6 @@ def test_get_id():
                 'product_type': expected_product.product_type.value,
                 'product_status': expected_product.status.value
             }
-
 
     mock_connection = MagicMock()
     mock_cursor = MagicMock()
