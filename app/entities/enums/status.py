@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ClientStatus(Enum):
+class Status(Enum):
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
 

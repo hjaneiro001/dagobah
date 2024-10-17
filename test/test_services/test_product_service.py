@@ -3,7 +3,7 @@ from unittest.mock import patch
 import unittest
 import random
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.exceptions.productAlreadyExistException import ProductAlreadyExistsException
 from app.exceptions.productNotFoundException import ProductNotFoundException
 from app.services.productService import  ProductService
@@ -70,7 +70,7 @@ class TestProductService(unittest.TestCase):
         mock_find_by_code.assert_called_once_with(mocked_product.code)
         mock_create.assert_called_once_with(mocked_product)
         self.assertEqual(product_id, mocked_product.product_id)
-        self.assertEqual(mocked_product.status, ClientStatus.ACTIVE)
+        self.assertEqual(mocked_product.status, Status.ACTIVE)
 
 
     @patch('app.repositories.productRepository.ProductRepository.create')
@@ -136,7 +136,7 @@ class TestProductService(unittest.TestCase):
         # Assert
         mock_get_id.assert_called_once_with(id_to_delete)
         mock_save.assert_called_once_with(product_to_delete)
-        self.assertEqual(product_to_delete.status, ClientStatus.INACTIVE)
+        self.assertEqual(product_to_delete.status, Status.INACTIVE)
 
 
     @patch('app.repositories.productRepository.ProductRepository.get_id')

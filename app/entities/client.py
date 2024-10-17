@@ -1,10 +1,10 @@
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 
 class Client:
-    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :ClientStatus):
+    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :Status):
         self.pk_client :int = pk_client
         self.name :str = name
         self.address :str= address
@@ -17,7 +17,7 @@ class Client:
         self.tax_id :str= tax_id
         self.tax_condition :TaxCondition = tax_condition
         self.client_type : ClientType = client_type
-        self.status :ClientStatus= status
+        self.status :Status= status
 
     def __str__(self):
         return (f"Name: {self.name}\n"
@@ -130,8 +130,8 @@ class ClientBuilder:
         self._client_type :ClientType = client_type
         return self
 
-    def status(self, status :ClientStatus):
-        self._status :ClientStatus = status
+    def status(self, status :Status):
+        self._status :Status = status
         return self
 
     def build(self):

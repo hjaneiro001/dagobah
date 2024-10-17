@@ -3,7 +3,7 @@ from unittest.mock import patch
 import unittest
 import random
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.exceptions.clientAlreadyExistsException import ClientAlreadyExistsException
 from app.exceptions.clientNotFoundException import ClientNotFoundException
 from app.services.clientService import ClientService
@@ -55,7 +55,7 @@ class TestClientService(unittest.TestCase):
         mock_find_by_tax_id.assert_called_once_with(mocked_client.tax_id)
         mock_create.assert_called_once_with(mocked_client)
         self.assertEqual(client_id, mocked_client.pk_client)
-        self.assertEqual(mocked_client.status, ClientStatus.ACTIVE)
+        self.assertEqual(mocked_client.status, Status.ACTIVE)
 
 
     @patch('app.repositories.clientRepository.ClientRepository.create')
@@ -136,7 +136,7 @@ class TestClientService(unittest.TestCase):
         # Assert
         mock_get_id.assert_called_once_with(id_to_delete)
         mock_save.assert_called_once_with(client_to_delete)
-        self.assertEqual(client_to_delete.status, ClientStatus.INACTIVE)
+        self.assertEqual(client_to_delete.status, Status.INACTIVE)
 
     @patch('app.repositories.clientRepository.ClientRepository.get_id')
     def test_delete_client_not_found(self, mock_get_id):

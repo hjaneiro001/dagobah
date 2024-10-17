@@ -1,7 +1,7 @@
 from app.entities.client import Client, ClientBuilder
 import pymysql.cursors
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.typeId import TypeId
@@ -36,7 +36,7 @@ class ClientRepository:
 
 
     def find_by_tax_id(self, taxid: str):
-            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s AND client_status = 'ACTIVE'"
+            sql: str = f"SELECT * FROM clients WHERE client_tax_id = %s AND client_status = '{Status.ACTIVE.value}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
@@ -65,7 +65,7 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = "SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
+        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.value}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -86,14 +86,14 @@ class ClientRepository:
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
                 .client_type(ClientType(row.get('client_type')))
-                .status(ClientStatus(row.get('client_status')))
+                .status(Status(row.get('client_status')))
                 .build())
 
         return client
 
     def get_all(self):
 
-            sql = "SELECT * FROM clients WHERE client_status = 'ACTIVE'"
+            sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.value}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -114,7 +114,7 @@ class ClientRepository:
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
                           .client_type(ClientType(row.get('client_type')))
-                          .status(ClientStatus(row.get('client_status')))
+                          .status(Status(row.get('client_status')))
                           .build())
 
                 clients.append(client)
