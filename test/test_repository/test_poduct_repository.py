@@ -103,13 +103,7 @@ def test_create_success():
 
 def test_save_success():
     product_to_modify = ProductMother.normal_product(1)
-    expected_sql: str = """
-               UPDATE products
-               SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s, 
-                   product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
-                   product_status = %s
-               WHERE product_id = %s
-           """
+
     expected_values = (
         product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
         product_to_modify.pack, product_to_modify.price, product_to_modify.currency.value,
@@ -124,7 +118,7 @@ def test_save_success():
     product_repository = ProductRepository(mock_connection)
 
     # Act
-    actual = product_repository.save(product_to_modify)
+    product_repository.save(product_to_modify)
 
     # Assert
-    mock_cursor.execute.assert_any_call(ANY, expected_values)
+    mock_cursor.execute.assert_called_with(ANY, expected_values)
