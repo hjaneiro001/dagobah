@@ -11,7 +11,7 @@ from app.entities.enums.productType import ProductType
 from app.entities.product import Product, ProductBuilder
 
 from app.exceptions.wrapperExceptions import handle_exceptions
-from app.modules import productService
+from app.modules import productService, clientService
 
 productsBp = Blueprint('products', __name__)
 
@@ -70,3 +70,8 @@ def modify(id :int):
     productService.modify(id, product)
     return jsonify({"message": "Product modify successfully"}), 200
 
+@productsBp.route("/<int:id>", methods=['DELETE'])
+@handle_exceptions
+def delete(id :int):
+    productService.delete((id))
+    return jsonify({"message": "Product deleted successfully"}), 200

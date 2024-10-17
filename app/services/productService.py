@@ -1,3 +1,5 @@
+from itertools import product
+
 from app.entities.enums.clientStatus import ClientStatus
 from app.entities.enums.currency import Currency
 from app.entities.product import Product
@@ -31,6 +33,14 @@ class ProductService:
         product.product_id = product_to_modify.product_id
         product.status = product_to_modify.status
         self.product_repository.save(product)
+        return
+
+    def delete(self,id :int):
+        product_to_delete :Product = self.product_repository.get_id(id)
+        if product_to_delete is None:
+            raise ProductNotFoundException
+        product_to_delete.status = ClientStatus.INACTIVE
+        self.product_repository.save(product_to_delete)
         return
 
 

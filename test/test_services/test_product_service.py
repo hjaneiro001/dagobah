@@ -1,9 +1,9 @@
+from itertools import product
 from unittest.mock import patch
 import unittest
 import random
 
 from app.entities.enums.clientStatus import ClientStatus
-from app.entities.product import Product
 from app.exceptions.productAlreadyExistException import ProductAlreadyExistsException
 from app.exceptions.productNotFoundException import ProductNotFoundException
 from app.services.productService import  ProductService
@@ -84,5 +84,72 @@ class TestProductService(unittest.TestCase):
         with self.assertRaises(ProductAlreadyExistsException):
             self.product_service.create(mocked_product)
         mock_create.assert_not_called()
+
+
+
+    @patch('app.repositories.productRepository.ProductRepository.save')
+    @patch('app.repositories.productRepository.ProductRepository.get_id')
+    def test_modify_product_success(self, mock_get_id, mock_save):
+        # Arrange
+        id_to_modify = random.randint(1, 100)
+        product_to_modify = ProductMother.normal_product(id_to_modify)
+        product_updated = ProductMother.normal_product(id_to_modify)
+
+        mock_get_id.return_value = product_to_modify
+
+        # Act
+        self.product_service.modify(id_to_modify, product_updated)
+
+        # Assert
+        mock_get_id.assert_called_once_with(id_to_modify)
+        mock_save.assert_called_once_with(product_updated)
+        self.assertEqual(product_updated.product_id, product_to_modify.product_id)
+        self.assertEqual(product_updated.status, product_to_modify.status)
+
+
+    @patch('app.repositories.productRepository.ProductRepository.get_id')
+    def test_modify_product_not_found(self, mock_get_id):
+        # Arrange
+        id_to_modify = random.randint(1, 100)
+        product_updated = ProductMother.normal_product(id_to_modify)
+
+        mock_get_id.return_value = None
+
+        # Act & Assert
+        with self.assertRaises(ProductNotFoundException):
+            self.product_service.modify(id_to_modify, product_updated)
+        self.mock_product_repository.save.assert_not_called()
+
+
+    @patch('app.repositories.productRepository.ProductRepository.save')
+    @patch('app.repositories.productRepository.ProductRepository.get_id')
+    def test_delete_product_success(self, mock_get_id, mock_save):
+        # Arrange
+        id_to_delete = random.randint(1, 100)
+        product_to_delete = ProductMother.normal_product(id_to_delete)
+
+        mock_get_id.return_value = product_to_delete
+
+        # Act
+        self.product_service.delete(id_to_delete)
+
+        # Assert
+        mock_get_id.assert_called_once_with(id_to_delete)
+        mock_save.assert_called_once_with(product_to_delete)
+        self.assertEqual(product_to_delete.status, ClientStatus.INACTIVE)
+
+
+    @patch('app.repositories.productRepository.ProductRepository.get_id')
+    def test_delete_product_not_found(self, mock_get_id):
+        # Arrange
+        id_to_delete = random.randint(1, 100)
+
+        mock_get_id.return_value = None
+
+        # Act & Assert
+        with self.assertRaises(ProductNotFoundException):
+            self.product_service.delete(id_to_delete)
+        self.mock_product_repository.save.assert_not_called()
+
 
 

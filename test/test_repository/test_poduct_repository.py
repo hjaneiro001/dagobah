@@ -1,10 +1,10 @@
-from itertools import product
+
 from unittest.mock import MagicMock
 from app.entities.product import Product
 from app.repositories.productRepository import ProductRepository
 from test.mothers.productMother import ProductMother
+from unittest.mock import ANY
 
-import re
 
 def test_get_all():
     #Arrange
@@ -101,6 +101,30 @@ def test_create_success():
     assert actual == expected_product_id
     mock_cursor.execute.assert_called_with(expected_sql, expected_values)
 
+def test_save_success():
+    product_to_modify = ProductMother.normal_product(1)
+    expected_sql: str = """
+               UPDATE products
+               SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s, 
+                   product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
+                   product_status = %s
+               WHERE product_id = %s
+           """
+    expected_values = (
+        product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
+        product_to_modify.pack, product_to_modify.price, product_to_modify.currency.value,
+        product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.value,
+        product_to_modify.product_id
+    )
 
+    # Mock objects
+    mock_connection = MagicMock()
+    mock_cursor = MagicMock()
+    mock_connection.cursor.return_value = mock_cursor
+    product_repository = ProductRepository(mock_connection)
 
+    # Act
+    actual = product_repository.save(product_to_modify)
 
+    # Assert
+    mock_cursor.execute.assert_any_call(ANY, expected_values)

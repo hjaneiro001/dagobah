@@ -97,14 +97,14 @@ class ProductRepository:
     def save(self, product: Product):
         sql: str = """
             UPDATE products
-            SET product_code = %s, product_name = %s, product_description = %s, product_pack = %s, 
+            SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s, 
                 product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
                 product_status = %s
             WHERE product_id = %s
         """
 
         values = (
-            product.code, product.name, product.description, product.pack, product.price,
+            product.code, product.name, product.description, product.bar_code, product.pack, product.price,
             product.currency.value, product.iva.value, product.product_type.value, product.status.value,
             product.product_id
         )
