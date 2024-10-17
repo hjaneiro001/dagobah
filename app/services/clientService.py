@@ -37,7 +37,6 @@ class ClientService:
         client: Client = self.client_repository.get_id(id)
         if client is None:
             raise ClientNotFoundException
-
         client.status = ClientStatus.INACTIVE
         self.client_repository.save(client)
         return

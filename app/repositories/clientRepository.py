@@ -122,18 +122,5 @@ class ClientRepository:
             return clients
 
 
-    def delete(self, id: int):
-
-        sql: str = """
-                   UPDATE clients
-                   SET client_status = "INACTIVE"
-                   WHERE client_id = %s
-               """
-
-        cursor = self.conn.cursor()
-        cursor.execute(sql, id)
-        self.conn.commit()
-        cursor.close()
-
 
 
