@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+
+from app.entities.enums.status import Status
 from app.entities.product import Product
 from app.repositories.productRepository import ProductRepository
 from test.mothers.productMother import ProductMother
@@ -9,7 +11,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
         #Arrange
-        expected_sentence: str = "SELECT * FROM Products WHERE product_status = 'ACTIVE'"
+        expected_sentence: str = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.value}'"
         expected_product: Product = ProductMother.normal_product(1)
         expected_db_response = [
             {
@@ -45,7 +47,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
     def test_get_id(self):
         # Arrange
         expected_product: Product = ProductMother.normal_product(1)
-        expected_sentence: str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
+        expected_sentence: str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.value}'"
         expected_db_response = {
                     'product_id': expected_product.product_id,
                     'product_code': expected_product.code,
