@@ -17,7 +17,7 @@ class ProductMother:
                             .price(9.99)
                             .currency(Currency.ARS)
                             .iva(ProductIva.I21)
-                            .product_type(ProductType.BC)
+                            .product_type(ProductType.PRODUCTO)
                             .status(ClientStatus.ACTIVE)
                             .build())
         return product
