@@ -21,7 +21,7 @@ class ClientRepository:
 
             values = (
                 client.name, client.address, client.city, client.state, client.country,
-                client.email, client.phone, client.type_id.value, client.tax_id,
+                client.email, client.phone, client.type_id.get_type(), client.tax_id,
                 client.tax_condition.value,client.client_type.value, client.status.value
             )
 
@@ -82,7 +82,7 @@ class ClientRepository:
                 .country(row.get('client_country'))
                 .email(row.get('client_email'))
                 .phone(row.get('client_phone'))
-                .type_id(TypeId(row.get('client_type_id')))
+                .type_id(TypeId[row.get('client_type_id')])
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
                 .client_type(ClientType(row.get('client_type')))

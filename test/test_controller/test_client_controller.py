@@ -32,7 +32,7 @@ class ClientControllerTestCase(unittest.TestCase):
              'status': mocked_client.status.value,
              'tax_condition': mocked_client.tax_condition.value,
              'tax_id': mocked_client.tax_id,
-             'type_id': mocked_client.type_id.value}
+             'type_id': mocked_client.type_id.get_type()}
 
         mock_get_id.return_value = mocked_client
 
@@ -67,7 +67,7 @@ class ClientControllerTestCase(unittest.TestCase):
             'status': mocked_client_a.status.value,
             'tax_condition': mocked_client_a.tax_condition.value,
             'tax_id': mocked_client_a.tax_id,
-            'type_id': mocked_client_a.type_id.value
+            'type_id': mocked_client_a.type_id.get_type()
             },{
             'address': mocked_client_b.address,
             'city': mocked_client_b.city,
@@ -81,7 +81,7 @@ class ClientControllerTestCase(unittest.TestCase):
             'status': mocked_client_b.status.value,
             'tax_condition': mocked_client_b.tax_condition.value,
             'tax_id': mocked_client_b.tax_id,
-            'type_id': mocked_client_b.type_id.value
+            'type_id': mocked_client_b.type_id.get_type()
         }]
         mock_get_all.return_value = mocked_client_list
 
@@ -104,7 +104,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "country": mocked_client.country,
             "email": mocked_client.email,
             "phone": mocked_client.phone,
-            "type_id": mocked_client.type_id.value,
+            "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
             "tax_condition": mocked_client.tax_condition.value,
             "client_type": mocked_client.client_type.value
@@ -131,7 +131,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "country": mocked_client.country,
             "email": mocked_client.email,
             "phone": mocked_client.phone,
-            "type_id": mocked_client.type_id.value,
+            "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
             "tax_condition": mocked_client.tax_condition.value,
             "client_type": mocked_client.client_type.value

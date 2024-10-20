@@ -15,7 +15,7 @@ class ClientMother:
                           .country("Fake Country")
                           .email("NataliaNatalia@Fakemail.com")
                           .phone("123456789")
-                          .type_id(TypeId.DNI)
+                          .type_id(TypeId.CUIT)
                           .tax_id("123123123")
                           .tax_condition(TaxCondition.RI)
                           .client_type(ClientType.C)
