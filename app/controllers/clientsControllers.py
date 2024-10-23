@@ -32,19 +32,21 @@ def get_id(id :int):
 @handle_exceptions
 def create():
     post_client_dto = ClientDto().load(request.json)
+
     client: Client = (ClientBuilder()
-                      .name(post_client_dto["name"])
-                      .address(post_client_dto["address"])
-                      .city(post_client_dto["city"])
-                      .state(post_client_dto["state"])
-                      .country(post_client_dto["country"])
-                      .email(post_client_dto["email"])
-                      .phone(post_client_dto["phone"])
-                      .type_id(TypeId.get_type_id(post_client_dto["type_id"]))
-                      .tax_id(post_client_dto["tax_id"])
-                      .tax_condition(TaxCondition(post_client_dto["tax_condition"]))
-                      .client_type(ClientType(post_client_dto["client_type"]))
-                      .build())
+                        .name(post_client_dto["name"])
+                        .address(post_client_dto["address"])
+                        .city(post_client_dto["city"])
+                        .state(post_client_dto["state"])
+                        .country(post_client_dto["country"])
+                        .email(post_client_dto["email"])
+                        .phone(post_client_dto["phone"])
+                        .type_id(TypeId[post_client_dto["type_id"]])
+                        .tax_id(post_client_dto["tax_id"])
+                        .tax_condition(TaxCondition(post_client_dto["tax_condition"]))
+                        .client_type(ClientType[post_client_dto["client_type"]])
+                        .build())
+
     client_id: int = clientService.create(client)
     return jsonify({"client_id" : client_id}), 201
 
@@ -63,8 +65,9 @@ def modify(id :int):
                       .type_id(TypeId.get_type_id(modify_client_dto["type_id"]))
                       .tax_id(modify_client_dto["tax_id"])
                       .tax_condition(TaxCondition(modify_client_dto["tax_condition"]))
-                      .client_type(ClientType(modify_client_dto["client_type"]))
+                      .client_type(ClientType[modify_client_dto["client_type"]])
                       .build())
+
     clientService.modify(id, client)
     return jsonify({"message": "Client modify successfully"}), 200
 

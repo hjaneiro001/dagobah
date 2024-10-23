@@ -6,7 +6,6 @@ from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.typeId import TypeId
 
-
 class ClientRepository:
 
     def __init__(self, connection):
@@ -22,7 +21,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                client.tax_condition.value,client.client_type.value, client.status.value
+                client.tax_condition.value,client.client_type.get_type(), client.status.value
             )
 
             cursor = self.conn.cursor()
@@ -55,7 +54,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id.get_type(), client.tax_id,
-            client.tax_condition.value, client.client_type.value, client.status.value, client.pk_client
+            client.tax_condition.value, client.client_type.get_type(), client.status.value, client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -85,7 +84,7 @@ class ClientRepository:
                 .type_id(TypeId[row.get('client_type_id')])
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                .client_type(ClientType(row.get('client_type')))
+                .client_type(ClientType[row.get('client_type')])
                 .status(ClientStatus(row.get('client_status')))
                 .build())
 
@@ -113,7 +112,7 @@ class ClientRepository:
                           .type_id(TypeId[row.get('client_type_id')])
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                          .client_type(ClientType(row.get('client_type')))
+                          .client_type(ClientType[row.get('client_type')])
                           .status(ClientStatus(row.get('client_status')))
                           .build())
 

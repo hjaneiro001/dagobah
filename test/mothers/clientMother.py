@@ -18,7 +18,7 @@ class ClientMother:
                           .type_id(TypeId.CUIT)
                           .tax_id("123123123")
                           .tax_condition(TaxCondition.RI)
-                          .client_type(ClientType.C)
+                          .client_type(ClientType.CLIENTE)
                           .status(ClientStatus.ACTIVE)
                           .build())
         return client

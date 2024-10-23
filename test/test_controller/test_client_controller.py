@@ -22,7 +22,7 @@ class ClientControllerTestCase(unittest.TestCase):
         mocked_client: Client = ClientMother.normal_client(id)
         expected_client: json = {'address': mocked_client.address,
              'city': mocked_client.city,
-             'client_type': mocked_client.client_type.value,
+             'client_type': mocked_client.client_type.get_type(),
              'country': mocked_client.country,
              'email': mocked_client.email,
              'name': mocked_client.name,
@@ -57,7 +57,7 @@ class ClientControllerTestCase(unittest.TestCase):
         expected_list = [{
             'address': mocked_client_a.address,
             'city': mocked_client_a.city,
-            'client_type': mocked_client_a.client_type.value,
+            'client_type': mocked_client_a.client_type.get_type(),
             'country': mocked_client_a.country,
             'email': mocked_client_a.email,
             'name': mocked_client_a.name,
@@ -71,7 +71,7 @@ class ClientControllerTestCase(unittest.TestCase):
             },{
             'address': mocked_client_b.address,
             'city': mocked_client_b.city,
-            'client_type': mocked_client_b.client_type.value,
+            'client_type': mocked_client_b.client_type.get_type(),
             'country': mocked_client_b.country,
             'email': mocked_client_b.email,
             'name': mocked_client_b.name,
@@ -107,7 +107,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
             "tax_condition": mocked_client.tax_condition.value,
-            "client_type": mocked_client.client_type.value
+            "client_type": mocked_client.client_type.get_type()
         }
         mock_create.return_value = mocked_client.pk_client
         expected_response = {"client_id": mocked_client.pk_client}
@@ -134,7 +134,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
             "tax_condition": mocked_client.tax_condition.value,
-            "client_type": mocked_client.client_type.value
+            "client_type": mocked_client.client_type.get_type()
         }
         expected_response = {"message": "Client modify successfully"}
 

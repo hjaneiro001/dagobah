@@ -30,7 +30,7 @@ class Client:
                 f"Phone: {self.type_id.value}\n"
                 f"Tax ID: {self.tax_id}\n"
                 f"Tax Condition: {self.tax_condition.value}\n"
-                f"Type: {self.client_type.get_value()}")
+                f"Type: {self.client_type.value}")
 
     def __eq__(self, other):
         if not isinstance(other, Client):
@@ -62,7 +62,7 @@ class Client:
             "type_id": self.type_id.value[0],
             "tax_id": self.tax_id,
             "tax_condition": self.tax_condition.value,
-            "client_type": self.client_type.value,
+            "client_type": self.client_type.value[0],
             "status": self.status.value
         }
 
