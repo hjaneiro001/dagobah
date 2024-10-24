@@ -10,7 +10,7 @@ from app.entities.enums.productType import ProductType
 from app.entities.product import Product, ProductBuilder
 
 from app.exceptions.wrapperExceptions import handle_exceptions
-from app.modules import productService, clientService
+from app.modules import productService
 
 productsBp = Blueprint('products', __name__)
 

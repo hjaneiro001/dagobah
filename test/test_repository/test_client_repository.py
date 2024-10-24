@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, ANY
 from sqlalchemy.engine.mock import MockConnection
 
 from app.entities.client import Client, ClientBuilder
+from app.entities.enums.status import Status
 from app.repositories.clientRepository import ClientRepository
 from test.mothers.clientMother import ClientMother
 
@@ -12,7 +13,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
 
-        expected_sql :str = "SELECT * FROM clients WHERE client_status = 'ACTIVE'"
+        expected_sql :str = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.value}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = [{
@@ -46,7 +47,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
         mock_cursor.execute.assert_called_with(expected_sql)
 
     def test_get_id(self):
-        expected_sql: str = "SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
+        expected_sql: str = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.value}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = {

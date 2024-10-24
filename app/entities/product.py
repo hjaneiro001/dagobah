@@ -5,7 +5,7 @@ from app.entities.enums.productType import ProductType
 
 class Product:
     def __init__(self, product_id :int, code :str, bar_code :str, name :str, description :str, pack :float,
-                 price :float, currency :Currency, iva: ProductIva, product_type :ProductType,  status :Status):
+                 price :float, currency :Currency, iva: ProductIva, product_type :ProductType, status :Status):
         self.product_id :int = product_id
         self.code :str = code
         self.bar_code :str = bar_code

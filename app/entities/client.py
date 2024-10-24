@@ -131,7 +131,7 @@ class ClientBuilder:
         return self
 
     def status(self, status :Status):
-        self._status :status = status
+        self._status :Status = status
         return self
 
     def build(self):

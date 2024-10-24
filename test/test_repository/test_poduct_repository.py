@@ -1,10 +1,13 @@
-
+import unittest
 from unittest.mock import MagicMock
+
+from app.entities.enums.status import Status
 from app.entities.product import Product
 from app.repositories.productRepository import ProductRepository
 from test.mothers.productMother import ProductMother
 from unittest.mock import ANY
 
+class ProductRepositoryTestCase(unittest.TestCase):
 
 def test_get_all():
     #Arrange
