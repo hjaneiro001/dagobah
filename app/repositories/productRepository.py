@@ -3,7 +3,7 @@ import pymysql.cursors
 from app.entities.enums.currency import Currency
 from app.entities.enums.productIva import ProductIva
 from app.entities.enums.productType import ProductType
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.product import ProductBuilder, Product
 
 class ProductRepository:
@@ -13,7 +13,7 @@ class ProductRepository:
 
     def get_all(self):
 
-            sql = "SELECT * FROM Products WHERE product_status = 'ACTIVE'"
+            sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.value}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -32,7 +32,7 @@ class ProductRepository:
                         .currency(Currency(row.get('product_currency')))
                         .iva(ProductIva(row.get('product_iva')))
                         .product_type(ProductType(row.get('product_type')))
-                        .status(ClientStatus(row.get('product_status')))
+                        .status(Status(row.get('product_status')))
                         .build())
 
                 products.append(product)
@@ -41,7 +41,7 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        sql :str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
+        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.value}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -60,7 +60,7 @@ class ProductRepository:
                     .currency(Currency(row.get('product_currency')))
                     .iva(ProductIva(row.get('product_iva')))
                     .product_type(ProductType(row.get('product_type')))
-                    .status(ClientStatus(row.get('product_status')))
+                    .status(Status(row.get('product_status')))
                     .currency(Currency(row.get('product_currency')))
                     .build())
 
@@ -88,7 +88,7 @@ class ProductRepository:
         return product_id
 
     def find_by_code(self, product_code: str):
-        sql: str = "SELECT * FROM products WHERE product_code = %s AND product_status = 'ACTIVE'"
+        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.value}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()

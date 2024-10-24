@@ -1,5 +1,5 @@
 from app.entities.client import Client, ClientBuilder
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
@@ -19,6 +19,6 @@ class ClientMother:
                           .tax_id("123123123")
                           .tax_condition(TaxCondition.RI)
                           .client_type(ClientType.C)
-                          .status(ClientStatus.ACTIVE)
+                          .status(Status.ACTIVE)
                           .build())
         return client

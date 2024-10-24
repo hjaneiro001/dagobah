@@ -1,6 +1,6 @@
 from itertools import product
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.currency import Currency
 from app.entities.product import Product
 from app.exceptions.productAlreadyExistException import ProductAlreadyExistsException
@@ -22,7 +22,7 @@ class ProductService:
     def create(self, product: Product):
         if self.product_repository.find_by_code(product.code):
             raise ProductAlreadyExistsException
-        product.status = ClientStatus.ACTIVE
+        product.status = Status.ACTIVE
         product_id: int = self.product_repository.create(product)
         return product_id
 
@@ -39,7 +39,7 @@ class ProductService:
         product_to_delete :Product = self.product_repository.get_id(id)
         if product_to_delete is None:
             raise ProductNotFoundException
-        product_to_delete.status = ClientStatus.INACTIVE
+        product_to_delete.status = Status.INACTIVE
         self.product_repository.save(product_to_delete)
         return
 

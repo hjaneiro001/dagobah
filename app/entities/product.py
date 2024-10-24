@@ -1,11 +1,11 @@
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.currency import Currency
 from app.entities.enums.productIva import ProductIva
 from app.entities.enums.productType import ProductType
 
 class Product:
     def __init__(self, product_id :int, code :str, bar_code :str, name :str, description :str, pack :float,
-                 price :float, currency :Currency, iva: ProductIva, product_type :ProductType,  status :ClientStatus):
+                 price :float, currency :Currency, iva: ProductIva, product_type :ProductType, status :Status):
         self.product_id :int = product_id
         self.code :str = code
         self.bar_code :str = bar_code
@@ -16,7 +16,7 @@ class Product:
         self.currency :Currency= currency
         self.iva :ProductIva= iva
         self.product_type :ProductType= product_type
-        self.status :ClientStatus= status
+        self.status :Status= status
 
     def __str__(self):
         return (f"Code: {self.code}\n"
@@ -113,8 +113,8 @@ class ProductBuilder:
         self._product_type: ProductType = product_type
         return self
 
-    def status(self, status: ClientStatus):
-        self._status: ClientStatus = status
+    def status(self, status: Status):
+        self._status: Status = status
         return self
 
     def build(self):
