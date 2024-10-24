@@ -37,7 +37,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'currency': mocked_product_a.currency.value,
             'iva': mocked_product_a.iva.value,
             'product_type': mocked_product_a.product_type.value,
-            'status': mocked_product_a.status.value,
+            'status': mocked_product_a.status.get_status(),
             'product_id': 1,
         }, {
             'code': mocked_product_b.code,
@@ -49,7 +49,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'currency': mocked_product_b.currency.value,
             'iva': mocked_product_b.iva.value,
             'product_type': mocked_product_b.product_type.value,
-            'status': mocked_product_b.status.value,
+            'status': mocked_product_b.status.get_status(),
            'product_id': 2,
         }]
         mock_get_all.return_value = mocked_product_list
@@ -77,7 +77,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'currency': mocked_product.currency.value,
             'iva': mocked_product.iva.value,
             'product_type': mocked_product.product_type.value,
-            'status': mocked_product.status.value,
+            'status': mocked_product.status.get_status(),
             'product_id': id,
         }
 

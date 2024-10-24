@@ -41,7 +41,7 @@ class Product:
                 "currency": self.currency.value,
                 "iva": self.iva.value,
                 "product_type": self.product_type.value,
-                "status": self.status.value
+                "status": self.status.value[0]
             }
 
     def __eq__(self, other):

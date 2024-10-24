@@ -32,7 +32,7 @@ class ProductRepository:
                         .currency(Currency(row.get('product_currency')))
                         .iva(ProductIva(row.get('product_iva')))
                         .product_type(ProductType(row.get('product_type')))
-                        .status(Status(row.get('product_status')))
+                        .status(Status[row.get('product_status')])
                         .build())
 
                 products.append(product)
@@ -60,7 +60,7 @@ class ProductRepository:
                     .currency(Currency(row.get('product_currency')))
                     .iva(ProductIva(row.get('product_iva')))
                     .product_type(ProductType(row.get('product_type')))
-                    .status(Status(row.get('product_status')))
+                    .status(Status[row.get('product_status')])
                     .currency(Currency(row.get('product_currency')))
                     .build())
 
@@ -75,7 +75,7 @@ class ProductRepository:
         values = (
             product.code, product.bar_code, product.name, product.description, product.pack,
             product.price, product.currency.value, product.iva.value,
-            product.product_type.value, product.status.value
+            product.product_type.value, product.status.get_status()
         )
 
         cursor = self.conn.cursor()
@@ -105,7 +105,7 @@ class ProductRepository:
 
         values = (
             product.code, product.name, product.description, product.bar_code, product.pack, product.price,
-            product.currency.value, product.iva.value, product.product_type.value, product.status.value,
+            product.currency.value, product.iva.value, product.product_type.value, product.status.get_status(),
             product.product_id
         )
 

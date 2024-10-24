@@ -2,10 +2,10 @@ from app.entities.client import Client, ClientBuilder
 import pymysql.cursors
 
 from app.entities.enums.status import Status
+
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.typeId import TypeId
-
 
 class ClientRepository:
 
@@ -21,8 +21,8 @@ class ClientRepository:
 
             values = (
                 client.name, client.address, client.city, client.state, client.country,
-                client.email, client.phone, client.type_id.value, client.tax_id,
-                client.tax_condition.value,client.client_type.value, client.status.value
+                client.email, client.phone, client.type_id.get_type(), client.tax_id,
+                client.tax_condition.value,client.client_type.get_type(), client.status.get_status()
             )
 
             cursor = self.conn.cursor()
@@ -54,8 +54,8 @@ class ClientRepository:
 
         values = (
             client.name, client.address, client.city, client.state, client.country,
-            client.email, client.phone, client.type_id.value, client.tax_id,
-            client.tax_condition.value, client.client_type.value, client.status.value, client.pk_client
+            client.email, client.phone, client.type_id.get_type(), client.tax_id,
+            client.tax_condition.value, client.client_type.get_type(), client.status.get_status(), client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -82,11 +82,11 @@ class ClientRepository:
                 .country(row.get('client_country'))
                 .email(row.get('client_email'))
                 .phone(row.get('client_phone'))
-                .type_id(TypeId(row.get('client_type_id')))
+                .type_id(TypeId[row.get('client_type_id')])
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                .client_type(ClientType(row.get('client_type')))
-                .status(Status(row.get('client_status')))
+                .client_type(ClientType[row.get('client_type')])
+                .status(Status[row.get('client_status')])
                 .build())
 
         return client
@@ -110,11 +110,11 @@ class ClientRepository:
                           .country(row.get('client_country'))
                           .email(row.get('client_email'))
                           .phone(row.get('client_phone'))
-                          .type_id(TypeId(row.get('client_type_id')))
+                          .type_id(TypeId[row.get('client_type_id')])
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                          .client_type(ClientType(row.get('client_type')))
-                          .status(Status(row.get('client_status')))
+                          .client_type(ClientType[row.get('client_type')])
+                          .status(Status[row.get('client_status')])
                           .build())
 
                 clients.append(client)

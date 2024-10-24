@@ -25,11 +25,11 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_country': expected_client.country,
             'client_email': expected_client.email,
             'client_phone': expected_client.phone,
-            'client_type_id': expected_client.type_id.value,
+            'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
             'client_tax_condition': expected_client.tax_condition.value,
-            'client_type': expected_client.client_type.value,
-            'client_status': expected_client.status.value
+            'client_type': expected_client.client_type.get_type(),
+            'client_status': expected_client.status.get_status()
         }]
 
         mock_connection = MagicMock()
@@ -59,11 +59,11 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_country': expected_client.country,
             'client_email': expected_client.email,
             'client_phone': expected_client.phone,
-            'client_type_id': expected_client.type_id.value,
+            'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
             'client_tax_condition': expected_client.tax_condition.value,
-            'client_type': expected_client.client_type.value,
-            'client_status': expected_client.status.value
+            'client_type': expected_client.client_type.get_type(),
+            'client_status': expected_client.status.get_status()
         }
 
         mock_connection = MagicMock()
@@ -99,11 +99,11 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_create.country,
             client_to_create.email,
             client_to_create.phone,
-            client_to_create.type_id.value,
+            client_to_create.type_id.get_type(),
             client_to_create.tax_id,
             client_to_create.tax_condition.value,
-            client_to_create.client_type.value,
-            client_to_create.status.value
+            client_to_create.client_type.get_type(),
+            client_to_create.status.get_status()
         )
 
         # Mock objects
@@ -131,11 +131,11 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_modify.country,
             client_to_modify.email,
             client_to_modify.phone,
-            client_to_modify.type_id.value,
+            client_to_modify.type_id.get_type(),
             client_to_modify.tax_id,
             client_to_modify.tax_condition.value,
-            client_to_modify.client_type.value,
-            client_to_modify.status.value,
+            client_to_modify.client_type.get_type(),
+            client_to_modify.status.get_status(),
             client_to_modify.pk_client
         )
 

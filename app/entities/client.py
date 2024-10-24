@@ -59,11 +59,11 @@ class Client:
             "country": self.country,
             "email": self.email,
             "phone": self.phone,
-            "type_id": self.type_id.value,
+            "type_id": self.type_id.value[0],
             "tax_id": self.tax_id,
             "tax_condition": self.tax_condition.value,
-            "client_type": self.client_type.value,
-            "status": self.status.value
+            "client_type": self.client_type.value[0],
+            "status": self.status.value[0]
         }
 
 class ClientBuilder:
