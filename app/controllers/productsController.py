@@ -4,7 +4,6 @@ from flask import request, jsonify
 
 from app.dtos.requestProductDto import RequestProductDTO
 from app.dtos.responseProductDto import ResponseProductDTO
-from app.entities.enums.clientStatus import ClientStatus
 from app.entities.enums.currency import Currency
 from app.entities.enums.productIva import ProductIva
 from app.entities.enums.productType import ProductType

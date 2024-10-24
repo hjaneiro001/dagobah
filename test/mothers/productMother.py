@@ -1,5 +1,5 @@
 from app.entities.product import Product, ProductBuilder
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.productType import  ProductType
 from app.entities.enums.productIva import ProductIva
 from app.entities.enums.currency import Currency
@@ -18,6 +18,6 @@ class ProductMother:
                             .currency(Currency.ARS)
                             .iva(ProductIva.I21)
                             .product_type(ProductType.PRODUCTO)
-                            .status(ClientStatus.ACTIVE)
+                            .status(Status.ACTIVE)
                             .build())
         return product

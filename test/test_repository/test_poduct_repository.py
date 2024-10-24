@@ -22,7 +22,7 @@ def test_get_all():
             'product_currency': expected_product.currency.value,
             'product_iva': expected_product.iva.value,
             'product_type': expected_product.product_type.value,
-            'product_status': expected_product.status.value
+            'product_status': expected_product.status.get_status()
         }
     ]
 
@@ -56,7 +56,7 @@ def test_get_id():
                 'product_currency': expected_product.currency.value,
                 'product_iva': expected_product.iva.value,
                 'product_type': expected_product.product_type.value,
-                'product_status': expected_product.status.value
+                'product_status': expected_product.status.get_status()
             }
 
     mock_connection = MagicMock()
@@ -85,7 +85,7 @@ def test_create_success():
         product_to_create.code, product_to_create.bar_code, product_to_create.name, product_to_create.description,
         product_to_create.pack,
         product_to_create.price, product_to_create.currency.value, product_to_create.iva.value,
-        product_to_create.product_type.value, product_to_create.status.value
+        product_to_create.product_type.value, product_to_create.status.get_status()
     )
 
     mock_connection = MagicMock()
@@ -107,7 +107,7 @@ def test_save_success():
     expected_values = (
         product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
         product_to_modify.pack, product_to_modify.price, product_to_modify.currency.value,
-        product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.value,
+        product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.get_status(),
         product_to_modify.product_id
     )
 

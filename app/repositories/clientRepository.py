@@ -1,7 +1,7 @@
 from app.entities.client import Client, ClientBuilder
 import pymysql.cursors
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import  Status
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.typeId import TypeId
@@ -21,7 +21,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                client.tax_condition.value,client.client_type.get_type(), client.status.value
+                client.tax_condition.value,client.client_type.get_type(), client.status.get_status()
             )
 
             cursor = self.conn.cursor()
@@ -54,7 +54,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id.get_type(), client.tax_id,
-            client.tax_condition.value, client.client_type.get_type(), client.status.value, client.pk_client
+            client.tax_condition.value, client.client_type.get_type(), client.status.get_status(), client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -85,7 +85,7 @@ class ClientRepository:
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
                 .client_type(ClientType[row.get('client_type')])
-                .status(ClientStatus(row.get('client_status')))
+                .status(Status[row.get('client_status')])
                 .build())
 
         return client
@@ -113,7 +113,7 @@ class ClientRepository:
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
                           .client_type(ClientType[row.get('client_type')])
-                          .status(ClientStatus(row.get('client_status')))
+                          .status(Status[row.get('client_status')])
                           .build())
 
                 clients.append(client)
