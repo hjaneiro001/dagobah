@@ -13,7 +13,7 @@ class ProductRepository:
 
     def get_all(self):
 
-            sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.value}'"
+            sql = "SELECT * FROM Products WHERE product_status = 'ACTIVE'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -41,7 +41,7 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.value}'"
+        sql :str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -88,7 +88,7 @@ class ProductRepository:
         return product_id
 
     def find_by_code(self, product_code: str):
-        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.value}'"
+        sql: str = "SELECT * FROM products WHERE product_code = %s AND product_status = 'ACTIVE'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()

@@ -36,7 +36,7 @@ class ClientRepository:
 
 
     def find_by_tax_id(self, taxid: str):
-            sql: str = f"SELECT * FROM clients WHERE client_tax_id = %s AND client_status = '{Status.ACTIVE.value}'"
+            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s AND client_status = 'ACTIVE'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
@@ -65,7 +65,7 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.value}'"
+        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -93,7 +93,7 @@ class ClientRepository:
 
     def get_all(self):
 
-            sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.value}'"
+            sql = f"SELECT * FROM clients WHERE client_status = 'ACTIVE'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
