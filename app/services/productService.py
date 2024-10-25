@@ -22,7 +22,7 @@ class ProductService:
     def create(self, product: Product):
         if self.product_repository.find_by_code(product.code):
             raise ProductAlreadyExistsException
-        product.status = Status.ACTIVE
+        product.status = Status.get_status('ACTIVE')
         product_id: int = self.product_repository.create(product)
         return product_id
 

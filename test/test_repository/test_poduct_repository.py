@@ -11,7 +11,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
         #Arrange
-        expected_sentence: str = "SELECT * FROM Products WHERE product_status = 'ACTIVE'"
+        expected_sentence: str = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE}'"
         expected_product: Product = ProductMother.normal_product(1)
         expected_db_response = [
             {
@@ -25,7 +25,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
                 'product_currency': expected_product.currency.value,
                 'product_iva': expected_product.iva.value,
                 'product_type': expected_product.product_type.value,
-                'product_status': expected_product.status.get_status()
+                'product_status': expected_product.status.get_status('ACTIVE')
             }
         ]
 
@@ -47,7 +47,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
     def test_get_id(self):
         # Arrange
         expected_product: Product = ProductMother.normal_product(1)
-        expected_sentence: str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
+        expected_sentence: str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE}'"
         expected_db_response = {
                     'product_id': expected_product.product_id,
                     'product_code': expected_product.code,
@@ -59,7 +59,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
                     'product_currency': expected_product.currency.value,
                     'product_iva': expected_product.iva.value,
                     'product_type': expected_product.product_type.value,
-                    'product_status': expected_product.status.get_status()
+                    'product_status': expected_product.status.get_status('ACTIVE')
                 }
 
         mock_connection = MagicMock()
@@ -88,7 +88,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
             product_to_create.code, product_to_create.bar_code, product_to_create.name, product_to_create.description,
             product_to_create.pack,
             product_to_create.price, product_to_create.currency.value, product_to_create.iva.value,
-            product_to_create.product_type.value, product_to_create.status.get_status()
+            product_to_create.product_type.value, product_to_create.status.ACTIVE
         )
 
         mock_connection = MagicMock()
@@ -110,7 +110,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
         expected_values = (
             product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
             product_to_modify.pack, product_to_modify.price, product_to_modify.currency.value,
-            product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.get_status(),
+            product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.ACTIVE,
             product_to_modify.product_id
         )
 

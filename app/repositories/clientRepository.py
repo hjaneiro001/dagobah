@@ -22,7 +22,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                client.tax_condition.value,client.client_type.get_type(), client.status.get_status()
+                client.tax_condition.value,client.client_type.get_type(), client.status.ACTIVE
             )
 
             cursor = self.conn.cursor()
@@ -36,7 +36,7 @@ class ClientRepository:
 
 
     def find_by_tax_id(self, taxid: str):
-            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s AND client_status = 'ACTIVE'"
+            sql: str = f"SELECT * FROM clients WHERE client_tax_id = %s AND client_status = '{Status.get_status('ACTIVE')}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
@@ -55,7 +55,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id.get_type(), client.tax_id,
-            client.tax_condition.value, client.client_type.get_type(), client.status.get_status(), client.pk_client
+            client.tax_condition.value, client.client_type.get_type(), client.status.ACTIVE, client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -65,7 +65,7 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
+        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.get_status('ACTIVE')}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -93,7 +93,7 @@ class ClientRepository:
 
     def get_all(self):
 
-            sql = f"SELECT * FROM clients WHERE client_status = 'ACTIVE'"
+            sql = f"SELECT * FROM clients WHERE client_status = '{Status.get_status('ACTIVE')}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()

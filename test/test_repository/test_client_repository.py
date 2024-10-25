@@ -13,7 +13,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
 
-        expected_sql :str = f"SELECT * FROM clients WHERE client_status = 'ACTIVE'"
+        expected_sql :str = f"SELECT * FROM clients WHERE client_status = '{Status.get_status('ACTIVE')}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = [{
@@ -29,7 +29,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_tax_id': expected_client.tax_id,
             'client_tax_condition': expected_client.tax_condition.value,
             'client_type': expected_client.client_type.get_type(),
-            'client_status': expected_client.status.get_status()
+            'client_status': expected_client.status.get_status('ACTIVE')
         }]
 
         mock_connection = MagicMock()
@@ -47,7 +47,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
         mock_cursor.execute.assert_called_with(expected_sql)
 
     def test_get_id(self):
-        expected_sql: str = "SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
+        expected_sql: str = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.get_status('ACTIVE')}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = {
@@ -63,7 +63,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_tax_id': expected_client.tax_id,
             'client_tax_condition': expected_client.tax_condition.value,
             'client_type': expected_client.client_type.get_type(),
-            'client_status': expected_client.status.get_status()
+            'client_status': expected_client.status.get_status('ACTIVE')
         }
 
         mock_connection = MagicMock()
@@ -103,7 +103,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_create.tax_id,
             client_to_create.tax_condition.value,
             client_to_create.client_type.get_type(),
-            client_to_create.status.get_status()
+            client_to_create.status.ACTIVE
         )
 
         # Mock objects
@@ -135,7 +135,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_modify.tax_id,
             client_to_modify.tax_condition.value,
             client_to_modify.client_type.get_type(),
-            client_to_modify.status.get_status(),
+            client_to_modify.status.ACTIVE,
             client_to_modify.pk_client
         )
 

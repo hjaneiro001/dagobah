@@ -12,8 +12,9 @@ class ProductRepository:
         self.conn = connection
 
     def get_all(self):
-
-            sql = "SELECT * FROM Products WHERE product_status = 'ACTIVE'"
+            st = Status.get_status('ACTIVE')
+            print(st)
+            sql = f"SELECT * FROM Products WHERE product_status = '{Status.get_status('ACTIVE')}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -41,7 +42,7 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        sql :str = "SELECT * FROM products WHERE product_id = %s AND product_status = 'ACTIVE'"
+        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.get_status('ACTIVE')}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -75,7 +76,7 @@ class ProductRepository:
         values = (
             product.code, product.bar_code, product.name, product.description, product.pack,
             product.price, product.currency.value, product.iva.value,
-            product.product_type.value, product.status.get_status()
+            product.product_type.value, product.status
         )
 
         cursor = self.conn.cursor()
@@ -88,7 +89,7 @@ class ProductRepository:
         return product_id
 
     def find_by_code(self, product_code: str):
-        sql: str = "SELECT * FROM products WHERE product_code = %s AND product_status = 'ACTIVE'"
+        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.get_status('ACTIVE')}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()
@@ -105,7 +106,7 @@ class ProductRepository:
 
         values = (
             product.code, product.name, product.description, product.bar_code, product.pack, product.price,
-            product.currency.value, product.iva.value, product.product_type.value, product.status.get_status(),
+            product.currency.value, product.iva.value, product.product_type.value, product.status,
             product.product_id
         )
 
