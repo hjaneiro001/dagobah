@@ -1,10 +1,10 @@
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 
 class Client:
-    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :ClientStatus):
+    def __init__(self, pk_client :int, name :str, address :str, city :str, state :str, country :str, email :str, phone :str, type_id :TypeId, tax_id :str, tax_condition :TaxCondition, client_type :ClientType, status :Status):
         self.pk_client :int = pk_client
         self.name :str = name
         self.address :str= address
@@ -17,7 +17,7 @@ class Client:
         self.tax_id :str= tax_id
         self.tax_condition :TaxCondition = tax_condition
         self.client_type : ClientType = client_type
-        self.status :ClientStatus= status
+        self.status :Status= status
 
     def __str__(self):
         return (f"Name: {self.name}\n"
@@ -32,6 +32,23 @@ class Client:
                 f"Tax Condition: {self.tax_condition.value}\n"
                 f"Type: {self.client_type.value}")
 
+    def __eq__(self, other):
+        if not isinstance(other, Client):
+            return False
+        return (self.pk_client == other.pk_client and
+                self.name == other.name and
+                self.address == other.address and
+                self.city == other.city and
+                self.state == other.state and
+                self.country == other.country and
+                self.email == other.email and
+                self.phone == other.phone and
+                self.type_id == other.type_id and
+                self.tax_id == other.tax_id and
+                self.tax_condition == other.tax_condition and
+                self.client_type == other.client_type and
+                self.status == other.status)
+
     def to_dict(self):
         return {
             "pk_client": self.pk_client,
@@ -42,11 +59,11 @@ class Client:
             "country": self.country,
             "email": self.email,
             "phone": self.phone,
-            "type_id": self.type_id.value,
+            "type_id": self.type_id.value[0],
             "tax_id": self.tax_id,
             "tax_condition": self.tax_condition.value,
-            "client_type": self.client_type.value,
-            "status": self.status.value
+            "client_type": self.client_type.value[0],
+            "status": self.status.value[0]
         }
 
 class ClientBuilder:
@@ -113,8 +130,8 @@ class ClientBuilder:
         self._client_type :ClientType = client_type
         return self
 
-    def status(self, status :ClientStatus):
-        self._status :ClientStatus = status
+    def status(self, status :Status):
+        self._status :Status = status
         return self
 
     def build(self):

@@ -1,5 +1,5 @@
 from app.entities.client import Client
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
 from app.exceptions.clientAlreadyExistsException import ClientAlreadyExistsException
 from app.exceptions.clientNotFoundException import ClientNotFoundException
 
@@ -11,7 +11,7 @@ class ClientService:
     def create(self, client: Client):
         if self.client_repository.find_by_tax_id(client.tax_id):
             raise ClientAlreadyExistsException
-        client.status = ClientStatus.ACTIVE
+        client.status = Status.ACTIVE
         client_id :int = self.client_repository.create(client)
         return client_id
 
@@ -37,7 +37,6 @@ class ClientService:
         client: Client = self.client_repository.get_id(id)
         if client is None:
             raise ClientNotFoundException
-
-        client.status = ClientStatus.INACTIVE
+        client.status = Status.INACTIVE
         self.client_repository.save(client)
         return

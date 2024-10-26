@@ -1,8 +1,11 @@
+
 from app.config import Config
 from pymysql import connect,cursors
 
 from app.repositories.clientRepository import ClientRepository
+from app.repositories.productRepository import ProductRepository
 from app.services.clientService import ClientService
+from app.services.productService import ProductService
 
 connection = connect(host=Config.HOST,
                      port= Config.PORT,
@@ -13,3 +16,6 @@ connection = connect(host=Config.HOST,
 
 clientRepository = ClientRepository(connection)
 clientService = ClientService(clientRepository)
+
+productRepository = ProductRepository(connection)
+productService = ProductService(productRepository)

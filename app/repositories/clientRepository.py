@@ -1,11 +1,11 @@
 from app.entities.client import Client, ClientBuilder
 import pymysql.cursors
 
-from app.entities.enums.clientStatus import ClientStatus
+from app.entities.enums.status import Status
+
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
 from app.entities.enums.typeId import TypeId
-
 
 class ClientRepository:
 
@@ -21,8 +21,8 @@ class ClientRepository:
 
             values = (
                 client.name, client.address, client.city, client.state, client.country,
-                client.email, client.phone, client.type_id.value, client.tax_id,
-                client.tax_condition.value,client.client_type.value, client.status.value
+                client.email, client.phone, client.type_id.get_type(), client.tax_id,
+                client.tax_condition.value,client.client_type.get_type(), client.status.get_status()
             )
 
             cursor = self.conn.cursor()
@@ -36,7 +36,7 @@ class ClientRepository:
 
 
     def find_by_tax_id(self, taxid: str):
-            sql: str = "SELECT * FROM clients WHERE client_tax_id = %s AND client_status = 'ACTIVE'"
+            sql: str = f"SELECT * FROM clients WHERE client_tax_id = %s AND client_status = '{Status.ACTIVE.value}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
@@ -54,8 +54,8 @@ class ClientRepository:
 
         values = (
             client.name, client.address, client.city, client.state, client.country,
-            client.email, client.phone, client.type_id.value, client.tax_id,
-            client.tax_condition.value, client.client_type.value, client.status.value, client.pk_client
+            client.email, client.phone, client.type_id.get_type(), client.tax_id,
+            client.tax_condition.value, client.client_type.get_type(), client.status.get_status(), client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -65,7 +65,7 @@ class ClientRepository:
 
 
     def get_id(self, id: int):
-        sql = "SELECT * FROM clients WHERE client_id = %s AND client_status = 'ACTIVE'"
+        sql = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.value}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -82,18 +82,18 @@ class ClientRepository:
                 .country(row.get('client_country'))
                 .email(row.get('client_email'))
                 .phone(row.get('client_phone'))
-                .type_id(TypeId(row.get('client_type_id')))
+                .type_id(TypeId[row.get('client_type_id')])
                 .tax_id(row.get('client_tax_id'))
                 .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                .client_type(ClientType(row.get('client_type')))
-                .status(ClientStatus(row.get('client_status')))
+                .client_type(ClientType[row.get('client_type')])
+                .status(Status[row.get('client_status')])
                 .build())
 
         return client
 
     def get_all(self):
 
-            sql = "SELECT * FROM clients WHERE client_status = 'ACTIVE'"
+            sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.value}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -110,30 +110,17 @@ class ClientRepository:
                           .country(row.get('client_country'))
                           .email(row.get('client_email'))
                           .phone(row.get('client_phone'))
-                          .type_id(TypeId(row.get('client_type_id')))
+                          .type_id(TypeId[row.get('client_type_id')])
                           .tax_id(row.get('client_tax_id'))
                           .tax_condition(TaxCondition(row.get('client_tax_condition')))
-                          .client_type(ClientType(row.get('client_type')))
-                          .status(ClientStatus(row.get('client_status')))
+                          .client_type(ClientType[row.get('client_type')])
+                          .status(Status[row.get('client_status')])
                           .build())
 
                 clients.append(client)
 
             return clients
 
-
-    def delete(self, id: int):
-
-        sql: str = """
-                   UPDATE clients
-                   SET client_status = "INACTIVE"
-                   WHERE client_id = %s
-               """
-
-        cursor = self.conn.cursor()
-        cursor.execute(sql, id)
-        self.conn.commit()
-        cursor.close()
 
 
 
