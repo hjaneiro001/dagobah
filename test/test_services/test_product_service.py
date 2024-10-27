@@ -94,7 +94,7 @@ class TestProductService(unittest.TestCase):
         id_to_modify = random.randint(1, 100)
         product_to_modify = ProductMother.normal_product(id_to_modify)
         product_updated = ProductMother.normal_product(id_to_modify)
-
+        print(product_to_modify)
         mock_get_id.return_value = product_to_modify
 
         # Act

@@ -20,18 +20,22 @@ class ProductService:
         return product
 
     def create(self, product: Product):
+        print(product)
         if self.product_repository.find_by_code(product.code):
             raise ProductAlreadyExistsException
         product.status = Status.get_status('ACTIVE')
+
         product_id: int = self.product_repository.create(product)
         return product_id
 
     def modify(self,id: int,product: Product):
+
         product_to_modify: Product = self.product_repository.get_id(id)
         if product_to_modify is None:
             raise ProductNotFoundException
         product.product_id = product_to_modify.product_id
         product.status = product_to_modify.status
+
         self.product_repository.save(product)
         return
 

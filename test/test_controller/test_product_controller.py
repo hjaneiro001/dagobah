@@ -34,7 +34,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product_a.description,
             'pack': mocked_product_a.pack,
             'price': mocked_product_a.price,
-            'currency': mocked_product_a.currency.value,
+            'currency': mocked_product_a.currency.get_currency(),
             'iva': mocked_product_a.iva.value,
             'product_type': mocked_product_a.product_type.value,
             'status': mocked_product_a.status.get_status('ACTIVE'),
@@ -46,7 +46,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product_b.description,
             'pack': mocked_product_b.pack,
             'price': mocked_product_b.price,
-            'currency': mocked_product_b.currency.value,
+            'currency': mocked_product_b.currency.get_currency(),
             'iva': mocked_product_b.iva.value,
             'product_type': mocked_product_b.product_type.value,
             'status': mocked_product_b.status.get_status('ACTIVE'),
@@ -74,7 +74,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
+            'currency': mocked_product.currency.get_currency(),
             'iva': mocked_product.iva.value,
             'product_type': mocked_product.product_type.value,
             'status': mocked_product.status.get_status('ACTIVE'),
@@ -102,7 +102,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
+            'currency': mocked_product.currency.get_code('PESOS'),
             'iva': mocked_product.iva.value,
             'product_type': mocked_product.product_type.value
         }
@@ -127,7 +127,7 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
+            'currency': mocked_product.currency.get_code('PESOS'),
             'iva': mocked_product.iva.value,
             'product_type': mocked_product.product_type.value
         }

@@ -22,7 +22,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
                 'product_description': expected_product.description,
                 'product_pack': expected_product.pack,
                 'product_price': expected_product.price,
-                'product_currency': expected_product.currency.value,
+                'product_currency': expected_product.currency.get_code('PESOS'),
                 'product_iva': expected_product.iva.value,
                 'product_type': expected_product.product_type.value,
                 'product_status': expected_product.status.get_status('ACTIVE')
@@ -56,7 +56,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
                     'product_description': expected_product.description,
                     'product_pack': expected_product.pack,
                     'product_price': expected_product.price,
-                    'product_currency': expected_product.currency.value,
+                    'product_currency': expected_product.currency.get_code('PESOS'),
                     'product_iva': expected_product.iva.value,
                     'product_type': expected_product.product_type.value,
                     'product_status': expected_product.status.get_status('ACTIVE')
@@ -87,7 +87,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
         expected_values = (
             product_to_create.code, product_to_create.bar_code, product_to_create.name, product_to_create.description,
             product_to_create.pack,
-            product_to_create.price, product_to_create.currency.value, product_to_create.iva.value,
+            product_to_create.price, product_to_create.currency.get_code('PESOS'), product_to_create.iva.value,
             product_to_create.product_type.value, product_to_create.status.ACTIVE
         )
 
@@ -109,7 +109,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
         expected_values = (
             product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
-            product_to_modify.pack, product_to_modify.price, product_to_modify.currency.value,
+            product_to_modify.pack, product_to_modify.price, product_to_modify.currency.get_code('PESOS'),
             product_to_modify.iva.value, product_to_modify.product_type.value, product_to_modify.status.ACTIVE,
             product_to_modify.product_id
         )

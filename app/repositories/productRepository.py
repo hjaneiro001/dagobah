@@ -12,8 +12,7 @@ class ProductRepository:
         self.conn = connection
 
     def get_all(self):
-            st = Status.get_status('ACTIVE')
-            print(st)
+
             sql = f"SELECT * FROM Products WHERE product_status = '{Status.get_status('ACTIVE')}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
@@ -30,7 +29,7 @@ class ProductRepository:
                         .description(row.get('product_description'))
                         .pack(row.get('product_pack'))
                         .price(row.get('product_price'))
-                        .currency(Currency(row.get('product_currency')))
+                        .currency(Currency[row.get('product_currency')])
                         .iva(ProductIva(row.get('product_iva')))
                         .product_type(ProductType(row.get('product_type')))
                         .status(Status[row.get('product_status')])
@@ -58,16 +57,16 @@ class ProductRepository:
                     .description(row.get('product_description'))
                     .pack(row.get('product_pack'))
                     .price(row.get('product_price'))
-                    .currency(Currency(row.get('product_currency')))
+                    .currency(Currency[row.get('product_currency')])
                     .iva(ProductIva(row.get('product_iva')))
                     .product_type(ProductType(row.get('product_type')))
                     .status(Status[row.get('product_status')])
-                    .currency(Currency(row.get('product_currency')))
                     .build())
 
         return product
 
     def create(self, product: Product):
+
         sql: str = """
             INSERT INTO products (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -75,7 +74,7 @@ class ProductRepository:
 
         values = (
             product.code, product.bar_code, product.name, product.description, product.pack,
-            product.price, product.currency.value, product.iva.value,
+            product.price,Currency.get_code(product.currency.get_currency()) , product.iva.value,
             product.product_type.value, product.status
         )
 
@@ -88,6 +87,7 @@ class ProductRepository:
 
         return product_id
 
+
     def find_by_code(self, product_code: str):
         sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.get_status('ACTIVE')}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
@@ -95,18 +95,20 @@ class ProductRepository:
         row = cursor.fetchone()
         return row
 
+
     def save(self, product: Product):
+
         sql: str = """
             UPDATE products
-            SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s, 
-                product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
+            SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s,
+                product_price = %s, product_currency = %s, product_iva = %s, product_type = %s,
                 product_status = %s
             WHERE product_id = %s
         """
 
         values = (
-            product.code, product.name, product.description, product.bar_code, product.pack, product.price,
-            product.currency.value, product.iva.value, product.product_type.value, product.status,
+            product.code, product.name, product.description, product.bar_code, product.pack,
+            product.price, Currency.get_code(product.currency.get_currency())  , product.iva.value, product.product_type.value, product.status,
             product.product_id
         )
 
@@ -114,3 +116,4 @@ class ProductRepository:
         cursor.execute(sql, values)
         self.conn.commit()
         cursor.close()
+

@@ -38,7 +38,7 @@ class Product:
                 "description": self.description,
                 "pack": self.pack,
                 "price": self.price,
-                "currency": self.currency.value,
+                "currency": self.currency.value[0],
                 "iva": self.iva.value,
                 "product_type": self.product_type.value,
                 "status": self.status.value[0]

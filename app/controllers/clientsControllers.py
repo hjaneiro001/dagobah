@@ -68,7 +68,6 @@ def modify(id :int):
                       .client_type(ClientType[modify_client_dto["client_type"]])
                       .build())
 
-
     clientService.modify(id, client)
     return jsonify({"message": "Client modify successfully"}), 200
 
