@@ -70,7 +70,7 @@ class TestProductService(unittest.TestCase):
         mock_find_by_code.assert_called_once_with(mocked_product.code)
         mock_create.assert_called_once_with(mocked_product)
         self.assertEqual(product_id, mocked_product.product_id)
-        self.assertEqual(mocked_product.status, Status.ACTIVE)
+        self.assertEqual(mocked_product.status, Status.get_status('ACTIVE'))
 
 
     @patch('app.repositories.productRepository.ProductRepository.create')

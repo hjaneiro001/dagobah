@@ -43,7 +43,7 @@ def create():
                         .phone(post_client_dto["phone"])
                         .type_id(TypeId[post_client_dto["type_id"]])
                         .tax_id(post_client_dto["tax_id"])
-                        .tax_condition(TaxCondition(post_client_dto["tax_condition"]))
+                        .tax_condition(TaxCondition[post_client_dto["tax_condition"]])
                         .client_type(ClientType[post_client_dto["client_type"]])
                         .build())
 
@@ -64,9 +64,10 @@ def modify(id :int):
                       .phone(modify_client_dto["phone"])
                       .type_id(TypeId.get_type_id(modify_client_dto["type_id"]))
                       .tax_id(modify_client_dto["tax_id"])
-                      .tax_condition(TaxCondition(modify_client_dto["tax_condition"]))
+                      .tax_condition(TaxCondition[modify_client_dto["tax_condition"]])
                       .client_type(ClientType[modify_client_dto["client_type"]])
                       .build())
+
 
     clientService.modify(id, client)
     return jsonify({"message": "Client modify successfully"}), 200

@@ -27,7 +27,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_phone': expected_client.phone,
             'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
-            'client_tax_condition': expected_client.tax_condition.value,
+            'client_tax_condition': expected_client.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
             'client_type': expected_client.client_type.get_type(),
             'client_status': expected_client.status.get_status('ACTIVE')
         }]
@@ -61,7 +61,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_phone': expected_client.phone,
             'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
-            'client_tax_condition': expected_client.tax_condition.value,
+            'client_tax_condition': expected_client.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
             'client_type': expected_client.client_type.get_type(),
             'client_status': expected_client.status.get_status('ACTIVE')
         }
@@ -101,7 +101,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_create.phone,
             client_to_create.type_id.get_type(),
             client_to_create.tax_id,
-            client_to_create.tax_condition.value,
+            client_to_create.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
             client_to_create.client_type.get_type(),
             client_to_create.status.ACTIVE
         )
@@ -133,7 +133,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_modify.phone,
             client_to_modify.type_id.get_type(),
             client_to_modify.tax_id,
-            client_to_modify.tax_condition.value,
+            client_to_modify.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
             client_to_modify.client_type.get_type(),
             client_to_modify.status.ACTIVE,
             client_to_modify.pk_client

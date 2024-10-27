@@ -22,7 +22,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                client.tax_condition.value,client.client_type.get_type(), client.status.ACTIVE
+                TaxCondition.get_code(client.tax_condition.get_condition()),client.client_type.get_type(), client.status.ACTIVE
             )
 
             cursor = self.conn.cursor()
@@ -44,6 +44,7 @@ class ClientRepository:
 
 
     def save(self,client: Client):
+        print(client)
         sql: str = """
                 UPDATE clients
                 SET client_name = %s, client_address = %s, client_city = %s, client_state = %s,
@@ -55,7 +56,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id.get_type(), client.tax_id,
-            client.tax_condition.value, client.client_type.get_type(), client.status.ACTIVE, client.pk_client
+            TaxCondition.get_code(client.tax_condition.get_condition()), client.client_type.get_type(), client.status.ACTIVE, client.pk_client
         )
 
         cursor = self.conn.cursor()
@@ -84,7 +85,7 @@ class ClientRepository:
                 .phone(row.get('client_phone'))
                 .type_id(TypeId[row.get('client_type_id')])
                 .tax_id(row.get('client_tax_id'))
-                .tax_condition(TaxCondition(row.get('client_tax_condition')))
+                .tax_condition(TaxCondition[row.get('client_tax_condition')])
                 .client_type(ClientType[row.get('client_type')])
                 .status(Status[row.get('client_status')])
                 .build())
@@ -112,7 +113,7 @@ class ClientRepository:
                           .phone(row.get('client_phone'))
                           .type_id(TypeId[row.get('client_type_id')])
                           .tax_id(row.get('client_tax_id'))
-                          .tax_condition(TaxCondition(row.get('client_tax_condition')))
+                          .tax_condition(TaxCondition[row.get('client_tax_condition')])
                           .client_type(ClientType[row.get('client_type')])
                           .status(Status[row.get('client_status')])
                           .build())

@@ -61,7 +61,7 @@ class Client:
             "phone": self.phone,
             "type_id": self.type_id.value[0],
             "tax_id": self.tax_id,
-            "tax_condition": self.tax_condition.value,
+            "tax_condition": self.tax_condition.value[0],
             "client_type": self.client_type.value[0],
             "status": self.status.value[0]
         }
