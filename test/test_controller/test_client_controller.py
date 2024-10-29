@@ -106,7 +106,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "phone": mocked_client.phone,
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
-            "tax_condition": mocked_client.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
+            "tax_condition": mocked_client.tax_condition.get_name('RESPONSABLE INSCRIPTO'),
             "client_type": mocked_client.client_type.get_type()
         }
 
@@ -134,7 +134,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "phone": mocked_client.phone,
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
-            "tax_condition": mocked_client.tax_condition.get_code('RESPONSABLE INSCRIPTO'),
+            "tax_condition": mocked_client.tax_condition.get_name('RESPONSABLE INSCRIPTO'),
             "client_type": mocked_client.client_type.get_type()
         }
         expected_response = {"message": "Client modify successfully"}

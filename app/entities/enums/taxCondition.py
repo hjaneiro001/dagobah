@@ -17,7 +17,7 @@ class TaxCondition(Enum):
     ES = ['EVENTUAL SOCIAL']
 
     @classmethod
-    def get_code(cls, value):
+    def get_name(cls, value):
         for item in cls:
             if value == item.value[0]:
                 return item.name

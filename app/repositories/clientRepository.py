@@ -22,7 +22,7 @@ class ClientRepository:
             values = (
                 client.name, client.address, client.city, client.state, client.country,
                 client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                TaxCondition.get_code(client.tax_condition.get_condition()),client.client_type.get_type(), client.status.ACTIVE
+                TaxCondition.get_name(client.tax_condition.get_condition()),client.client_type.get_type(), client.status.ACTIVE
             )
 
             cursor = self.conn.cursor()
@@ -44,7 +44,7 @@ class ClientRepository:
 
 
     def save(self,client: Client):
-        print(client)
+
         sql: str = """
                 UPDATE clients
                 SET client_name = %s, client_address = %s, client_city = %s, client_state = %s,
@@ -56,7 +56,7 @@ class ClientRepository:
         values = (
             client.name, client.address, client.city, client.state, client.country,
             client.email, client.phone, client.type_id.get_type(), client.tax_id,
-            TaxCondition.get_code(client.tax_condition.get_condition()), client.client_type.get_type(), client.status.ACTIVE, client.pk_client
+            TaxCondition.get_name(client.tax_condition.get_condition()), client.client_type.get_type(), client.status.ACTIVE, client.pk_client
         )
 
         cursor = self.conn.cursor()
