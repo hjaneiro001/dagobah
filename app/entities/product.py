@@ -40,7 +40,7 @@ class Product:
                 "price": self.price,
                 "currency": self.currency.value[0],
                 "iva": self.iva.value,
-                "product_type": self.product_type.value,
+                "product_type": self.product_type.value[0],
                 "status": self.status.value[0]
             }
 

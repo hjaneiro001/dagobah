@@ -41,7 +41,7 @@ def create():
                .price(request_product_dto['price'])
                .currency(Currency[request_product_dto['currency']])
                .iva(ProductIva(request_product_dto['iva']))
-               .product_type(ProductType(request_product_dto['product_type']))
+               .product_type(ProductType[request_product_dto['product_type']])
                .build())
 
     product_id: int = productService.create(product)
@@ -61,7 +61,7 @@ def modify(id :int):
                .price(modify_product_dto['price'])
                .currency(Currency[modify_product_dto['currency']])
                .iva(ProductIva(modify_product_dto['iva']))
-               .product_type(ProductType(modify_product_dto['product_type']))
+               .product_type(ProductType[modify_product_dto['product_type']])
                .build())
 
     productService.modify(id, product)
