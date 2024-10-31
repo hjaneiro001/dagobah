@@ -16,11 +16,12 @@ class TaxCondition(Enum):
     MS = ['MONOTRIBUTO SOCIAL']
     ES = ['EVENTUAL SOCIAL']
 
-    @classmethod
-    def get_name(cls, value):
-        for item in cls:
-            if value == item.value[0]:
-                return item.name
+  #  @classmethod
+    def get_tax_condition(value):
+        for item in TaxCondition:
+            if value in item.value:
+                return item
+        return None
 
     def get_condition(self):
         return self.value[0]

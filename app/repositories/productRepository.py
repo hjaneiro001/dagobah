@@ -1,3 +1,4 @@
+from itertools import product
 
 import pymysql.cursors
 from app.entities.enums.currency import Currency
@@ -13,7 +14,7 @@ class ProductRepository:
 
     def get_all(self):
 
-            sql = f"SELECT * FROM Products WHERE product_status = '{Status.get_status('ACTIVE')}'"
+            sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -29,10 +30,10 @@ class ProductRepository:
                         .description(row.get('product_description'))
                         .pack(row.get('product_pack'))
                         .price(row.get('product_price'))
-                        .currency(Currency[row.get('product_currency')])
-                        .iva(ProductIva(row.get('product_iva')))
-                        .product_type(ProductType[row.get('product_type')])
-                        .status(Status[row.get('product_status')])
+                        .currency(Currency.get_currency(row.get('product_currency')))
+                        .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                        .product_type(ProductType.get_product_type(row.get('product_type')))
+                        .status(Status.get_status(row.get('product_status')))
                         .build())
 
                 products.append(product)
@@ -41,7 +42,7 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.get_status('ACTIVE')}'"
+        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -57,10 +58,10 @@ class ProductRepository:
                     .description(row.get('product_description'))
                     .pack(row.get('product_pack'))
                     .price(row.get('product_price'))
-                    .currency(Currency[row.get('product_currency')])
-                    .iva(ProductIva(row.get('product_iva')))
-                    .product_type(ProductType[row.get('product_type')])
-                    .status(Status[row.get('product_status')])
+                    .currency(Currency.get_currency(row.get('product_currency')))
+                    .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                    .product_type(ProductType.get_product_type(row.get('product_type')))
+                    .status(Status.get_status(row.get('product_status')))
                     .build())
 
         return product
@@ -74,8 +75,8 @@ class ProductRepository:
 
         values = (
             product.code, product.bar_code, product.name, product.description, product.pack,
-            product.price,Currency.get_code(product.currency.get_currency()) , product.iva.value,
-            product.product_type.get_productType(), product.status
+            product.price,product.currency.get_value() , product.iva.get_iva(),
+            product.product_type.get_type(), product.status.get_value()
         )
 
         cursor = self.conn.cursor()
@@ -87,9 +88,8 @@ class ProductRepository:
 
         return product_id
 
-
     def find_by_code(self, product_code: str):
-        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.get_status('ACTIVE')}'"
+        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()
@@ -108,7 +108,7 @@ class ProductRepository:
 
         values = (
             product.code, product.name, product.description, product.bar_code, product.pack,
-            product.price, Currency.get_code(product.currency.get_currency())  , product.iva.value, ProductType.get_name(product.product_type.get_productType()), product.status,
+            product.price, product.currency.get_value() , product.iva.get_iva(), product.product_type.get_type(), product.status.get_value(),
             product.product_id
         )
 

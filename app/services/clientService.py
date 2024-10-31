@@ -29,7 +29,7 @@ class ClientService:
         if client_to_modify is None:
             raise ClientNotFoundException
         client.pk_client = client_to_modify.pk_client
-        client.status = client_to_modify.status
+        client.status = Status.ACTIVE
         self.client_repository.save(client)
         return
 

@@ -38,10 +38,10 @@ class Product:
                 "description": self.description,
                 "pack": self.pack,
                 "price": self.price,
-                "currency": self.currency.value[0],
-                "iva": self.iva.value,
-                "product_type": self.product_type.value[0],
-                "status": self.status.value[0]
+                "currency": self.currency.get_value(),
+                "iva": self.iva.get_iva(),
+                "product_type": self.product_type.get_type(),
+                "status": self.status.get_value()
             }
 
     def __eq__(self, other):
