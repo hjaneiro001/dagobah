@@ -1,4 +1,3 @@
-from itertools import product
 
 import pymysql.cursors
 from app.entities.enums.currency import Currency
