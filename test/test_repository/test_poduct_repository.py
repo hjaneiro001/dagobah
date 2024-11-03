@@ -11,7 +11,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
         #Arrange
-        expected_sentence: str = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE}'"
+        expected_sentence: str = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
         expected_product: Product = ProductMother.normal_product(1)
         expected_db_response = [
             {
@@ -22,10 +22,10 @@ class ProductRepositoryTestCase(unittest.TestCase):
                 'product_description': expected_product.description,
                 'product_pack': expected_product.pack,
                 'product_price': expected_product.price,
-                'product_currency': expected_product.currency.get_code('PESOS'),
-                'product_iva': expected_product.iva.value,
-                'product_type': expected_product.product_type.get_name('PRODUCTO'),
-                'product_status': expected_product.status.get_status('ACTIVE')
+                'product_currency': expected_product.currency.get_value(),
+                'product_iva': expected_product.iva.get_iva(),
+                'product_type': expected_product.product_type.get_type(),
+                'product_status': expected_product.status.ACTIVE.get_value()
             }
         ]
 
@@ -47,7 +47,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
     def test_get_id(self):
         # Arrange
         expected_product: Product = ProductMother.normal_product(1)
-        expected_sentence: str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE}'"
+        expected_sentence: str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         expected_db_response = {
                     'product_id': expected_product.product_id,
                     'product_code': expected_product.code,
@@ -56,10 +56,10 @@ class ProductRepositoryTestCase(unittest.TestCase):
                     'product_description': expected_product.description,
                     'product_pack': expected_product.pack,
                     'product_price': expected_product.price,
-                    'product_currency': expected_product.currency.get_code('PESOS'),
-                    'product_iva': expected_product.iva.value,
-                    'product_type': expected_product.product_type.get_name('PRODUCTO'),
-                    'product_status': expected_product.status.get_status('ACTIVE')
+                    'product_currency': expected_product.currency.get_value(),
+                    'product_iva': expected_product.iva.get_iva(),
+                    'product_type': expected_product.product_type.get_type(),
+                    'product_status': expected_product.status.ACTIVE.get_value()
                 }
 
         mock_connection = MagicMock()
@@ -87,8 +87,8 @@ class ProductRepositoryTestCase(unittest.TestCase):
         expected_values = (
             product_to_create.code, product_to_create.bar_code, product_to_create.name, product_to_create.description,
             product_to_create.pack,
-            product_to_create.price, product_to_create.currency.get_code('PESOS'), product_to_create.iva.value,
-            product_to_create.product_type.get_name('PRODUCTO'), product_to_create.status.ACTIVE
+            product_to_create.price, product_to_create.currency.get_value(), product_to_create.iva.get_iva(),
+            product_to_create.product_type.get_type(), product_to_create.status.ACTIVE.get_value()
         )
 
         mock_connection = MagicMock()
@@ -109,8 +109,8 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
         expected_values = (
             product_to_modify.code, product_to_modify.name, product_to_modify.description, product_to_modify.bar_code,
-            product_to_modify.pack, product_to_modify.price, product_to_modify.currency.get_code('PESOS'),
-            product_to_modify.iva.value, product_to_modify.product_type.get_name('PRODUCTO'), product_to_modify.status.ACTIVE,
+            product_to_modify.pack, product_to_modify.price, product_to_modify.currency.get_value(),
+            product_to_modify.iva.get_iva(), product_to_modify.product_type.get_type(), product_to_modify.status.ACTIVE.get_value(),
             product_to_modify.product_id
         )
 

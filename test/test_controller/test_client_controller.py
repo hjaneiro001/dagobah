@@ -29,7 +29,7 @@ class ClientControllerTestCase(unittest.TestCase):
              'phone': mocked_client.phone,
              'pk_client': str(id),
              'state': mocked_client.state,
-             'status': mocked_client.status.get_status('ACTIVE'),
+             'status': mocked_client.status.ACTIVE.get_value(),
              'tax_condition': mocked_client.tax_condition.get_condition(),
              'tax_id': mocked_client.tax_id,
              'type_id': mocked_client.type_id.get_type()}
@@ -64,7 +64,7 @@ class ClientControllerTestCase(unittest.TestCase):
             'phone': mocked_client_a.phone,
             'pk_client': str(id_a),
             'state': mocked_client_a.state,
-            'status': mocked_client_a.status.get_status('ACTIVE'),
+            'status': mocked_client_a.status.ACTIVE.get_value(),
             'tax_condition': mocked_client_a.tax_condition.get_condition(),
             'tax_id': mocked_client_a.tax_id,
             'type_id': mocked_client_a.type_id.get_type()
@@ -78,7 +78,7 @@ class ClientControllerTestCase(unittest.TestCase):
             'phone': mocked_client_b.phone,
             'pk_client': str(id_b),
             'state': mocked_client_b.state,
-            'status': mocked_client_b.status.get_status('ACTIVE'),
+            'status': mocked_client_b.status.ACTIVE.get_value(),
             'tax_condition': mocked_client_b.tax_condition.get_condition(),
             'tax_id': mocked_client_b.tax_id,
             'type_id': mocked_client_b.type_id.get_type()
@@ -106,7 +106,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "phone": mocked_client.phone,
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
-            "tax_condition": mocked_client.tax_condition.get_name('RESPONSABLE INSCRIPTO'),
+            "tax_condition": mocked_client.tax_condition.get_condition(),
             "client_type": mocked_client.client_type.get_type()
         }
 
@@ -134,7 +134,7 @@ class ClientControllerTestCase(unittest.TestCase):
             "phone": mocked_client.phone,
             "type_id": mocked_client.type_id.get_type(),
             "tax_id": mocked_client.tax_id,
-            "tax_condition": mocked_client.tax_condition.get_name('RESPONSABLE INSCRIPTO'),
+            "tax_condition": mocked_client.tax_condition.get_condition(),
             "client_type": mocked_client.client_type.get_type()
         }
         expected_response = {"message": "Client modify successfully"}
