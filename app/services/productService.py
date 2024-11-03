@@ -1,9 +1,9 @@
-from itertools import product
+
 
 from app.entities.enums.status import Status
-from app.entities.enums.currency import Currency
 from app.entities.product import Product
 from app.exceptions.productAlreadyExistException import ProductAlreadyExistsException
+from app.exceptions.productCodeAlreadyExistException import ProductCodeAlreadyExistsException
 from app.exceptions.productNotFoundException import ProductNotFoundException
 
 class ProductService:
@@ -36,7 +36,7 @@ class ProductService:
 
         existing_product = self.product_repository.find_by_code(product.code)
         if existing_product and existing_product['product_id'] != id:
-            raise ProductAlreadyExistsException
+            raise ProductCodeAlreadyExistsException
 
         product.product_id = product_to_modify.product_id
         product.status = product_to_modify.status
