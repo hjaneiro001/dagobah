@@ -34,14 +34,33 @@ class ClientRepository:
 
             return client_id
 
+    def get_tax_id(self, taxid: str):
 
-    def find_by_tax_id(self, taxid: str):
             sql: str = f"SELECT * FROM clients WHERE client_tax_id = %s AND client_status = '{Status.ACTIVE.get_value()}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql, (taxid,))
             row = cursor.fetchone()
-            return row
 
+            if row is None:
+                return None
+
+            client = (ClientBuilder()
+                      .pk_client(row.get('client_id'))
+                      .name(row.get('client_name'))
+                      .address(row.get('client_address'))
+                      .city(row.get('client_city'))
+                      .state(row.get('client_state'))
+                      .country(row.get('client_country'))
+                      .email(row.get('client_email'))
+                      .phone(row.get('client_phone'))
+                      .type_id(TypeId.get_type_id(row.get('client_type_id')))
+                      .tax_id(row.get('client_tax_id'))
+                      .tax_condition(TaxCondition.get_tax_condition(row.get('client_tax_condition')))
+                      .client_type(ClientType.get_clienttype(row.get('client_type')))
+                      .status(Status.get_status(row.get('client_status')))
+                      .build())
+
+            return client
 
     def save(self,client: Client):
 

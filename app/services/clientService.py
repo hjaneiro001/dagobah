@@ -9,7 +9,7 @@ class ClientService:
         self.client_repository = client_repository
 
     def create(self, client: Client):
-        if self.client_repository.find_by_tax_id(client.tax_id):
+        if self.client_repository.get_tax_id(client.tax_id):
             raise ClientAlreadyExistsException
         client.status = Status.ACTIVE
         client_id :int = self.client_repository.create(client)
@@ -20,6 +20,12 @@ class ClientService:
 
     def get_id(self, id):
         client: Client = self.client_repository.get_id(id)
+        if client is None:
+            raise ClientNotFoundException
+        return client
+
+    def get_taxId(self, taxId):
+        client: Client = self.client_repository.get_taxId(taxId)
         if client is None:
             raise ClientNotFoundException
         return client

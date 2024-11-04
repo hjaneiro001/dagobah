@@ -34,8 +34,8 @@ class ProductService:
         if product_to_modify is None:
             raise ProductNotFoundException
 
-        existing_product = self.product_repository.find_by_code(product.code)
-        if existing_product and existing_product['product_id'] != id:
+        existing_product :Product= self.product_repository.find_by_code(product.code)
+        if existing_product and existing_product.product_id != id:
             raise ProductCodeAlreadyExistsException
 
         product.product_id = product_to_modify.product_id

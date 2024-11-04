@@ -41,25 +41,25 @@ class TestClientService(unittest.TestCase):
 
 
     @patch('app.repositories.clientRepository.ClientRepository.create')
-    @patch('app.repositories.clientRepository.ClientRepository.find_by_tax_id')
-    def test_create_client_success(self, mock_find_by_tax_id, mock_create):
+    @patch('app.repositories.clientRepository.ClientRepository.get_tax_id')
+    def test_create_client_success(self, mock_get_tax_id, mock_create):
         # Arrange
         mocked_client = ClientMother.normal_client(random.randint(1, 100))
-        mock_find_by_tax_id.return_value = None
+        mock_get_tax_id.return_value = None
         mock_create.return_value = mocked_client.pk_client
 
         # Act
         client_id = self.client_service.create(mocked_client)
 
         # Assert
-        mock_find_by_tax_id.assert_called_once_with(mocked_client.tax_id)
+        mock_get_tax_id.assert_called_once_with(mocked_client.tax_id)
         mock_create.assert_called_once_with(mocked_client)
         self.assertEqual(client_id, mocked_client.pk_client)
         self.assertEqual(mocked_client.status, Status.ACTIVE)
 
 
     @patch('app.repositories.clientRepository.ClientRepository.create')
-    @patch('app.repositories.clientRepository.ClientRepository.find_by_tax_id')
+    @patch('app.repositories.clientRepository.ClientRepository.get_tax_id')
     def test_create_client_already_exists(self, mock_find_by_tax_id, mock_create):
         # Arrange
         mocked_client = ClientMother.normal_client(random.randint(1, 100))

@@ -92,7 +92,24 @@ class ProductRepository:
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()
-        return row
+        if row is None:
+            return None
+
+        product = (ProductBuilder()
+                   .product_id(row.get('product_id'))
+                   .code(row.get('product_code'))
+                   .bar_code(row.get('product_bar_code'))
+                   .name(row.get('product_name'))
+                   .description(row.get('product_description'))
+                   .pack(row.get('product_pack'))
+                   .price(row.get('product_price'))
+                   .currency(Currency.get_currency(row.get('product_currency')))
+                   .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                   .product_type(ProductType.get_product_type(row.get('product_type')))
+                   .status(Status.get_status(row.get('product_status')))
+                   .build())
+
+        return product
 
 
     def save(self, product: Product):

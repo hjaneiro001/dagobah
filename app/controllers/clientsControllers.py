@@ -27,6 +27,14 @@ def get_id(id :int):
     result = ResponseClientDto().dump(client.to_dict())
     return jsonify(result), 200
 
+@clientsBp.route("/cuit/<int:taxId>")
+@handle_exceptions
+def get_taxId(taxId :int):
+    client: Client = clientService.get_taxId(taxId)
+    result = ResponseClientDto().dump(client.to_dict())
+    return jsonify(result), 200
+
+
 
 @clientsBp.route("/", methods=['POST'])
 @handle_exceptions
