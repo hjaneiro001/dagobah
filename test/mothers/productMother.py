@@ -9,7 +9,7 @@ class ProductMother:
     def normal_product(product_id: int):
         product: Product = (ProductBuilder()
                             .product_id(product_id)
-                            .code("P001")
+                            .code("P01")
                             .bar_code("1234567890123")
                             .name("Sample Product")
                             .description("This is a sample product.")

@@ -13,7 +13,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
 
-        expected_sql :str = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.value}'"
+        expected_sql :str = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.get_value()}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = [{
@@ -27,9 +27,9 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_phone': expected_client.phone,
             'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
-            'client_tax_condition': expected_client.tax_condition.value,
+            'client_tax_condition': expected_client.tax_condition.get_condition(),
             'client_type': expected_client.client_type.get_type(),
-            'client_status': expected_client.status.get_status()
+            'client_status': expected_client.status.ACTIVE.get_value()
         }]
 
         mock_connection = MagicMock()
@@ -47,7 +47,7 @@ class ClientRepositoryTestCase(unittest.TestCase):
         mock_cursor.execute.assert_called_with(expected_sql)
 
     def test_get_id(self):
-        expected_sql: str = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.value}'"
+        expected_sql: str = f"SELECT * FROM clients WHERE client_id = %s AND client_status = '{Status.ACTIVE.get_value()}'"
         expected_client: Client = ClientMother.normal_client(1)
 
         expected_db_response = {
@@ -61,9 +61,9 @@ class ClientRepositoryTestCase(unittest.TestCase):
             'client_phone': expected_client.phone,
             'client_type_id': expected_client.type_id.get_type(),
             'client_tax_id': expected_client.tax_id,
-            'client_tax_condition': expected_client.tax_condition.value,
+            'client_tax_condition': expected_client.tax_condition.get_condition(),
             'client_type': expected_client.client_type.get_type(),
-            'client_status': expected_client.status.get_status()
+            'client_status': expected_client.status.ACTIVE.get_value()
         }
 
         mock_connection = MagicMock()
@@ -101,9 +101,9 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_create.phone,
             client_to_create.type_id.get_type(),
             client_to_create.tax_id,
-            client_to_create.tax_condition.value,
+            client_to_create.tax_condition.get_condition(),
             client_to_create.client_type.get_type(),
-            client_to_create.status.get_status()
+            client_to_create.status.ACTIVE.get_value()
         )
 
         # Mock objects
@@ -133,9 +133,9 @@ class ClientRepositoryTestCase(unittest.TestCase):
             client_to_modify.phone,
             client_to_modify.type_id.get_type(),
             client_to_modify.tax_id,
-            client_to_modify.tax_condition.value,
+            client_to_modify.tax_condition.get_condition(),
             client_to_modify.client_type.get_type(),
-            client_to_modify.status.get_status(),
+            client_to_modify.status.ACTIVE.get_value(),
             client_to_modify.pk_client
         )
 

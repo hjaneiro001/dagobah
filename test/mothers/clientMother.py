@@ -16,9 +16,10 @@ class ClientMother:
                           .email("NataliaNatalia@Fakemail.com")
                           .phone("123456789")
                           .type_id(TypeId.CUIT)
-                          .tax_id("123123123")
+                          .tax_id("12312123")
                           .tax_condition(TaxCondition.RI)
                           .client_type(ClientType.CLIENTE)
                           .status(Status.ACTIVE)
                           .build())
+
         return client

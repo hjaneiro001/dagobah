@@ -1,14 +1,12 @@
 
 from flask import Blueprint
 from flask import request, jsonify
-
 from app.dtos.requestProductDto import RequestProductDTO
 from app.dtos.responseProductDto import ResponseProductDTO
 from app.entities.enums.currency import Currency
 from app.entities.enums.productIva import ProductIva
 from app.entities.enums.productType import ProductType
 from app.entities.product import Product, ProductBuilder
-
 from app.exceptions.wrapperExceptions import handle_exceptions
 from app.modules import productService
 
@@ -41,9 +39,9 @@ def create():
                .description(request_product_dto['description'])
                .pack(request_product_dto['pack'])
                .price(request_product_dto['price'])
-               .currency(Currency(request_product_dto['currency']))
-               .iva(ProductIva(request_product_dto['iva']))
-               .product_type(ProductType(request_product_dto['product_type']))
+               .currency(Currency.get_currency(request_product_dto['currency']))
+               .iva(ProductIva.get_product_iva(request_product_dto['iva']))
+               .product_type(ProductType.get_product_type(request_product_dto['product_type']))
                .build())
 
     product_id: int = productService.create(product)
@@ -61,12 +59,13 @@ def modify(id :int):
                .description(modify_product_dto['description'])
                .pack(modify_product_dto['pack'])
                .price(modify_product_dto['price'])
-               .currency(Currency(modify_product_dto['currency']))
-               .iva(ProductIva(modify_product_dto['iva']))
-               .product_type(ProductType(modify_product_dto['product_type']))
+               .currency(Currency.get_currency(modify_product_dto['currency']))
+               .iva(ProductIva.get_product_iva(modify_product_dto["iva"]))
+               .product_type(ProductType.get_product_type(modify_product_dto['product_type']))
                .build())
 
     productService.modify(id, product)
+
     return jsonify({"message": "Product modify successfully"}), 200
 
 @productsBp.route("/<int:id>", methods=['DELETE'])

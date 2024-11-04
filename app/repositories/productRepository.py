@@ -13,7 +13,7 @@ class ProductRepository:
 
     def get_all(self):
 
-            sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.value}'"
+            sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
             cursor = self.conn.cursor(pymysql.cursors.DictCursor)
             cursor.execute(sql)
             rows = cursor.fetchall()
@@ -29,10 +29,10 @@ class ProductRepository:
                         .description(row.get('product_description'))
                         .pack(row.get('product_pack'))
                         .price(row.get('product_price'))
-                        .currency(Currency(row.get('product_currency')))
-                        .iva(ProductIva(row.get('product_iva')))
-                        .product_type(ProductType(row.get('product_type')))
-                        .status(Status[row.get('product_status')])
+                        .currency(Currency.get_currency(row.get('product_currency')))
+                        .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                        .product_type(ProductType.get_product_type(row.get('product_type')))
+                        .status(Status.get_status(row.get('product_status')))
                         .build())
 
                 products.append(product)
@@ -41,7 +41,7 @@ class ProductRepository:
 
     def get_id(self, id: int):
 
-        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.value}'"
+        sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
@@ -57,16 +57,16 @@ class ProductRepository:
                     .description(row.get('product_description'))
                     .pack(row.get('product_pack'))
                     .price(row.get('product_price'))
-                    .currency(Currency(row.get('product_currency')))
-                    .iva(ProductIva(row.get('product_iva')))
-                    .product_type(ProductType(row.get('product_type')))
-                    .status(Status[row.get('product_status')])
-                    .currency(Currency(row.get('product_currency')))
+                    .currency(Currency.get_currency(row.get('product_currency')))
+                    .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                    .product_type(ProductType.get_product_type(row.get('product_type')))
+                    .status(Status.get_status(row.get('product_status')))
                     .build())
 
         return product
 
     def create(self, product: Product):
+
         sql: str = """
             INSERT INTO products (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -74,8 +74,8 @@ class ProductRepository:
 
         values = (
             product.code, product.bar_code, product.name, product.description, product.pack,
-            product.price, product.currency.value, product.iva.value,
-            product.product_type.value, product.status.get_status()
+            product.price,product.currency.get_value() , product.iva.get_iva(),
+            product.product_type.get_type(), product.status.get_value()
         )
 
         cursor = self.conn.cursor()
@@ -88,24 +88,43 @@ class ProductRepository:
         return product_id
 
     def find_by_code(self, product_code: str):
-        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.value}'"
+        sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         cursor = self.conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(sql, (product_code,))
         row = cursor.fetchone()
-        return row
+        if row is None:
+            return None
+
+        product = (ProductBuilder()
+                   .product_id(row.get('product_id'))
+                   .code(row.get('product_code'))
+                   .bar_code(row.get('product_bar_code'))
+                   .name(row.get('product_name'))
+                   .description(row.get('product_description'))
+                   .pack(row.get('product_pack'))
+                   .price(row.get('product_price'))
+                   .currency(Currency.get_currency(row.get('product_currency')))
+                   .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                   .product_type(ProductType.get_product_type(row.get('product_type')))
+                   .status(Status.get_status(row.get('product_status')))
+                   .build())
+
+        return product
+
 
     def save(self, product: Product):
+
         sql: str = """
             UPDATE products
-            SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s, 
-                product_price = %s, product_currency = %s, product_iva = %s, product_type = %s, 
+            SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s,
+                product_price = %s, product_currency = %s, product_iva = %s, product_type = %s,
                 product_status = %s
             WHERE product_id = %s
         """
 
         values = (
-            product.code, product.name, product.description, product.bar_code, product.pack, product.price,
-            product.currency.value, product.iva.value, product.product_type.value, product.status.get_status(),
+            product.code, product.name, product.description, product.bar_code, product.pack,
+            product.price, product.currency.get_value() , product.iva.get_iva(), product.product_type.get_type(), product.status.get_value(),
             product.product_id
         )
 
@@ -113,3 +132,4 @@ class ProductRepository:
         cursor.execute(sql, values)
         self.conn.commit()
         cursor.close()
+

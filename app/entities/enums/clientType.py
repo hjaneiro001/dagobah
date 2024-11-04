@@ -5,7 +5,7 @@ class ClientType(Enum):
     PROVEEDOR = ['PROVEEDOR']
     AMBOS = ['AMBOS']
 
-    def get_clientType(value):
+    def get_clienttype(value):
         for item in ClientType:
             if value in item.value:
                 return item

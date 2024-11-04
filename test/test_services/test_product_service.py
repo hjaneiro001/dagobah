@@ -1,4 +1,4 @@
-from itertools import product
+
 from unittest.mock import patch
 import unittest
 import random
@@ -70,7 +70,7 @@ class TestProductService(unittest.TestCase):
         mock_find_by_code.assert_called_once_with(mocked_product.code)
         mock_create.assert_called_once_with(mocked_product)
         self.assertEqual(product_id, mocked_product.product_id)
-        self.assertEqual(mocked_product.status, Status.ACTIVE)
+        self.assertEqual(mocked_product.status, Status.get_status('ACTIVE'))
 
 
     @patch('app.repositories.productRepository.ProductRepository.create')
@@ -86,16 +86,16 @@ class TestProductService(unittest.TestCase):
         mock_create.assert_not_called()
 
 
-
+    @patch('app.repositories.productRepository.ProductRepository.find_by_code')
     @patch('app.repositories.productRepository.ProductRepository.save')
     @patch('app.repositories.productRepository.ProductRepository.get_id')
-    def test_modify_product_success(self, mock_get_id, mock_save):
+    def test_modify_product_success(self, mock_get_id, mock_save, mock_find_by_code):
         # Arrange
         id_to_modify = random.randint(1, 100)
         product_to_modify = ProductMother.normal_product(id_to_modify)
         product_updated = ProductMother.normal_product(id_to_modify)
-
         mock_get_id.return_value = product_to_modify
+        mock_find_by_code.return_value = product_to_modify
 
         # Act
         self.product_service.modify(id_to_modify, product_updated)

@@ -34,10 +34,10 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product_a.description,
             'pack': mocked_product_a.pack,
             'price': mocked_product_a.price,
-            'currency': mocked_product_a.currency.value,
-            'iva': mocked_product_a.iva.value,
-            'product_type': mocked_product_a.product_type.value,
-            'status': mocked_product_a.status.get_status(),
+            'currency': mocked_product_a.currency.get_value(),
+            'iva': mocked_product_a.iva.get_iva(),
+            'product_type': mocked_product_a.product_type.get_type(),
+            'status': mocked_product_a.status.ACTIVE.get_value(),
             'product_id': 1,
         }, {
             'code': mocked_product_b.code,
@@ -46,10 +46,10 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product_b.description,
             'pack': mocked_product_b.pack,
             'price': mocked_product_b.price,
-            'currency': mocked_product_b.currency.value,
-            'iva': mocked_product_b.iva.value,
-            'product_type': mocked_product_b.product_type.value,
-            'status': mocked_product_b.status.get_status(),
+            'currency': mocked_product_b.currency.get_value(),
+            'iva': mocked_product_b.iva.get_iva(),
+            'product_type': mocked_product_b.product_type.get_type(),
+            'status': mocked_product_b.status.ACTIVE.get_value(),
            'product_id': 2,
         }]
         mock_get_all.return_value = mocked_product_list
@@ -74,10 +74,10 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
-            'iva': mocked_product.iva.value,
-            'product_type': mocked_product.product_type.value,
-            'status': mocked_product.status.get_status(),
+            'currency': mocked_product.currency.get_value(),
+            'iva': mocked_product.iva.get_iva(),
+            'product_type': mocked_product.product_type.get_type(),
+            'status': mocked_product.status.ACTIVE.get_value(),
             'product_id': id,
         }
 
@@ -102,9 +102,9 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
-            'iva': mocked_product.iva.value,
-            'product_type': mocked_product.product_type.value
+            'currency': mocked_product.currency.get_value(),
+            'iva': mocked_product.iva.get_iva(),
+            'product_type': mocked_product.product_type.get_type()
         }
 
         mock_create.return_value = mocked_product.product_id
@@ -127,9 +127,9 @@ class ProductControllerTestCase(unittest.TestCase):
             'description': mocked_product.description,
             'pack': mocked_product.pack,
             'price': mocked_product.price,
-            'currency': mocked_product.currency.value,
-            'iva': mocked_product.iva.value,
-            'product_type': mocked_product.product_type.value
+            'currency': mocked_product.currency.get_value(),
+            'iva': mocked_product.iva.get_iva(),
+            'product_type': mocked_product.product_type.get_type()
         }
 
         expected_response = {"message": "Product modify successfully"}

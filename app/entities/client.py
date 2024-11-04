@@ -32,10 +32,26 @@ class Client:
                 f"Tax Condition: {self.tax_condition.value}\n"
                 f"Type: {self.client_type.value}")
 
+    def to_dict(self):
+        return {
+            "pk_client": self.pk_client,
+            "name": self.name,
+            "address": self.address,
+            "city": self.city,
+            "state": self.state,
+            "country": self.country,
+            "email": self.email,
+            "phone": self.phone,
+            "type_id": self.type_id.get_type(),
+            "tax_id": self.tax_id,
+            "tax_condition": self.tax_condition.get_condition(),
+            "client_type": self.client_type.get_type(),
+            "status": self.status.get_value()
+        }
+
     def __eq__(self, other):
-        if not isinstance(other, Client):
-            return False
-        return (self.pk_client == other.pk_client and
+        if isinstance(other, Client):
+            return (self.pk_client == other.pk_client and
                 self.name == other.name and
                 self.address == other.address and
                 self.city == other.city and
@@ -48,23 +64,7 @@ class Client:
                 self.tax_condition == other.tax_condition and
                 self.client_type == other.client_type and
                 self.status == other.status)
-
-    def to_dict(self):
-        return {
-            "pk_client": self.pk_client,
-            "name": self.name,
-            "address": self.address,
-            "city": self.city,
-            "state": self.state,
-            "country": self.country,
-            "email": self.email,
-            "phone": self.phone,
-            "type_id": self.type_id.value[0],
-            "tax_id": self.tax_id,
-            "tax_condition": self.tax_condition.value,
-            "client_type": self.client_type.value[0],
-            "status": self.status.value[0]
-        }
+        return False
 
 class ClientBuilder:
     def __init__(self):
