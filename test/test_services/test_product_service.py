@@ -45,6 +45,17 @@ class TestProductService(unittest.TestCase):
         mock_get_id.assert_called_once_with(mocked_product.product_id)
         self.assertEqual(result, mocked_product)
 
+    @patch('app.repositories.productRepository.ProductRepository.find_by_code')
+    def test_get_code_success(self, mock_get_code):
+        # Arrange
+        mocked_product = ProductMother.normal_product(random.randint(1, 100))
+        mock_get_code.return_value = mocked_product
+        # Act
+        result = self.product_service.get_code(mocked_product.product_id)
+        # Assert
+        mock_get_code.assert_called_once_with(mocked_product.product_id)
+        self.assertEqual(result, mocked_product)
+
     @patch('app.repositories.productRepository.ProductRepository.get_id')
     def test_get_id_not_found(self, mock_get_id):
         # Arrange

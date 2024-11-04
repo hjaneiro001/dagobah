@@ -57,7 +57,6 @@ class TestClientService(unittest.TestCase):
         self.assertEqual(client_id, mocked_client.pk_client)
         self.assertEqual(mocked_client.status, Status.ACTIVE)
 
-
     @patch('app.repositories.clientRepository.ClientRepository.create')
     @patch('app.repositories.clientRepository.ClientRepository.get_tax_id')
     def test_create_client_already_exists(self, mock_find_by_tax_id, mock_create):
