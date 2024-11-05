@@ -1,8 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, ANY
 
-from sqlalchemy.engine.mock import MockConnection
-
 from app.entities.client import Client, ClientBuilder
 from app.entities.enums.status import Status
 from app.repositories.clientRepository import ClientRepository
