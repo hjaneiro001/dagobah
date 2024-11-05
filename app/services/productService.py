@@ -19,6 +19,13 @@ class ProductService:
             raise ProductNotFoundException
         return product
 
+    def get_code(self, code):
+        product: Product = self.product_repository.find_by_code(code)
+        if product is None:
+            raise ProductNotFoundException
+        return product
+
+
     def create(self, product: Product):
 
         if self.product_repository.find_by_code(product.code):
