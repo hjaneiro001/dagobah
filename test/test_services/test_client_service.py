@@ -57,7 +57,6 @@ class TestClientService(unittest.TestCase):
         self.assertEqual(client_id, mocked_client.pk_client)
         self.assertEqual(mocked_client.status, Status.ACTIVE)
 
-
     @patch('app.repositories.clientRepository.ClientRepository.create')
     @patch('app.repositories.clientRepository.ClientRepository.get_tax_id')
     def test_create_client_already_exists(self, mock_find_by_tax_id, mock_create):
@@ -86,16 +85,17 @@ class TestClientService(unittest.TestCase):
         mock_get_all.assert_called_once()
         self.assertEqual(result, mocked_client_list)
 
-
+    @patch('app.repositories.clientRepository.ClientRepository.get_tax_id')
     @patch('app.repositories.clientRepository.ClientRepository.save')
     @patch('app.repositories.clientRepository.ClientRepository.get_id')
-    def test_modify_client_success(self, mock_get_id, mock_save):
+    def test_modify_client_success(self, mock_get_id, mock_save,mock_get_tax_id):
         # Arrange
         id_to_modify = random.randint(1, 100)
         client_to_modify = ClientMother.normal_client(id_to_modify)
         client_updated = ClientMother.normal_client(id_to_modify)
 
         mock_get_id.return_value = client_to_modify
+        mock_get_tax_id.return_value = client_to_modify
 
         # Act
         self.client_service.modify(id_to_modify, client_updated)

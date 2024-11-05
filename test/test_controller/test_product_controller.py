@@ -90,6 +90,33 @@ class ProductControllerTestCase(unittest.TestCase):
          self.assertEqual(expected_product, result.json)
          self.assertEqual(HTTPStatus.OK.value, result.status_code)
 
+    @patch('app.services.productService.ProductService.get_code')
+    def test_get_code(self, mock_get_code):
+        id: int = 1
+        mocked_product: Product = ProductMother.normal_product(id)
+        expected_product: json = {
+            'code': mocked_product.code,
+            'bar_code': mocked_product.bar_code,
+            'name': mocked_product.name,
+            'description': mocked_product.description,
+            'pack': mocked_product.pack,
+            'price': mocked_product.price,
+            'currency': mocked_product.currency.get_value(),
+            'iva': mocked_product.iva.get_iva(),
+            'product_type': mocked_product.product_type.get_type(),
+            'status': mocked_product.status.ACTIVE.get_value(),
+            'product_id': id,
+        }
+
+        mock_get_code.return_value = mocked_product
+
+        # Act
+        result = self.app.get('/products/code/' + str(id))
+
+        # Assert
+        self.assertEqual(expected_product, result.json)
+        self.assertEqual(HTTPStatus.OK.value, result.status_code)
+
 
     @patch('app.services.productService.ProductService.create')
     def test_create(self, mock_create):

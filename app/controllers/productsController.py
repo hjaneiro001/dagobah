@@ -27,6 +27,12 @@ def get_id(id :int):
     result = ResponseProductDTO().dump(product.to_dict())
     return jsonify(result), 200
 
+@productsBp.route("/code/<string:code>")
+@handle_exceptions
+def get_code(code :str):
+    product: Product = productService.get_code(code)
+    result = ResponseProductDTO().dump(product.to_dict())
+    return jsonify(result), 200
 
 @productsBp.route("/", methods=['POST'])
 @handle_exceptions
