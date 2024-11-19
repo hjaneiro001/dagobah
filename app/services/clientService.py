@@ -4,7 +4,6 @@ from app.exceptions.clientAlreadyExistsException import ClientAlreadyExistsExcep
 from app.exceptions.clientNotFoundException import ClientNotFoundException
 from app.exceptions.clientTaxIdAlreadyExistsException import ClientTaxIdAlreadyExistsException
 
-
 class ClientService:
     def __init__(self, client_repository):
         self.client_repository = client_repository
