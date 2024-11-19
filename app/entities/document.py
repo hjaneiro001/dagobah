@@ -1,18 +1,15 @@
 from datetime import datetime
-from typing import List
 
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.status import Status
-from app.entities.item import Item
-
 
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
                   number :int, date :datetime, date_serv_from :datetime, date_serv_to :datetime,
                   expiration_date :datetime,total_amount :float, taxable_amount :float, exempt_amount :float, tax_amount :float, currency :Currency,
-                  exchange_rate :float, status :Status,  items :List[Item]):
+                  exchange_rate :float, status :Status):
 
         self.document_id :int = document_id
         self.client_id :int = client_id
@@ -31,10 +28,8 @@ class Document:
         self.currency :Currency = currency
         self.exchange_rate :float = exchange_rate
         self.status :Status = status
-        self.items : List[Item] = items
 
     def __str__(self):
-        items_str = "\n".join([str(item) for item in self.items])
 
         return (f"Punto de Venta: {self.pos}\n"
                 f"Codigo de Cliente: {self.client_id}\n"
@@ -52,7 +47,7 @@ class Document:
                 f"Moneda : {self.currency}\n"
                 f"Cotizacion: {self.exchange_rate}\n"
                 f"Status : {self.status}\n"
-                f"Items:\n{items_str}\n")
+                )
 
     def to_dict(self):
         return {
@@ -73,7 +68,6 @@ class Document:
             "currency": self.currency.get_currency(),
             "exchange_rate": self.exchange_rate,
             "status": self.status.value,
-            "items": [item.to_dict() for item in self.items] if self.items else []
         }
 
     def __eq__(self, other):
@@ -94,7 +88,6 @@ class Document:
              self.tax_amount == other.tax_amount and
              self.currency == other.currency and
              self.exchange_rate == other.exchange_rate and
-             self.items == other.items
         }
 
         return False
@@ -118,7 +111,6 @@ class DocumentBuilder:
         self._currency = None
         self._exchange_rate = None
         self._status = None
-        self._items  = []
 
 
     def document_id(self, document_id):
@@ -190,15 +182,6 @@ class DocumentBuilder:
         self._status :Status = status
         return self
 
-    def items(self, items: List[Item]):
-        self._items = items
-        return self
-
-    def add_item(self, item: Item):
-        self._items.append(item)
-        return self
-
-
     def build(self):
         return Document(
             document_id=self._document_id,
@@ -217,8 +200,7 @@ class DocumentBuilder:
             tax_amount=self._tax_amount,
             currency=self._currency,
             exchange_rate=self._exchange_rate,
-            status=self._status,
-            items=self._items
+            status=self._status
         )
 
 
