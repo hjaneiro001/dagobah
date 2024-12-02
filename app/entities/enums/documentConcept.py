@@ -5,7 +5,7 @@ class DocumentConcept(Enum):
     SE = ['SERVICIOS', 2]
     BS = ['BIENES Y SERVICIOS', 3]
 
-    def get_documentconcept(value):
+    def get_document_concept(value):
         for item in DocumentConcept:
             if value in item.value:
                 return item

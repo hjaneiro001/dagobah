@@ -33,7 +33,7 @@ class Document:
 
         return (f"Punto de Venta: {self.pos}\n"
                 f"Codigo de Cliente: {self.client_id}\n"
-                f"Numero de Documento: {self.tax_id}\n"
+                f"Numero de Documento: {self.number}\n"
                 f"Tipo de documento: {self.document_type}\n"
                 f"Concepto : {self.document_concept}\n"
                 f"Fecha : {self.date}\n"
@@ -72,7 +72,7 @@ class Document:
 
     def __eq__(self, other):
         if isinstance(other, Document):
-            return {self.document_id == other.document_id and
+            return (self.document_id == other.document_id and
              self.client_id == other.client_id and
              self.pos == other.pos and
              self.document_type == other.document_type and
@@ -88,7 +88,8 @@ class Document:
              self.tax_amount == other.tax_amount and
              self.currency == other.currency and
              self.exchange_rate == other.exchange_rate and
-        }
+             self.status == other.status
+            )
 
         return False
 
