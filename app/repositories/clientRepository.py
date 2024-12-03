@@ -91,11 +91,6 @@ class ClientRepository:
                     client.tax_condition.get_condition() , client.client_type.get_type(), client.status.get_value(), client.pk_client
                 )
 
-                # cursor = conn.cursor()
-                # cursor.execute(sql, values)
-                # conn.commit()
-                # cursor.close()
-
                 cur.execute(sql, values)
                 conn.commit()
                 cur.close()

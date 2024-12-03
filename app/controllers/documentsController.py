@@ -16,6 +16,7 @@ def create():
 
     post_document_dto = RequestDocumentDTO().load(request.json)
 
+
     document :Document = (DocumentBuilder()
                           .client_id(post_document_dto["client_id"])
                           .pos(post_document_dto["pos"])
@@ -33,6 +34,8 @@ def create():
                           .currency(post_document_dto["currency"])
                           .exchange_rate(post_document_dto["exchange_rate"])
                           .build())
+
+
 
     document_id :int  = documentService.create(document)
 

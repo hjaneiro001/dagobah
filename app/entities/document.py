@@ -5,6 +5,7 @@ from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.status import Status
 
+
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
                   number :int, date :datetime, date_serv_from :datetime, date_serv_to :datetime,
