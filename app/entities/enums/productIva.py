@@ -21,17 +21,6 @@ class ProductIva(Enum):
     def get_value(self):
         return self.value[1]
 
-    # @classmethod
-    # def get_name(cls, value):
-    #     for item in cls:
-    #         if value == item.value[0]:
-    #             return item
-    #
-    # def get_iva(self):
-    #     return self.value[0]
-    #
-    # def get_alic(self):
-    #     return self.value[1]
 
 
 

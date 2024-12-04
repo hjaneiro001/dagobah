@@ -1,3 +1,5 @@
+import traceback
+
 import pymysql
 from flask import jsonify
 from marshmallow import ValidationError
@@ -5,6 +7,7 @@ from app.exceptions.baseException import BaseException
 
 
 def handle_exceptions(f):
+
     def wrapper(*args, **kwargs):
         try:
             return f(*args, **kwargs)
@@ -23,7 +26,7 @@ def handle_exceptions(f):
             return jsonify({"error": "An internal server error occurred"}), 500
         except Exception as e:
             print(e)
-            # print(traceback.format_exception())
+            print(traceback.format_exc())
             return jsonify({"error": "An internal server error occurred"}), 500
 
     wrapper.__name__ = f"{f.__name__}_wrapper"

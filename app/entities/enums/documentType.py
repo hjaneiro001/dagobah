@@ -4,7 +4,7 @@ class DocumentType(Enum):
     FACTURA = ['FACTURA', 0]
     NOTADECREDITO = ['NOTA DE CREDITO', 1]
 
-    def get_documenttype(value):
+    def get_document_type( value):
         for item in DocumentType:
             if value in item.value:
                 return item
