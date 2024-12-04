@@ -18,6 +18,11 @@ class Item:
                 f"Precio uniario: {self.unit_price}\n"
                 )
 
+    def __repr__(self):
+        return (f"Item(product_id={self.product_id}, document_id={self.document_id}, "
+                f"quantity={self.quantity}, tax_rate={self.tax_rate}, "
+                f"unit_price={self.unit_price})")
+
     def to_dict(self):
         return {
             "item_id": self.item_id,
@@ -40,13 +45,13 @@ class Item:
 
         return False
 
-    class ItemBuilder:
+class ItemBuilder:
         def __init__(self):
             self._item_id = None
-            self.document_id = None
+            self._document_id = None
             self._product_id = None
             self._quantity = None
-            self.tax_rate = None
+            self._tax_rate = None
             self._unit_price = None
 
         def item_id(self,item_id):

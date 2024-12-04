@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from app.dtos.requestItemDto import RequestItemDTO
+
 class RequestDocumentDTO(Schema):
     client_id = fields.Integer(required=True, error_messages={'required': 'The field client_id is required.'})
     pos = fields.Integer(required=True, error_messages={'required': 'The field pos is required.'})
@@ -16,3 +18,4 @@ class RequestDocumentDTO(Schema):
     tax_amount = fields.Float(required=True, error_messages={'required': 'The field tax_amount is required.'})
     currency = fields.String(required=True, error_messages={'required': 'The field currency is required.'})
     exchange_rate = fields.Float(required=True, error_messages={'required': 'The field exchange_rate is required.'})
+    items = fields.List(fields.Nested(RequestItemDTO), required=True, error_messages={'required': 'The field items is required.'})

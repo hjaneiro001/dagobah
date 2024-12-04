@@ -5,6 +5,7 @@ from app.dtos.requestDocument import RequestDocumentDTO
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
+from app.entities.item import Item, ItemBuilder
 from app.exceptions.wrapperExceptions import handle_exceptions
 from app.modules import documentService
 
@@ -15,7 +16,6 @@ documentsBp = Blueprint('documents', __name__)
 def create():
 
     post_document_dto = RequestDocumentDTO().load(request.json)
-
 
     document :Document = (DocumentBuilder()
                           .client_id(post_document_dto["client_id"])
@@ -35,8 +35,19 @@ def create():
                           .exchange_rate(post_document_dto["exchange_rate"])
                           .build())
 
+    items = []
 
+    for item_data in post_document_dto["items"]:
+        item = (
+            ItemBuilder()
+            .product(item_data["product_id"])
+            .quantity(item_data["quantity"])
+            .tax_rate(item_data["tax_rate"])
+            .unit_price(item_data["unit_price"])
+            .build()
+        )
+        items.append(item)
 
-    document_id :int  = documentService.create(document)
+    document_id :int  = documentService.create(document,items)
 
     return jsonify({"Document id": document_id}), 201

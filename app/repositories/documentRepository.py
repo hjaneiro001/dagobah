@@ -5,7 +5,6 @@ from app.entities.enums.status import Status
 from app.utils.connection_manager import ConnectionManager
 from app.utils.cursor_manager import CursorManager
 
-
 class DocumentRepository:
 
     def __init__(self, pool_connection: QueuePool):

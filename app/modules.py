@@ -5,6 +5,7 @@ from pymysql import connect,cursors
 
 from app.repositories.clientRepository import ClientRepository
 from app.repositories.documentRepository import DocumentRepository
+from app.repositories.itemRepository import ItemRepository
 from app.repositories.productRepository import ProductRepository
 from app.services.clientService import ClientService
 from app.services.documentService import DocumentService
@@ -30,5 +31,9 @@ clientService = ClientService(clientRepository)
 productRepository = ProductRepository(pool_connection)
 productService = ProductService(productRepository)
 
+itemRepository = ItemRepository(pool_connection)
+
 documentRepository = DocumentRepository(pool_connection)
-documentService = DocumentService(documentRepository)
+documentService = DocumentService(documentRepository, itemRepository)
+
+
