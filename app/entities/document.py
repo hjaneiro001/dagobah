@@ -4,11 +4,12 @@ from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.status import Status
+from app.entities.enums.typeId import TypeId
 
 
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
-                  number :int, date :datetime, date_serv_from :datetime, date_serv_to :datetime,
+                  client_type_id :TypeId, number :int, date :datetime, date_serv_from :datetime, date_serv_to :datetime,
                   expiration_date :datetime,total_amount :float, taxable_amount :float, exempt_amount :float, tax_amount :float, currency :Currency,
                   exchange_rate :float, status :Status):
 
@@ -17,6 +18,7 @@ class Document:
         self.pos :int = pos
         self.document_type: DocumentType = document_type
         self.document_concept: DocumentConcept = document_concept
+        self.client_type_id: TypeId = client_type_id
         self.number :int = number
         self.date: datetime = date
         self.date_serv_from :datetime = date_serv_from
@@ -37,6 +39,7 @@ class Document:
                 f"Numero de Documento: {self.number}\n"
                 f"Tipo de documento: {self.document_type}\n"
                 f"Concepto : {self.document_concept}\n"
+                f"Tipo ID Cliente : {self.client_type_id}\n"
                 f"Fecha : {self.date}\n"
                 f"Fecha del servicio desde : {self.date_serv_from}\n"
                 f"Fecha del servicio hasta : {self.date_serv_to}\n"
@@ -57,6 +60,7 @@ class Document:
             "pos": self.pos,
             "document_type": self.document_type.get_type(),
             "document_concept": self.document_concept.get_concept(),
+            "client_type_id": self.client_type_id.get_code(),
             "number": self.number,
             "date": self.date.isoformat() if self.date else None,
             "date_serv_from": self.date_serv_from.isoformat() if self.date_serv_from else None,
@@ -66,7 +70,7 @@ class Document:
             "taxable_amount": self.taxable_amount,
             "exempt_amount": self.exempt_amount,
             "tax_amount": self.tax_amount,
-            "currency": self.currency.get_currency(),
+            "currency": self.currency.get_value(),
             "exchange_rate": self.exchange_rate,
             "status": self.status.value,
         }
@@ -78,6 +82,7 @@ class Document:
              self.pos == other.pos and
              self.document_type == other.document_type and
              self.document_concept == other.document_concept and
+             self.client_type_id == other.client_type_id and
              self.number == other.number and
              self.date == other.date and
              self.date_serv_from == other.date_serv_from and
@@ -101,6 +106,7 @@ class DocumentBuilder:
         self._pos = None
         self._document_type = None
         self._document_concept = None
+        self._client_type_id = None
         self._number = None
         self._date = None
         self._date_serv_from = None
@@ -119,7 +125,6 @@ class DocumentBuilder:
         self._document_id :int = document_id
         return self
 
-
     def client_id(self, client_id):
         self._client_id :int = client_id
         return self
@@ -134,6 +139,10 @@ class DocumentBuilder:
 
     def document_concept(self, document_concept :DocumentConcept):
         self._document_concept :DocumentConcept = document_concept
+        return self
+
+    def client_type_id(self, client_type_id: TypeId):
+        self._client_type_id: TypeId = client_type_id
         return self
 
     def number(self, number):
@@ -191,6 +200,7 @@ class DocumentBuilder:
             pos=self._pos,
             document_type=self._document_type,
             document_concept=self._document_concept,
+            client_type_id=self._client_type_id,
             number=self._number,
             date=self._date,
             date_serv_from=self._date_serv_from,

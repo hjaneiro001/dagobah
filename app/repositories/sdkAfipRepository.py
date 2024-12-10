@@ -1,0 +1,30 @@
+
+from afip import Afip
+
+from app.entities.document import Document
+from app.entities.item import Item
+
+class SdkAfipRepository:
+
+    def __init__(self):
+        self.afip = Afip({"CUIT": 20409378472})
+
+    def next_number(self,document :Document, items :list[Item]):
+
+        document_number = self.afip.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
+        next_number = document_number + 1
+
+        return next_number
+
+    def create_document_afip(self,documentDTO):
+
+        return_full_response = False
+
+        res = self.afip.ElectronicBilling.createVoucher(documentDTO, return_full_response)
+
+        res["CAE"]
+        res["CAEFchVto"]
+
+        print(res)
+
+        return(res)

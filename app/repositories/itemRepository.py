@@ -11,7 +11,7 @@ class ItemRepository:
     def __init__(self, pool_connection: QueuePool):
         self.pool_connection: QueuePool = pool_connection
 
-    def create(self, items: list[Item]):
+    def create(self, items: list[Item],document_id :int):
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
@@ -22,10 +22,10 @@ class ItemRepository:
 
                 values = [
                     (
-                        item.document_id,
+                        document_id,
                         item.product_id,
                         item.quantity,
-                        item.tax_rate,
+                        item.tax_rate.get_value(),
                         item.unit_price,
                         Status.ACTIVE.get_value()
                     )
