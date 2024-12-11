@@ -26,13 +26,14 @@ def create():
                           .document_type(DocumentType.get_document_type(post_document_dto["document_type"]))
                           .document_concept(DocumentConcept.get_document_concept(post_document_dto["document_concept"]))
                           .client_type_id(TypeId.get_type_id(post_document_dto["client_type_id"]))
+                          .client_id_number(post_document_dto["client_id_number"])
                           .date(post_document_dto["date"])
-                          .date_serv_from(post_document_dto["date_serv_from"])
-                          .date_serv_to(post_document_dto["date_serv_to"])
                           .expiration_date(post_document_dto["expiration_date"])
                           .total_amount((post_document_dto["total_amount"]))
                           .taxable_amount(post_document_dto["taxable_amount"])
                           .exempt_amount(post_document_dto["exempt_amount"])
+                          .no_grav_amount(post_document_dto["no_grav_amount"])
+                          .tributes_amount(post_document_dto["tributes_amount"])
                           .tax_amount(post_document_dto["tax_amount"])
                           .currency(Currency.get_currency(post_document_dto["currency"]))
                           .exchange_rate(post_document_dto["exchange_rate"])
@@ -51,6 +52,6 @@ def create():
         )
         items.append(item)
 
+    print(document)
     document_id :int  = documentService.create(document,items)
-
     return jsonify({"Document id": document_id}), 201

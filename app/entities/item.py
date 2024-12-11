@@ -1,12 +1,14 @@
+from app.entities.enums.productIva import ProductIva
+
 
 class Item:
-    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :float, unit_price :float):
+    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :ProductIva, unit_price :float):
 
         self.item_id :int = item_id
         self.document_id :int = document_id
         self.product_id :int = product_id
         self.quantity :float = quantity
-        self.tax_rate :float = tax_rate
+        self.tax_rate :ProductIva = tax_rate
         self.unit_price :float = unit_price
 
     def __str__(self):
@@ -71,7 +73,7 @@ class ItemBuilder:
             return self
 
         def tax_rate(self,tax_rate):
-            self._tax_rate :float = tax_rate
+            self._tax_rate :ProductIva = tax_rate
             return self
 
         def unit_price(self,unit_price):
