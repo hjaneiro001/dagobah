@@ -1,9 +1,10 @@
-
+from app.dtos.documentAfipDto import DocumentAfipDto
 from app.entities.document import Document
 from app.entities.enums.status import Status
 from app.entities.item import Item
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
-from app.factories.documentDTOFactory import DocumentDTOFactory
+from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
+
 
 class DocumentService:
 
@@ -18,14 +19,15 @@ class DocumentService:
         document.number = number
         document.status = Status.ACTIVE.get_value()
 
-        if self.document_repository.get_document(document):
-            raise DocumentAlreadyExistsException
 
-        documentDTO = DocumentDTOFactory.from_entity(document,items)
+        # if self.document_repository.get_document(document):
+        #     raise DocumentAlreadyExistsException
 
-        res = self.sdk_afip_repository.create_document_afip(documentDTO)
-
-        document_id = self.document_repository.create(document)
-        self.item_repository.create(items, document_id)
-
-        return (res)
+        documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
+        print(documentDTO.to_dict())
+        # res = self.sdk_afip_repository.create_document_afip(documentDTO)
+        #
+        # document_id = self.document_repository.create(document)
+        # self.item_repository.create(items, document_id)
+        #
+        # return (res)

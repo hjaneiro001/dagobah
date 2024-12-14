@@ -1,6 +1,5 @@
 from app.entities.enums.productIva import ProductIva
 
-
 class Item:
     def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :ProductIva, unit_price :float):
 

@@ -3,7 +3,7 @@ from enum import Enum
 class ProductIva(Enum):
     I27 = ['IVA 27%',0.27,5]
     I21  = ['IVA 21%',21,5]
-    I105 = ['IVA 10.5%', 0.105,5]
+    I105 = ['IVA 10.5%', 0.105,4]
     I5 = ['IVA 5%', 0.05,5]
     I2C5 = ['IVA 2.5%', 0.025, 5]
     EXENTO = ['IVA EXENTO', 0, 5]

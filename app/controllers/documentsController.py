@@ -52,6 +52,5 @@ def create():
         )
         items.append(item)
 
-    print(document)
     document_id :int  = documentService.create(document,items)
     return jsonify({"Document id": document_id}), 201

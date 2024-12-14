@@ -6,7 +6,6 @@ from app.entities.enums.documentType import DocumentType
 from app.entities.enums.status import Status
 from app.entities.enums.typeId import TypeId
 
-
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
                   client_type_id :TypeId,client_id_number :str, number :int, date :datetime,
