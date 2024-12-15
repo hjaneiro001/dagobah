@@ -19,15 +19,14 @@ class DocumentService:
         document.number = number
         document.status = Status.ACTIVE.get_value()
 
-
-        # if self.document_repository.get_document(document):
-        #     raise DocumentAlreadyExistsException
+        if self.document_repository.get_document(document):
+            raise DocumentAlreadyExistsException
 
         documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
         print(documentDTO.to_dict())
-        # res = self.sdk_afip_repository.create_document_afip(documentDTO)
+        res = self.sdk_afip_repository.create_document_afip(documentDTO)
         #
         # document_id = self.document_repository.create(document)
         # self.item_repository.create(items, document_id)
         #
-        # return (res)
+        return (res)

@@ -1,7 +1,7 @@
 class TaxItemDto:
-    def __init__(self, id=None, base_imp=None, amount=None):
+    def __init__(self, id=None, taxable_amount=None, amount=None):
         self.id = id
-        self.taxable_amount = base_imp
+        self.taxable_amount = taxable_amount
         self.amount = amount
 
     def __eq__(self, other):
@@ -14,19 +14,17 @@ class TaxItemDto:
     def __str__(self):
         return f"TaxItem(Id='{self.id}', BaseImp={self.taxable_amount}, Importe={self.amount})"
 
-    # Getters
     def get_id(self):
         return self.Id
 
     def get_base_imp(self):
-        return self.BaseImp
+        return self.taxable_amount
 
     def get_amount(self):
-        return self.Amount
+        return self.amount
 
-    # Setters
     def set_id(self, id):
-        self.Id = id
+        self.id = id
 
     def set_base_imp(self, taxable_amount):
         self.taxable_amount= taxable_amount
@@ -43,7 +41,7 @@ class TaxItemDto:
 
     @classmethod
     def builder(cls):
-        return cls.TaxItemBuilder()
+         return cls.TaxItemBuilder()
 
     class TaxItemBuilder:
         def __init__(self):
@@ -51,8 +49,8 @@ class TaxItemDto:
             self._taxable_amount = None
             self._amount = None
 
-        def id(self, id):
-            self.id = id
+        def id(self, id_enum):
+            self._id = id_enum.get_code() if hasattr(id_enum, 'get_code') else id_enum
             return self
 
         def imp(self, taxable_amount):
@@ -64,7 +62,8 @@ class TaxItemDto:
             return self
 
         def build(self):
+
             return TaxItemDto(
                 id=self._id,
-                base_imp=self._taxable_amount,
+                taxable_amount=self._taxable_amount,
                 amount=self._amount)

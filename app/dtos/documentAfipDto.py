@@ -70,7 +70,7 @@ class DocumentAfipDto:
 
     def to_dict(self):
         return {"CantReg": self.CantReg,
-                "Pos": self.Pos,
+                "PtoVta": self.Pos,
                 "CbteTipo": self.document_type,
                 "Concepto":self.concept,
                 "DocTipo": self.client_type_id,
@@ -84,7 +84,7 @@ class DocumentAfipDto:
                 "ImpOpEx": self.exempt_amount,
                 "ImpIVA": self.tax_amount,
                 "ImpTrib": self.tributes_amount,
-                "MonID": self.currency,
+                "MonId": self.currency,
                 "MonCotiz": self.exchange_rate,
                 "Iva":self.iva_list}
 

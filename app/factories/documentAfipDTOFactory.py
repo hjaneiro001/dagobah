@@ -1,4 +1,5 @@
 from collections import defaultdict
+from distutils.command.build import build
 from typing import List
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.ivaListAfipDto import TaxItemDto
@@ -11,17 +12,7 @@ class DocumentAfipDTOFactory:
 
         builder = DocumentAfipDto.builder()
 
-        # iva_list = [
-        #     {
-        #         "Id": item.tax_rate.get_code(),
-        #         "BaseImp": item.quantity * item.unit_price,
-        #         "Importe": item.quantity * item.unit_price * (item.tax_rate.get_value() / 100)
-        #     }
-        #     for item in items
-        # ]
-
         grouped_iva = defaultdict(lambda: {"BaseImp": 0, "Importe": 0})
-
         for item in items:
             id_ = item.tax_rate.get_code()
             base_imp = item.quantity * item.unit_price
@@ -30,10 +21,15 @@ class DocumentAfipDTOFactory:
             grouped_iva[id_]["BaseImp"] += base_imp
             grouped_iva[id_]["Importe"] += importe
 
-        iva_list = [{"Id": id_, "BaseImp": values["BaseImp"], "Importe": values["Importe"]}
-                    for id_, values in grouped_iva.items()]
-
-        print(iva_list)
+        iva_list_dto = [
+            TaxItemDto.builder()
+            .id(id_enum)  # Aquí `id_enum` debería ser un valor de enum.
+            .imp(values["BaseImp"])
+            .importe(values["Importe"])
+            .build()
+            .to_dict()
+            for id_enum, values in grouped_iva.items()
+        ]
 
         document_dto = (builder
                         .cant_reg(1)
@@ -53,7 +49,7 @@ class DocumentAfipDTOFactory:
                         .tributes_amount(document.tributes_amount)
                         .currency(document.currency.get_id())
                         .exchange_rate(document.exchange_rate)
-                        .iva_list(iva_list)
+                        .iva_list(iva_list_dto)
                         .build())
 
         return document_dto
