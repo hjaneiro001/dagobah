@@ -7,6 +7,7 @@ class TaxItemDto:
     def __eq__(self, other):
         if not isinstance(other, TaxItemDto):
             return False
+
         return (self.id == other.Id and
                 self.taxable_amount == other.taxable_amount and
                 self.amount == other.amount)
