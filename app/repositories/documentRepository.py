@@ -32,15 +32,15 @@ class DocumentRepository:
             with CursorManager(conn) as cur:
 
                 sql :str = """ 
-                INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, date_serv_from, date_serv_to, 
+                INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, 
                 expiration_date, total_amount, taxable_amount, exempt_amount, tax_amount, currency, exchange_rate, status ) 
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
                 """
 
                 values = (
-                    document.client_id, document.pos, document.document_type.get_type(), document.document_concept.get_concept(),document.number,
-                    document.date, document.date_serv_from, document.date_serv_to, document.expiration_date,document.total_amount,document.taxable_amount,
-                    document.exempt_amount,document.tax_amount,document.currency,document.exchange_rate,document.status
+                    document.client_id, document.pos, document.document_type.get_type(), document.document_concept.get_concept(), document.number,
+                    document.date,  document.expiration_date, document.total_amount, document.taxable_amount,
+                    document.exempt_amount, document.tax_amount, document.currency, document.exchange_rate, document.status
                 )
 
                 cur.execute(sql,values)

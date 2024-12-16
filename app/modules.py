@@ -7,6 +7,7 @@ from app.repositories.clientRepository import ClientRepository
 from app.repositories.documentRepository import DocumentRepository
 from app.repositories.itemRepository import ItemRepository
 from app.repositories.productRepository import ProductRepository
+from app.repositories.sdkAfipRepository import SdkAfipRepository
 from app.services.clientService import ClientService
 from app.services.documentService import DocumentService
 from app.services.productService import ProductService
@@ -32,8 +33,9 @@ productRepository = ProductRepository(pool_connection)
 productService = ProductService(productRepository)
 
 itemRepository = ItemRepository(pool_connection)
+sdkAfipRepository = SdkAfipRepository()
 
 documentRepository = DocumentRepository(pool_connection)
-documentService = DocumentService(documentRepository, itemRepository)
+documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository)
 
 
