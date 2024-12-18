@@ -2,7 +2,6 @@ import json
 import random
 import unittest
 from http import HTTPStatus
-from itertools import product
 
 import app
 from unittest.mock import patch

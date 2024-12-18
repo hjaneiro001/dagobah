@@ -23,10 +23,13 @@ class DocumentService:
             raise DocumentAlreadyExistsException
 
         documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
-        print(documentDTO.to_dict())
         res = self.sdk_afip_repository.create_document_afip(documentDTO)
-        #
-        # document_id = self.document_repository.create(document)
-        # self.item_repository.create(items, document_id)
-        #
+        
+        document_id = self.document_repository.create(document)
+        self.item_repository.create(items, document_id)
+
         return (res)
+
+    def get_all(self):
+
+        return(self.document_repository.get_all())

@@ -45,7 +45,6 @@ class ProductRepository:
 
                     products.append(product)
 
-                    cur.close()
 
             return products
 

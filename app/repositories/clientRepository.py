@@ -125,7 +125,6 @@ class ClientRepository:
                         .status(Status.get_status(row.get('client_status')))
                         .build())
 
-                cur.close()
 
             return client
 
@@ -157,10 +156,7 @@ class ClientRepository:
                               .client_type(ClientType.get_clienttype(row.get('client_type')))
                               .status(Status.get_status(row.get('client_status')))
                               .build())
-
-                    cur.close()
-
-                clients.append(client)
+                    clients.append(client)
 
             return clients
 

@@ -1,5 +1,6 @@
 
-from flask import Blueprint, jsonify, request
+
+from flask import Blueprint, jsonify, request, logging
 
 from app.dtos.requestDocument import RequestDocumentDTO
 from app.entities.document import Document, DocumentBuilder
@@ -54,3 +55,12 @@ def create():
 
     document_id :int  = documentService.create(document,items)
     return jsonify({"Document id": document_id}), 201
+
+
+@documentsBp.route("/", methods=['GET'])
+@handle_exceptions
+def get_all():
+
+    document_data = documentService.get_all()
+
+    return jsonify(document_data), 200

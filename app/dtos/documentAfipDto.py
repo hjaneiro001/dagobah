@@ -88,15 +88,6 @@ class DocumentAfipDto:
                 "MonCotiz": self.exchange_rate,
                 "Iva":self.iva_list}
 
-
-    # "Iva": [  # (Opcional) Alícuotas asociadas al comprobante
-    #     {
-    #         "Id": 5,  # Id del tipo de IVA (5 para 21%)(ver tipos disponibles)
-    #         "BaseImp": 100,  # Base imponible
-    #         "Importe": 21  # Importe
-    #     }
-    # ]
-
     @classmethod
     def builder(cls):
         return cls.DocumentAfipDtoBuilder()

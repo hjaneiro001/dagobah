@@ -35,7 +35,6 @@ def get_taxId(taxId :int):
     return jsonify(result), 200
 
 
-
 @clientsBp.route("/", methods=['POST'])
 @handle_exceptions
 def create():
