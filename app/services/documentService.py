@@ -3,6 +3,7 @@ from app.entities.document import Document
 from app.entities.enums.status import Status
 from app.entities.item import Item
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
+from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
 
 
@@ -32,4 +33,15 @@ class DocumentService:
 
     def get_all(self):
 
-        return(self.document_repository.get_all())
+        document_list = self.document_repository.get_all()
+
+        return(document_list)
+
+    def get_id(self, id :int):
+
+        document_data = self.document_repository.get_id(id)
+
+        if document_data is None:
+            raise DocumentNotFoundException
+
+        return(document_data)

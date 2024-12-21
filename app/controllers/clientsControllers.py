@@ -14,7 +14,12 @@ clientsBp = Blueprint('clients', __name__)
 @clientsBp.route("/", methods=['GET'])
 @handle_exceptions
 def get_all():
+
     clients :list[Client]= clientService.get_all()
+
+    if len(clients) == 0:
+        return "", 204
+
     clients_data = [client.to_dict() for client in clients]
     response = ResponseClientDto(many=True).dump(clients_data)
     return jsonify(response), 200

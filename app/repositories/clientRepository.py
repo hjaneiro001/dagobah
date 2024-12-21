@@ -133,7 +133,7 @@ class ClientRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.get_value()}' and client_name = ''"
 
                 cur.execute(sql)
                 rows = cur.fetchall()

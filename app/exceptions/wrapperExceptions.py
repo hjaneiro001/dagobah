@@ -5,7 +5,6 @@ from flask import jsonify
 from marshmallow import ValidationError
 from app.exceptions.baseException import BaseException
 
-
 def handle_exceptions(f):
 
     def wrapper(*args, **kwargs):
