@@ -1,5 +1,4 @@
 from collections import defaultdict
-from distutils.command.build import build
 from typing import List
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.ivaListAfipDto import TaxItemDto

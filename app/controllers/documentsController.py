@@ -1,7 +1,9 @@
 
-from flask import Blueprint, jsonify, request
+
+from flask import Blueprint, jsonify, request, logging
 
 from app.dtos.requestDocument import RequestDocumentDTO
+from app.dtos.responseDocumentDto import ResponseDocumentDto
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
@@ -54,3 +56,27 @@ def create():
 
     document_id :int  = documentService.create(document,items)
     return jsonify({"Document id": document_id}), 201
+
+
+@documentsBp.route("/", methods=['GET'])
+@handle_exceptions
+def get_all():
+
+    document_data = documentService.get_all()
+
+    if not document_data:
+        return "", 204
+
+    response = [dto.to_dict() for dto in document_data]
+
+    return jsonify(response), 200
+
+@documentsBp.route("/<int:id>", methods=['GET'])
+@handle_exceptions
+def get_id(id :int):
+
+    document_data :ResponseDocumentDto = documentService.get_id(id)
+    response :dict = document_data.to_dict()
+
+    return jsonify(response), 200
+

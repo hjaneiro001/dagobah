@@ -14,9 +14,12 @@ class ProductService:
         return self.product_repository.get_all()
 
     def get_id(self, id):
+        
         product: Product = self.product_repository.get_id(id)
+
         if product is None:
             raise ProductNotFoundException
+
         return product
 
     def get_code(self, code):

@@ -1,6 +1,10 @@
+
 from sqlalchemy import QueuePool, values
 
 from app.entities.document import Document
+
+from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
+
 from app.entities.enums.status import Status
 from app.utils.connection_manager import ConnectionManager
 from app.utils.cursor_manager import CursorManager
@@ -50,3 +54,40 @@ class DocumentRepository:
                 conn.commit()
 
         return document_id
+
+    def get_all(self):
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+
+                sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE  client_status = '{Status.ACTIVE.get_value()}'"
+
+                cur.execute(sql)
+                rows = cur.fetchall()
+
+                if len(rows) == 0:
+                    return(None)
+
+                data =  ResponseDocumentDtoFactory.from_list(rows)
+
+        return (data)
+
+    def get_id(self, id: int):
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+                sql: str = (f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s")
+
+                values = (id, Status.ACTIVE.get_value())
+
+                cur.execute(sql, values)
+                row = cur.fetchone()
+
+                if row is None:
+                    return None
+
+                data = ResponseDocumentDtoFactory.from_dict(row)
+                return(data)
+
+
+

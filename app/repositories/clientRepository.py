@@ -125,7 +125,6 @@ class ClientRepository:
                         .status(Status.get_status(row.get('client_status')))
                         .build())
 
-                cur.close()
 
             return client
 
@@ -134,7 +133,7 @@ class ClientRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM clients WHERE client_status = '{Status.ACTIVE.get_value()}' and client_name = ''"
 
                 cur.execute(sql)
                 rows = cur.fetchall()
@@ -157,10 +156,7 @@ class ClientRepository:
                               .client_type(ClientType.get_clienttype(row.get('client_type')))
                               .status(Status.get_status(row.get('client_status')))
                               .build())
-
-                    cur.close()
-
-                clients.append(client)
+                    clients.append(client)
 
             return clients
 
