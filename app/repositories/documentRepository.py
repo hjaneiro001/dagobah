@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from sqlalchemy import QueuePool, values
 
@@ -15,7 +16,7 @@ class DocumentRepository:
         self.pool_connection: QueuePool = pool_connection
 
     def get_document(self, document :Document):
-        with ConnectionManager(self.pool_connection) as conn:
+         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
                 sql: str = (f"SELECT * FROM documents WHERE number = %s AND pos = %s and "
@@ -37,14 +38,14 @@ class DocumentRepository:
 
                 sql :str = """ 
                 INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, 
-                expiration_date, total_amount, taxable_amount, exempt_amount, tax_amount, currency, exchange_rate, status ) 
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                expiration_date, total_amount, taxable_amount, exempt_amount, tax_amount, currency, exchange_rate, cae, cae_vto, status ) 
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
                 """
 
                 values = (
                     document.client_id, document.pos, document.document_type.get_type(), document.document_concept.get_concept(), document.number,
                     document.date,  document.expiration_date, document.total_amount, document.taxable_amount,
-                    document.exempt_amount, document.tax_amount, document.currency, document.exchange_rate, document.status
+                    document.exempt_amount, document.tax_amount, document.currency, document.exchange_rate, document.cae, document.cae_vto, document.status
                 )
 
                 cur.execute(sql,values)
@@ -53,7 +54,7 @@ class DocumentRepository:
 
                 conn.commit()
 
-        return document_id
+            return document_id
 
     def get_all(self):
 
@@ -76,7 +77,7 @@ class DocumentRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql: str = (f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s")
+                sql: str = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s"
 
                 values = (id, Status.ACTIVE.get_value())
 
@@ -86,8 +87,23 @@ class DocumentRepository:
                 if row is None:
                     return None
 
-                data = ResponseDocumentDtoFactory.from_dict(row)
-                return(data)
+                return(row)
+
+
+    def save_cae(self,id: int, document :Document):
+
+         with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+
+                sql: str = " UPDATE documents SET cae = %s, cae_vto = %s WHERE document_id = %s"
+
+                values = (
+                    document.cae,document.cae_vto, id
+                )
+
+                cur.execute(sql, values)
+                conn.commit()
+
 
 
 

@@ -1,4 +1,7 @@
 from datetime import datetime
+
+from setuptools.package_index import entity_sub
+
 from app.dtos.responseDocumentDto import ResponseDocumentDto
 
 
@@ -31,7 +34,9 @@ class ResponseDocumentDtoFactory:
             client_country=data.get("client_country"),
             client_type_id=data.get("client_type_id"),
             client_tax_id=data.get("client_tax_id"),
-            client_tax_condition=data.get("client_tax_condition")
+            client_tax_condition=data.get("client_tax_condition"),
+            cae= data.get("cae"),
+            cae_vto = data.get("cae_vto")
         )
 
     @staticmethod
@@ -64,6 +69,8 @@ class ResponseDocumentDtoFactory:
                 client_type_id=row['client_type_id'],
                 client_tax_id=row['client_tax_id'],
                 client_tax_condition=row['client_tax_condition'],
+                cae=row["cae"],
+                cae_vto=row["cae_vto"]
             )
             dtos.append(dto)
 
@@ -115,5 +122,7 @@ class ResponseDocumentDtoFactory:
             client_country=entity.client.country,
             client_type_id=entity.client.type_id.name if entity.client.type_id else None,
             client_tax_id=entity.client.tax_id,
-            client_tax_condition=entity.client.tax_condition.name if entity.client.tax_condition else None
+            client_tax_condition=entity.client.tax_condition.name if entity.client.tax_condition else None,
+            cae=entity.cae if entity.cae else None,
+            cae_vto=entity.cae_vto
         )

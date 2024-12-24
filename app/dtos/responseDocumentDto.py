@@ -8,7 +8,7 @@ class ResponseDocumentDto:
                  no_grav_amount: float, tributes_amount: float, tax_amount: float,
                  currency: str, exchange_rate: float, status: str, client_name: str, client_address: str,
                  client_city: str, client_state: str, client_country: str, client_type_id: str, client_tax_id: str,
-                 client_tax_condition: str):
+                 client_tax_condition: str, cae :str, cae_vto :datetime):
 
         self.document_id = document_id
         self.client_id = client_id
@@ -35,6 +35,8 @@ class ResponseDocumentDto:
         self.client_type_id = client_type_id
         self.client_tax_id = client_tax_id
         self.client_tax_condition = client_tax_condition
+        self.cae = cae
+        self.cae_vto = cae_vto
 
     def __eq__(self, other):
         if not isinstance(other, ResponseDocumentDto):
@@ -67,7 +69,9 @@ class ResponseDocumentDto:
             "client_country": self.client_country,
             "client_type_id": self.client_type_id,
             "client_tax_id": self.client_tax_id,
-            "client_tax_condition": self.client_tax_condition
+            "client_tax_condition": self.client_tax_condition,
+            "cae": self.cae,
+            "cae_vto": self.cae_vto
         }
 
     def __str__(self):
@@ -82,7 +86,8 @@ class ResponseDocumentDto:
                 f"client_name={self.client_name}, client_address={self.client_address}, "
                 f"client_city={self.client_city}, client_state={self.client_state}, "
                 f"client_country={self.client_country}, client_type_id={self.client_type_id}, "
-                f"client_tax_id={self.client_tax_id}, client_tax_condition={self.client_tax_condition})")
+                f"client_tax_id={self.client_tax_id}, client_tax_condition={self.client_tax_condition}, "
+                f"cae = {self.cae}, cae_vto={cae_vto}")
 
 class ResponseDocumentDtoBuilder:
     def __init__(self):
@@ -111,6 +116,8 @@ class ResponseDocumentDtoBuilder:
         self._client_type_id = None
         self._client_tax_id = None
         self._client_tax_condition = None
+        self._cae = None
+        self._cae_vto = None
 
     def document_id(self, document_id: int):
         self._document_id = document_id
@@ -212,6 +219,14 @@ class ResponseDocumentDtoBuilder:
         self._client_tax_condition = client_tax_condition
         return self
 
+    def cae(self,cae:str):
+        self._cae = cae
+        return self
+
+    def cae_vto(self,cae_vto :datetime):
+        self._cae_vto = cae_vto
+        return self
+
     def build(self):
         return ResponseDocumentDto(
             document_id=self._document_id,
@@ -238,7 +253,9 @@ class ResponseDocumentDtoBuilder:
             client_country=self._client_country,
             client_type_id=self._client_type_id,
             client_tax_id=self._client_tax_id,
-            client_tax_condition=self._client_tax_condition
+            client_tax_condition=self._client_tax_condition,
+            cae=self._cae,
+            cae_vto=self._cae_vto
         )
 
 

@@ -13,7 +13,7 @@ class ItemRepository:
 
     def create(self, items: list[Item],document_id :int):
 
-        with ConnectionManager(self.pool_connection) as conn:
+         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
                 sql: str = """
                     INSERT INTO items (document_id, product_id, quantity, tax_rate, unit_price, status)
@@ -33,7 +33,10 @@ class ItemRepository:
                 ]
 
                 cur.executemany(sql, values)
+
                 conn.commit()
+
+
 
 
 
