@@ -5,6 +5,7 @@ from app.entities.item import Item
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
 from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
+from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
 
 
 class DocumentService:
@@ -13,6 +14,7 @@ class DocumentService:
         self.document_repository = document_repository
         self.item_repository = item_repository
         self.sdk_afip_repository = sdk_afip_repository
+
 
     def create(self, document: Document, items :list[Item]):
 
@@ -23,13 +25,19 @@ class DocumentService:
         if self.document_repository.get_document(document):
             raise DocumentAlreadyExistsException
 
-        documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
-        res = self.sdk_afip_repository.create_document_afip(documentDTO)
-        
         document_id = self.document_repository.create(document)
-        self.item_repository.create(items, document_id)
 
-        return (res)
+        if document_id:
+            self.item_repository.create(items, document_id)
+            documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
+            res = self.sdk_afip_repository.create_document_afip(documentDTO)
+
+            document.cae = res["CAE"]
+            document.cae_vto = res["CAEFchVto"]
+
+            self.document_repository.save_cae(document_id,document)
+
+        return res
 
     def get_all(self):
 
@@ -39,9 +47,10 @@ class DocumentService:
 
     def get_id(self, id :int):
 
-        document_data = self.document_repository.get_id(id)
+        row = self.document_repository.get_id(id)
+        document_data = ResponseDocumentDtoFactory.from_dict(row)
 
-        if document_data is None:
+        if row is None:
             raise DocumentNotFoundException
 
         return(document_data)

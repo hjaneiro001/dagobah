@@ -10,7 +10,7 @@ class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
                   client_type_id :TypeId,client_id_number :str, number :int, date :datetime,
                   expiration_date :datetime,total_amount :float, taxable_amount :float, exempt_amount :float, no_grav_amount: float, tributes_amount :float, tax_amount :float,
-                  currency :Currency, exchange_rate :float, status :Status):
+                  currency :Currency, exchange_rate :float, cae :str, cae_vto :datetime, status :Status):
 
         self.document_id :int = document_id
         self.client_id :int = client_id
@@ -31,6 +31,8 @@ class Document:
         self.tax_amount :float = tax_amount
         self.currency :Currency = currency
         self.exchange_rate :float = exchange_rate
+        self.cae :str = cae
+        self.cae_vto :datetime = cae_vto
         self.status :Status = status
 
     def __str__(self):
@@ -53,6 +55,8 @@ class Document:
                 f"Importe Iva : {self.tax_amount}\n"
                 f"Moneda : {self.currency}\n"
                 f"Cotizacion: {self.exchange_rate}\n"
+                f"Cae: {self.cae}\n"
+                f"Venc. CAE : {self.cae_vto}\n"
                 f"Status : {self.status}\n"
                 )
 
@@ -76,6 +80,8 @@ class Document:
             "tax_amount": self.tax_amount,
             "currency": self.currency.get_value(),
             "exchange_rate": self.exchange_rate,
+            "cae": self.cae,
+            "Vencimiento CAE": self.cae_vto.isoformat() if self.cae_vto else None,
             "status": self.status.value,
         }
 
@@ -99,6 +105,8 @@ class Document:
                     self.tax_amount == other.tax_amount and
                     self.currency == other.currency and
                     self.exchange_rate == other.exchange_rate and
+                    self.cae == other.cae and
+                    self.cae_vto == other.cae_vto and
                     self.status == other.status
                     )
 
@@ -124,6 +132,8 @@ class DocumentBuilder:
         self._tax_amount = None
         self._currency = None
         self._exchange_rate = None
+        self._cae = None
+        self._cae_vto = None
         self._status = None
 
 
@@ -199,6 +209,14 @@ class DocumentBuilder:
         self._exchange_rate :float = exchange_rate
         return self
 
+    def cae(self,cae):
+        self._cae :str = cae
+        return self
+
+    def cae_vto(self,cae_vto):
+        self._cae_vto :datetime= cae_vto
+        return self
+
     def status(self,status :Status):
         self._status :Status = status
         return self
@@ -223,6 +241,8 @@ class DocumentBuilder:
             tax_amount=self._tax_amount,
             currency=self._currency,
             exchange_rate=self._exchange_rate,
+            cae=self._cae,
+            cae_vto=self._cae_vto,
             status=self._status
         )
 
