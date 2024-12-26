@@ -3,6 +3,8 @@ from afip import Afip
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.entities.document import Document
 from app.entities.item import Item
+from app.exceptions.errorCreateDocumentAfipException import ErrorCreateDocumentAfipException
+
 
 class SdkAfipRepository:
 
@@ -19,9 +21,14 @@ class SdkAfipRepository:
     def create_document_afip(self,documentDTO :DocumentAfipDto):
 
         return_full_response = False
-        res = self.afip.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
 
-        res["CAE"]
-        res["CAEFchVto"]
+        tax_id = "20111111111"
 
-        return(res)
+        taxpayer_details = self.afip.RegisterInscriptionProof.getTaxpayerDetails(tax_id)
+
+        # try:
+        #     res = self.afip.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
+        #     return(res)
+        # except Exception as e:
+        #     raise ErrorCreateDocumentAfipException
+

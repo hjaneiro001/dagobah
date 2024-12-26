@@ -51,3 +51,5 @@ class ClientService:
         client.status = Status.INACTIVE
         self.client_repository.save(client)
         return
+
+
