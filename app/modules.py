@@ -37,5 +37,3 @@ sdkAfipRepository = SdkAfipRepository()
 
 documentRepository = DocumentRepository(pool_connection)
 documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository)
-
-

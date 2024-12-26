@@ -1,11 +1,8 @@
-from datetime import datetime
+
 
 from sqlalchemy import QueuePool, values
-
 from app.entities.document import Document
-
 from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
-
 from app.entities.enums.status import Status
 from app.utils.connection_manager import ConnectionManager
 from app.utils.cursor_manager import CursorManager
@@ -45,7 +42,7 @@ class DocumentRepository:
                 values = (
                     document.client_id, document.pos, document.document_type.get_type(), document.document_concept.get_concept(), document.number,
                     document.date,  document.expiration_date, document.total_amount, document.taxable_amount,
-                    document.exempt_amount, document.tax_amount, document.currency, document.exchange_rate, document.cae, document.cae_vto, document.status
+                    document.exempt_amount, document.tax_amount, document.currency.get_value(), document.exchange_rate, document.cae, document.cae_vto, document.status
                 )
 
                 cur.execute(sql,values)
@@ -84,21 +81,28 @@ class DocumentRepository:
                 cur.execute(sql, values)
                 row = cur.fetchone()
 
+
                 if row is None:
                     return None
 
                 return(row)
 
-
-    def save_cae(self,id: int, document :Document):
+    def save(self, document :Document):
 
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = " UPDATE documents SET cae = %s, cae_vto = %s WHERE document_id = %s"
+                sql: str = ("""UPDATE documents SET pos = %s, document_type= %s, document_concept= %s, number= %s, 
+                               date = %s, expiration_date = %s, total_amount= %s, taxable_amount = %s, exempt_amount = %s,
+                               tax_amount = %s, currency = %s, exchange_rate = %s, cae = %s, cae_vto = %s, status = %s
+                               WHERE document_id = %s """)
 
                 values = (
-                    document.cae,document.cae_vto, id
+                    document.pos, document.document_type.get_type(),
+                    document.document_concept.get_concept(), document.number,
+                    document.date, document.expiration_date, document.total_amount, document.taxable_amount,
+                    document.exempt_amount, document.tax_amount, document.currency.get_value(), document.exchange_rate,
+                    document.cae, document.cae_vto, document.status, document.document_id
                 )
 
                 cur.execute(sql, values)

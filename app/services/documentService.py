@@ -7,14 +7,12 @@ from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
 from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
 
-
 class DocumentService:
 
     def __init__(self, document_repository, item_repository, sdk_afip_repository):
         self.document_repository = document_repository
         self.item_repository = item_repository
         self.sdk_afip_repository = sdk_afip_repository
-
 
     def create(self, document: Document, items :list[Item]):
 
@@ -35,7 +33,7 @@ class DocumentService:
             document.cae = res["CAE"]
             document.cae_vto = res["CAEFchVto"]
 
-            self.document_repository.save_cae(document_id,document)
+            self.document_repository.save(document)
 
         return res
 
