@@ -22,13 +22,9 @@ class SdkAfipRepository:
 
         return_full_response = False
 
-        tax_id = "20111111111"
-
-        taxpayer_details = self.afip.RegisterInscriptionProof.getTaxpayerDetails(tax_id)
-
-        # try:
-        #     res = self.afip.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
-        #     return(res)
-        # except Exception as e:
-        #     raise ErrorCreateDocumentAfipException
+        try:
+            res = self.afip.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
+            return(res)
+        except Exception as e:
+            raise ErrorCreateDocumentAfipException
 
