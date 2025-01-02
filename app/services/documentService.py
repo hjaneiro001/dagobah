@@ -1,4 +1,7 @@
+from marshmallow import ValidationError
+
 from app.dtos.documentAfipDto import DocumentAfipDto
+from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document
 from app.entities.enums.status import Status
 from app.entities.item import Item
@@ -52,3 +55,19 @@ class DocumentService:
             raise DocumentNotFoundException
 
         return(document_data)
+
+    def get_pdf(self, id: int):
+
+        row = self.document_repository.get_id(id)
+        schema = ResponseDocumentMM()
+
+        try:
+
+            result = schema.dump(row)
+            response = self.sdk_afip_repository.create_pdf(result)
+
+            return (response)
+
+        except ValidationError as err:
+            print(f"Errores de validación: {err.messages}")
+            raise

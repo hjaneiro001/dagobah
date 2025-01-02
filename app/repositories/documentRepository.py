@@ -81,7 +81,6 @@ class DocumentRepository:
                 cur.execute(sql, values)
                 row = cur.fetchone()
 
-
                 if row is None:
                     return None
 

@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from setuptools.package_index import entity_sub
-
 from app.dtos.responseDocumentDto import ResponseDocumentDto
 
 

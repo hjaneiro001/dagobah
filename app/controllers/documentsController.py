@@ -1,4 +1,4 @@
-
+from http.client import responses
 
 from flask import Blueprint, jsonify, request, logging
 
@@ -79,4 +79,19 @@ def get_id(id :int):
     response :dict = document_data.to_dict()
 
     return jsonify(response), 200
+
+
+@documentsBp.route("/pdf/<int:id>", methods=['GET'])
+@handle_exceptions
+def get_pdf(id :int):
+
+    # document_data :ResponseDocumentDto = documentService.get_pdf(id)
+    # response :dict = document_data.to_dict()
+
+    response = documentService.get_pdf((id))
+    response = "Hola Mundo"
+    return jsonify(response), 200
+
+
+
 

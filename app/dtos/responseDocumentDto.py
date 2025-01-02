@@ -10,6 +10,12 @@ class ResponseDocumentDto:
                  client_city: str, client_state: str, client_country: str, client_type_id: str, client_tax_id: str,
                  client_tax_condition: str, cae :str, cae_vto :datetime):
 
+
+        if not isinstance(date, datetime):
+            raise ValueError("`date` debe ser un objeto datetime")
+        if not isinstance(total_amount, (int, float)) or total_amount < 0:
+            raise ValueError("`total_amount` debe ser un número positivo")
+
         self.document_id = document_id
         self.client_id = client_id
         self.pos = pos
@@ -35,7 +41,7 @@ class ResponseDocumentDto:
         self.client_type_id = client_type_id
         self.client_tax_id = client_tax_id
         self.client_tax_condition = client_tax_condition
-        self.cae = cae
+        self.cae = cae if cae is not None else "N/A"
         self.cae_vto = cae_vto
 
     def __eq__(self, other):
@@ -44,6 +50,9 @@ class ResponseDocumentDto:
         return self.__dict__ == other.__dict__
 
     def to_dict(self):
+        def default_value(value, fallback):
+            return value if value is not None else fallback
+
         return {
             "document_id": self.document_id,
             "client_id": self.client_id,
@@ -71,7 +80,7 @@ class ResponseDocumentDto:
             "client_tax_id": self.client_tax_id,
             "client_tax_condition": self.client_tax_condition,
             "cae": self.cae,
-            "cae_vto": self.cae_vto
+            "cae_vto":  self.cae_vto.isoformat() if isinstance(self.cae_vto, datetime) else self.cae_vto
         }
 
     def __str__(self):
@@ -87,7 +96,7 @@ class ResponseDocumentDto:
                 f"client_city={self.client_city}, client_state={self.client_state}, "
                 f"client_country={self.client_country}, client_type_id={self.client_type_id}, "
                 f"client_tax_id={self.client_tax_id}, client_tax_condition={self.client_tax_condition}, "
-                f"cae = {self.cae}, cae_vto={cae_vto}")
+                f"cae = {self.cae}, cae_vto={self.cae_vto}")
 
 class ResponseDocumentDtoBuilder:
     def __init__(self):
