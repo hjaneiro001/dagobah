@@ -1,7 +1,12 @@
 
-
 from sqlalchemy import QueuePool, values
-from app.entities.document import Document
+
+from app.dtos.responseDocumentMM import ResponseDocumentMM
+from app.entities.document import Document, DocumentBuilder
+from app.entities.enums.currency import Currency
+from app.entities.enums.documentConcept import DocumentConcept
+from app.entities.enums.documentType import DocumentType
+from app.entities.enums.typeId import TypeId
 from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
 from app.entities.enums.status import Status
 from app.utils.connection_manager import ConnectionManager
@@ -69,6 +74,23 @@ class DocumentRepository:
                 data =  ResponseDocumentDtoFactory.from_list(rows)
 
         return (data)
+    #
+    # def get_id(self, id: int):
+    #
+    #     with ConnectionManager(self.pool_connection) as conn:
+    #         with CursorManager(conn) as cur:
+    #             sql: str = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s"
+    #
+    #             values = (id, Status.ACTIVE.get_value())
+    #
+    #             cur.execute(sql, values)
+    #             row = cur.fetchone()
+    #
+    #             if row is None:
+    #                 return None
+    #
+    #
+    #         return(row)
 
     def get_id(self, id: int):
 
@@ -84,7 +106,34 @@ class DocumentRepository:
                 if row is None:
                     return None
 
-                return(row)
+                document: Document = (DocumentBuilder()
+                                      .document_id((row["document_id"]))
+                                      .client_id(row["client_id"])
+                                      .pos(row["pos"])
+                                      .document_type(DocumentType.get_document_type(row["document_type"]))
+                                      .document_concept(DocumentConcept.get_document_concept(row["document_concept"]))
+                                      .client_type_id(TypeId.get_type_id(row["client_type_id"]))
+                                      .client_tax_id(row["client_tax_id"])
+                                      .client_name(row["client_name"])
+                                      .client_address(row["client_address"])
+                                      .client_city(row["client_city"])
+                                      .client_state(row["client_state"])
+                                      .date(row["date"])
+                                      .expiration_date(row["expiration_date"])
+                                      .total_amount((row["total_amount"]))
+                                      .taxable_amount(row["taxable_amount"])
+                                      .exempt_amount(row["exempt_amount"])
+                                      .no_grav_amount(row["no_grav_amount"])
+                                      .tributes_amount(row["tributes_amount"])
+                                      .tax_amount(row["tax_amount"])
+                                      .currency(Currency.get_currency(row["currency"]))
+                                      .exchange_rate(row["exchange_rate"])
+                                      .cae(row["cae"])
+                                      .cae_vto(row["cae_vto"])
+                                      .number(row["number"])
+                                      .build())
+
+            return document
 
     def save(self, document :Document):
 

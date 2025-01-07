@@ -1,8 +1,9 @@
 
 from sqlalchemy import QueuePool
 
+from app.entities.enums.productIva import ProductIva
 from app.entities.enums.status import Status
-from app.entities.item import Item
+from app.entities.item import Item, ItemBuilder
 from app.utils.connection_manager import ConnectionManager
 from app.utils.cursor_manager import CursorManager
 
@@ -35,6 +36,39 @@ class ItemRepository:
                 cur.executemany(sql, values)
 
                 conn.commit()
+
+    def get_by_document_id(self, id:int):
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+                sql = f"SELECT * FROM Items i inner join Products p on i.product_id = p.product_id WHERE  document_id = %s and status = '{Status.ACTIVE.get_value()}'"
+
+                cur.execute(sql, (id))
+                rows = cur.fetchall()
+
+                items = []
+                for item_data in rows:
+                    item = (
+                        ItemBuilder()
+                        .item_id(item_data["item_id"])
+                        .document(item_data["document_id"])
+                        .product(item_data["product_id"])
+                        .quantity(item_data["quantity"])
+                        .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
+                        .unit_price(item_data["unit_price"])
+                        .product_name(item_data["product_name"])
+                        .product_code(item_data["product_code"])
+                        .build()
+                    )
+                    items.append(item)
+
+
+            return items
+
+
+
+
+
 
 
 

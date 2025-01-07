@@ -1,8 +1,11 @@
 
 from marshmallow import Schema, fields
 
+from app.dtos.responseItemDtoMM import ResponseItemDTO
+
 class ResponseDocumentMM(Schema):
 
+    document_id = fields.Integer(required=True, error_messages={'required': 'The field document_id is required.'})
     client_id = fields.Integer(required=True, error_messages={'required': 'The field client_id is required.'})
     pos = fields.Method(
         required=True,
@@ -43,6 +46,7 @@ class ResponseDocumentMM(Schema):
         serialize="format_taxable_amount",
         error_messages={'required': 'The field taxable_amount is required.'}
     )
+
     exempt_amount = fields.Float(required=True, error_messages={'required': 'The field exempt_amount is required.'})
     no_grav_amount = fields.Float(required=True, error_messages={'required': 'The field no_grav_amount is required.'})
     tributes_amount = fields.Float(required=True, error_messages={'required': 'The field tributes_amount is required.'})
@@ -51,17 +55,23 @@ class ResponseDocumentMM(Schema):
         serialize="format_tax_amount",
         error_messages={'required': 'The field tax_amount is required.'}
     )
+
     currency = fields.String(required=True, error_messages={'required': 'The field currency is required.'})
     exchange_rate = fields.Float(required=True, error_messages={'required': 'The field exchange_rate is required.'})
-    cae = fields.String(required=False, allow_none=True)
+    cae = fields.Method(
+        required=False,
+        allow_none=True,
+        serialize="format_cae",
+    )
+
     cae_vto = fields.Method(
         required=False,
         allow_none=True,
         serialize = "format_cae_vto",
     )
+    items = fields.List(fields.Nested(ResponseItemDTO), required=True, error_messages={'required': 'The field items is required.'})
 
     def format_number(self, obj):
-
         return f"{obj.get('number'):08}"
 
     def format_pos(self, obj):
@@ -75,6 +85,10 @@ class ResponseDocumentMM(Schema):
     def format_cae_vto(self, obj):
         cae_vto = obj.get('cae_vto')
         return cae_vto.strftime('%d-%m-%Y') if cae_vto else "N/A"
+
+    def format_cae(self, obj):
+        cae = obj.get('cae')
+        return cae if cae else "N/A"
 
     def format_date(self, obj):
         date = obj.get('date')
