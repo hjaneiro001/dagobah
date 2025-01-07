@@ -1,6 +1,9 @@
 from http.client import responses
 import traceback
-from flask import Blueprint, jsonify, request, logging
+from flask import Blueprint, jsonify, request, send_file, logging
+
+import io
+import base64
 
 from app.dtos.requestDocument import RequestDocumentDTO
 from app.dtos.responseDocumentDto import ResponseDocumentDto
@@ -77,31 +80,41 @@ def get_all():
 def get_id(id :int):
 
     document :Document = documentService.get_id(id)
-
     response_schema = ResponseDocumentMM()
     document_response = response_schema.dump(document.to_dict())
-
     return jsonify(document_response), 200
 
 
 
 @documentsBp.route("/bill/<int:id>", methods=['GET'])
 @handle_exceptions
-def get_pdf(id :int):
+def get_bill(id :int):
 
-    response = documentService.get_pdf(id, 'bill')
-    response = "Hola Bill"
-    return jsonify(response), 200
+    pdf_file = documentService.get_pdf(id, "bill")  # Esto debería devolver los bytes del PDF
+    pdf_io = io.BytesIO(pdf_file)
+    pdf_io.seek(0)
 
+    return send_file(pdf_io, mimetype='application/pdf', as_attachment=True, download_name=f"document_{id}.pdf")
 
 @documentsBp.route("/ticket/<int:id>", methods=['GET'])
 @handle_exceptions
 def get_ticket(id :int):
 
-    response = documentService.get_pdf(id, 'ticket')
-    response = "Hola Ticket"
-    return jsonify(response), 200
+    pdf_file = documentService.get_pdf(id, "ticket")  # Esto debería devolver los bytes del PDF
+    pdf_io = io.BytesIO(pdf_file)
+    pdf_io.seek(0)
+
+    return send_file(pdf_io, mimetype='application/pdf', as_attachment=True, download_name=f"document_{id}.pdf")
 
 
+@documentsBp.route("/qr/<int:id>", methods=['GET'])
+@handle_exceptions
+def get_qr(id: int):
 
+    base64_image = documentService.get_qr(id)
 
+    image_data = base64.b64decode(base64_image.split(",")[1])  # Eliminamos "data:image/png;base64,"
+    image_io = io.BytesIO(image_data)
+    image_io.seek(0)
+
+    return send_file(image_io, mimetype='image/png')

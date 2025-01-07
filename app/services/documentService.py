@@ -76,3 +76,20 @@ class DocumentService:
         response = self.sdk_afip_repository.create_pdf(document_data, mode)
 
         return response
+
+    def get_qr(self, id: int):
+
+        document = self.document_repository.get_id(id)
+
+        if document is None:
+            raise DocumentNotFoundException
+
+        items = self.item_repository.get_by_document_id(id)
+        document.items = items
+
+        response_schema = ResponseDocumentMM()
+        document_data = response_schema.dump(document.to_dict())
+
+        response = self.sdk_afip_repository.create_qr(document_data)
+
+        return response

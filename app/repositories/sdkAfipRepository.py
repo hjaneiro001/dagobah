@@ -123,8 +123,6 @@ class SdkAfipRepository:
 
         name = "PDF de prueba"
 
-
-
         options = {
             "width": page_width,  # Ancho de pagina en pulgadas. Usar 3.1 para ticket
             "marginLeft": margins,  # Margen izquierdo en pulgadas. Usar 0.1 para ticket
@@ -145,11 +143,10 @@ class SdkAfipRepository:
 
         open("./Comprobante.pdf", 'wb').write(response.content)
 
-        return(response)
+        return(response.content)
 
 
     def create_qr(self, document : ResponseDocumentMM):
-
 
         qr_code_data = {
             'ver': 1,  # Versión del formato de los datos (1 por defecto)
