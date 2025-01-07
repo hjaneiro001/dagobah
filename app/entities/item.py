@@ -1,7 +1,9 @@
+from itertools import product
+
 from app.entities.enums.productIva import ProductIva
 
 class Item:
-    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :ProductIva, unit_price :float):
+    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :ProductIva, unit_price :float, product_name :str, product_code :str):
 
         self.item_id :int = item_id
         self.document_id :int = document_id
@@ -9,6 +11,8 @@ class Item:
         self.quantity :float = quantity
         self.tax_rate :ProductIva = tax_rate
         self.unit_price :float = unit_price
+        self.product_name :str = product_name
+        self.product_code :str = product_code
 
     def __str__(self):
 
@@ -17,6 +21,8 @@ class Item:
                 f"Cantidad: {self.quantity}\n"
                 f"Iva: {self.tax_rate}\n"
                 f"Precio uniario: {self.unit_price}\n"
+                f"Nombre producto : {self.product_name}\n"
+                f"Codigo producto : {self.product_code}\n"
                 )
 
     def __repr__(self):
@@ -30,8 +36,10 @@ class Item:
             "document_id": self.document_id,
             "product": self.product_id,
             "quantity": self.quantity,
-            "tax_rate": self.tax_rate,
-            "unit_price": self.unit_price
+            "tax_rate": self.tax_rate.get_value(),
+            "unit_price": self.unit_price,
+            "product_name": self.product_name,
+            "product_code": self.product_code
         }
 
     def __eq__(self, other):
@@ -41,7 +49,9 @@ class Item:
                     self.product_id == other.product_id and
                     self.quantity == other.quantity and
                     self.tax_rate == other.tax_rate and
-                    self.unit_price == other.unit_price
+                    self.unit_price == other.unit_price and
+                    self.product_name == other.product_name and
+                    self.product_code == other.product_code
         }
 
         return False
@@ -54,6 +64,8 @@ class ItemBuilder:
             self._quantity = None
             self._tax_rate = None
             self._unit_price = None
+            self._product_name = None
+            self._product_code = None
 
         def item_id(self,item_id):
             self._item_id :int = item_id
@@ -79,6 +91,14 @@ class ItemBuilder:
             self._unit_price :float = unit_price
             return self
 
+        def product_name(self,product_name):
+            self._product_name :str = product_name
+            return self
+
+        def product_code(self,product_code):
+            self._product_code = product_code
+            return self
+
         def build(self):
             return Item(
                 item_id=self._item_id,
@@ -86,6 +106,8 @@ class ItemBuilder:
                 product_id = self._product_id,
                 quantity = self._quantity,
                 tax_rate = self._tax_rate,
-                unit_price = self._unit_price
+                unit_price = self._unit_price,
+                product_name = self._product_name,
+                product_code =self._product_code
             )
 

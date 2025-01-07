@@ -1,4 +1,8 @@
+from marshmallow import ValidationError
+
 from app.dtos.documentAfipDto import DocumentAfipDto
+from app.dtos.responseDocumentMM import ResponseDocumentMM
+from app.dtos.responseItemDtoMM import ResponseItemDTO
 from app.entities.document import Document
 from app.entities.enums.status import Status
 from app.entities.item import Item
@@ -43,12 +47,56 @@ class DocumentService:
 
         return(document_list)
 
-    def get_id(self, id :int):
 
-        row = self.document_repository.get_id(id)
-        document_data = ResponseDocumentDtoFactory.from_dict(row)
+    def get_id(self, id: int):
 
-        if row is None:
+        document = self.document_repository.get_id(id)
+        if document is None:
             raise DocumentNotFoundException
 
-        return(document_data)
+        items = self.item_repository.get_by_document_id(id)
+        document.items = items
+
+        return document
+
+
+    def get_pdf(self, id: int):
+
+        document = self.document_repository.get_id(id)
+
+        if document is None:
+            raise DocumentNotFoundException
+
+        items = self.item_repository.get_by_document_id(id)
+        document.items = items
+
+        response_schema = ResponseDocumentMM()
+        document_data = response_schema.dump(document.to_dict())
+
+        response = self.sdk_afip_repository.create_pdf(document_data)
+
+        return response
+    #
+    #
+    # def get_pdf(self, id: int):
+    #
+    #     row = self.document_repository.get_id(id)
+    #     schema = ResponseDocumentMM()
+    #
+    #     schemaItems = ResponseItemDTO(many=True)
+    #     item_rows = self.item_repository.get_by_document_id(id)
+    #     items_dto_result = schemaItems.dump(item_rows)
+    #
+    #     document_data = schema.dump({
+    #         **row,
+    #         "items": items_dto_result  # Lista de items
+    #     })
+    #
+    #     try:
+    #
+    #         response = self.sdk_afip_repository.create_pdf(document_data)
+    #         return response
+    #
+    #     except ValidationError as err:
+    #         print(f"Errores de validación: {err.messages}")
+    #         raise

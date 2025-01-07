@@ -1,9 +1,10 @@
-
-
+from http.client import responses
+import traceback
 from flask import Blueprint, jsonify, request, logging
 
 from app.dtos.requestDocument import RequestDocumentDTO
 from app.dtos.responseDocumentDto import ResponseDocumentDto
+from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
@@ -75,8 +76,26 @@ def get_all():
 @handle_exceptions
 def get_id(id :int):
 
-    document_data :ResponseDocumentDto = documentService.get_id(id)
-    response :dict = document_data.to_dict()
+    document :Document = documentService.get_id(id)
 
+    response_schema = ResponseDocumentMM()
+    document_response = response_schema.dump(document.to_dict())
+
+    return jsonify(document_response), 200
+
+
+
+@documentsBp.route("/pdf/<int:id>", methods=['GET'])
+@handle_exceptions
+def get_pdf(id :int):
+
+    # document_data :ResponseDocumentDto = documentService.get_pdf(id)
+    # response :dict = document_data.to_dict()
+
+    response = documentService.get_pdf((id))
+    response = "Hola Mundo"
     return jsonify(response), 200
+
+
+
 
