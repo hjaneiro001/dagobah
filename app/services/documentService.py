@@ -60,7 +60,7 @@ class DocumentService:
         return document
 
 
-    def get_pdf(self, id: int):
+    def get_pdf(self, id: int, mode :str):
 
         document = self.document_repository.get_id(id)
 
@@ -73,30 +73,6 @@ class DocumentService:
         response_schema = ResponseDocumentMM()
         document_data = response_schema.dump(document.to_dict())
 
-        response = self.sdk_afip_repository.create_pdf(document_data)
+        response = self.sdk_afip_repository.create_pdf(document_data, mode)
 
         return response
-    #
-    #
-    # def get_pdf(self, id: int):
-    #
-    #     row = self.document_repository.get_id(id)
-    #     schema = ResponseDocumentMM()
-    #
-    #     schemaItems = ResponseItemDTO(many=True)
-    #     item_rows = self.item_repository.get_by_document_id(id)
-    #     items_dto_result = schemaItems.dump(item_rows)
-    #
-    #     document_data = schema.dump({
-    #         **row,
-    #         "items": items_dto_result  # Lista de items
-    #     })
-    #
-    #     try:
-    #
-    #         response = self.sdk_afip_repository.create_pdf(document_data)
-    #         return response
-    #
-    #     except ValidationError as err:
-    #         print(f"Errores de validación: {err.messages}")
-    #         raise

@@ -85,15 +85,21 @@ def get_id(id :int):
 
 
 
-@documentsBp.route("/pdf/<int:id>", methods=['GET'])
+@documentsBp.route("/bill/<int:id>", methods=['GET'])
 @handle_exceptions
 def get_pdf(id :int):
 
-    # document_data :ResponseDocumentDto = documentService.get_pdf(id)
-    # response :dict = document_data.to_dict()
+    response = documentService.get_pdf(id, 'bill')
+    response = "Hola Bill"
+    return jsonify(response), 200
 
-    response = documentService.get_pdf((id))
-    response = "Hola Mundo"
+
+@documentsBp.route("/ticket/<int:id>", methods=['GET'])
+@handle_exceptions
+def get_ticket(id :int):
+
+    response = documentService.get_pdf(id, 'ticket')
+    response = "Hola Ticket"
     return jsonify(response), 200
 
 

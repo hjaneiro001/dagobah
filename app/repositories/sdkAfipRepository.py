@@ -43,7 +43,15 @@ class SdkAfipRepository:
         except Exception as e:
             raise ErrorCreateDocumentAfipException
 
-    def create_pdf(self, document : ResponseDocumentMM):
+    def create_pdf(self, document : ResponseDocumentMM, mode="bill"):
+
+        page_width = 8
+        margins = 0.4
+
+        if mode=="ticket":
+            page_width = 3.1
+            margins= 0.1
+
 
         business_data = {
             'business_name': 'Empresa imaginaria S.A.',  # Nombre / Razon social
@@ -96,8 +104,8 @@ class SdkAfipRepository:
 
         qr_code_image = self.create_qr(document)
 
-        base_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta al directorio del script
-        html_path = os.path.join(base_dir, 'bill.html')  # Ruta absoluta a 'bill.html'
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        html_path = os.path.join(base_dir, f"{mode}.html")
 
         with open(html_path, 'r') as f:
             html = f.read()
@@ -115,12 +123,14 @@ class SdkAfipRepository:
 
         name = "PDF de prueba"
 
+
+
         options = {
-            "width": 8,  # Ancho de pagina en pulgadas. Usar 3.1 para ticket
-            "marginLeft": 0.4,  # Margen izquierdo en pulgadas. Usar 0.1 para ticket
-            "marginRight": 0.4,  # Margen derecho en pulgadas. Usar 0.1 para ticket
-            "marginTop": 0.4,  # Margen superior en pulgadas. Usar 0.1 para ticket
-            "marginBottom": 0.4  # Margen inferior en pulgadas. Usar 0.1 para ticket
+            "width": page_width,  # Ancho de pagina en pulgadas. Usar 3.1 para ticket
+            "marginLeft": margins,  # Margen izquierdo en pulgadas. Usar 0.1 para ticket
+            "marginRight": margins,  # Margen derecho en pulgadas. Usar 0.1 para ticket
+            "marginTop": margins,  # Margen superior en pulgadas. Usar 0.1 para ticket
+            "marginBottom": margins # Margen inferior en pulgadas. Usar 0.1 para ticket
         }
 
         res = self.afip.ElectronicBilling.createPDF({
