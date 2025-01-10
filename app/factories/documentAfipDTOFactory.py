@@ -15,7 +15,7 @@ class DocumentAfipDTOFactory:
         for item in items:
             id_ = item.tax_rate.get_code()
             base_imp = item.quantity * item.unit_price
-            importe = base_imp * (item.tax_rate.get_value() / 100)
+            importe = base_imp * item.tax_rate.get_value()
 
             grouped_iva[id_]["BaseImp"] += base_imp
             grouped_iva[id_]["Importe"] += importe
@@ -36,7 +36,7 @@ class DocumentAfipDTOFactory:
                         .document_type(document.document_type.get_value())
                         .concept(document.document_concept.get_value())
                         .client_type_id((document.client_type_id.get_code()))
-                        .id_number(document.client_id_number)
+                        .id_number(document.client_tax_id)
                         .document_from(document.number)
                         .document_to(document.number)
                         .document_date(document.date)

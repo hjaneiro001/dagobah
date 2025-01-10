@@ -1,15 +1,13 @@
-from marshmallow import ValidationError
 
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
-from app.dtos.responseItemDtoMM import ResponseItemDTO
 from app.entities.document import Document
 from app.entities.enums.status import Status
 from app.entities.item import Item
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
 from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
-from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
+
 
 class DocumentService:
 
