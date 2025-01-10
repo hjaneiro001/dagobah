@@ -1,4 +1,4 @@
-from locale import currency
+# from locale import currency
 
 from afip import Afip
 
@@ -24,26 +24,43 @@ from jinja2 import Template
 class SdkAfipRepository:
 
     def __init__(self):
-        self.afip = Afip({"CUIT": 20409378472})
+        self.afip_instances = {}
+        self.afip_data = {}
+
+    def get_afip_instance(self, cuit: str):
+        if cuit not in self.afip_instances:
+            self.afip_instances[cuit] = Afip({"CUIT": cuit})
+            self.afip_data[cuit] = {"COMPANY": "LFK SRL","ADDRESS": "Tucuman 3333","CITY":"Lanus Este", "STATE":"Buenos Aires","TAX_ID": "30-71091491-1", "GROSS_INCOME":"30-71091491-1", "INICIO": "01/05/2009", "TAXCONDITION": "Responsable Inscripto"}
+        return self.afip_instances[cuit]
+
+    def get_company_info(self, cuit: str):
+        return self.afip_data.get(cuit, {})
 
     def next_number(self,document :Document, items :list[Item]):
 
-        document_number = self.afip.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
+        afip_instance = self.get_afip_instance("20409378472")
+        document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
         next_number = document_number + 1
 
         return next_number
 
     def create_document_afip(self,documentDTO :DocumentAfipDto):
 
+        afip_instance = self.get_afip_instance("20409378472")
         return_full_response = False
 
         try:
-            res = self.afip.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
+            res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
             return(res)
         except Exception as e:
             raise ErrorCreateDocumentAfipException
 
+        return(res)
+
     def create_pdf(self, document : ResponseDocumentMM, mode="bill"):
+
+        afip_instance = self.get_afip_instance("20409378472")
+        company_info = self.get_company_info("20409378472")
 
         page_width = 8
         margins = 0.4
@@ -54,12 +71,12 @@ class SdkAfipRepository:
 
 
         business_data = {
-            'business_name': 'Empresa imaginaria S.A.',  # Nombre / Razon social
-            'address': 'Calle falsa 123',  # Direccion
-            'tax_id': 12345678912,  # CUIL/CUIT
-            'gross_income_id': 12345432,  # Ingresos brutos
-            'start_date': '25/10/2017',  # Fecha inicio de actividades
-            'vat_condition': 'Responsable inscripto'  # Condicion frente al IVA
+            'business_name': company_info["COMPANY"],
+            'address': company_info["ADDRESS"] +" " + company_info["CITY"] + " " + company_info["STATE"],
+            'tax_id': company_info["TAX_ID"],
+            'gross_income_id': company_info["GROSS_INCOME"],
+            'start_date': company_info["INICIO"],
+            'vat_condition': company_info["TAXCONDITION"]
         }
 
         bill = {
@@ -131,7 +148,7 @@ class SdkAfipRepository:
             "marginBottom": margins # Margen inferior en pulgadas. Usar 0.1 para ticket
         }
 
-        res = self.afip.ElectronicBilling.createPDF({
+        res = afip_instance.ElectronicBilling.createPDF({
             "html": template_html,
             "file_name": name,
             "options": options

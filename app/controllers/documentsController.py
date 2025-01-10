@@ -1,12 +1,10 @@
-from http.client import responses
-import traceback
+
 from flask import Blueprint, jsonify, request, send_file, logging
 
 import io
 import base64
 
 from app.dtos.requestDocument import RequestDocumentDTO
-from app.dtos.responseDocumentDto import ResponseDocumentDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
@@ -32,7 +30,7 @@ def create():
                           .document_type(DocumentType.get_document_type(post_document_dto["document_type"]))
                           .document_concept(DocumentConcept.get_document_concept(post_document_dto["document_concept"]))
                           .client_type_id(TypeId.get_type_id(post_document_dto["client_type_id"]))
-                          .client_id_number(post_document_dto["client_id_number"])
+                          .client_tax_id(post_document_dto["client_id_number"])
                           .date(post_document_dto["date"])
                           .expiration_date(post_document_dto["expiration_date"])
                           .total_amount((post_document_dto["total_amount"]))
