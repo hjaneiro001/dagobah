@@ -91,3 +91,7 @@ class DocumentService:
         response = self.sdk_afip_repository.create_qr(document_data)
 
         return response
+
+    def get_certificado(self):
+
+        return self.sdk_afip_repository.create_certificado()

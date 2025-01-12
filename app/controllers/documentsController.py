@@ -111,8 +111,16 @@ def get_qr(id: int):
 
     base64_image = documentService.get_qr(id)
 
-    image_data = base64.b64decode(base64_image.split(",")[1])  # Eliminamos "data:image/png;base64,"
+    image_data = base64.b64decode(base64_image.split(",")[1])
     image_io = io.BytesIO(image_data)
     image_io.seek(0)
 
     return send_file(image_io, mimetype='image/png')
+
+@documentsBp.route("/certificado/", methods=['GET'])
+@handle_exceptions
+
+def get_certificado():
+
+   return documentService.get_certificado()
+

@@ -29,8 +29,20 @@ class SdkAfipRepository:
 
     def get_afip_instance(self, cuit: str):
         if cuit not in self.afip_instances:
-            self.afip_instances[cuit] = Afip({"CUIT": cuit})
+
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+
+            cert_path = os.path.join(current_dir, "certificado.crt")
+            key_path = os.path.join(current_dir, "key.key")
+
+            cert = open(cert_path).read()
+            key = open(key_path).read()
+
+            tax_id = 27185949260
+
+            self.afip_instances[cuit] = Afip({"CUIT": tax_id, "cert": cert, "key": key})
             self.afip_data[cuit] = {"COMPANY": "LFK SRL","ADDRESS": "Tucuman 3333","CITY":"Lanus Este", "STATE":"Buenos Aires","TAX_ID": "30-71091491-1", "GROSS_INCOME":"30-71091491-1", "INICIO": "01/05/2009", "TAXCONDITION": "Responsable Inscripto"}
+
         return self.afip_instances[cuit]
 
     def get_company_info(self, cuit: str):
@@ -190,4 +202,24 @@ class SdkAfipRepository:
 
         return(qr_code_image)
 
+    def create_certificado(self):
+
+
+        tax_id = 27185949260
+
+        username = "27185949260"
+
+        password = "Crodriguez002"
+
+        cert_alias = "afipsdkCR"
+
+        afip = Afip({"CUIT": tax_id})
+
+        res = afip.createCert(username, password, cert_alias)
+
+        print(res["cert"])
+
+        print(res["key"])
+
+        return
 
