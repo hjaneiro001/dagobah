@@ -119,7 +119,6 @@ def get_qr(id: int):
 
 @documentsBp.route("/certificado/", methods=['GET'])
 @handle_exceptions
-
 def get_certificado():
 
    return documentService.get_certificado()

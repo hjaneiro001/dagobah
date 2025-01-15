@@ -42,6 +42,7 @@ class ClientService:
         client.pk_client = client_to_modify.pk_client
         client.status = Status.ACTIVE
         self.client_repository.save(client)
+
         return
 
     def delete(self, id):

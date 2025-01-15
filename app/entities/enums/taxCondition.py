@@ -16,7 +16,6 @@ class TaxCondition(Enum):
     MS = ['MONOTRIBUTO SOCIAL']
     ES = ['EVENTUAL SOCIAL']
 
-  #  @classmethod
     def get_tax_condition(value):
         for item in TaxCondition:
             if value in item.value:

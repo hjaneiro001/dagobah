@@ -1,6 +1,6 @@
-# from locale import currency
 
 from afip import Afip
+from sqlalchemy import QueuePool
 
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
@@ -21,27 +21,27 @@ import requests
 
 from jinja2 import Template
 
+from app.utils.connection_manager import ConnectionManager
+from app.utils.cursor_manager import CursorManager
+
+
 class SdkAfipRepository:
 
-    def __init__(self):
+    def __init__(self, pool_connection :QueuePool):
         self.afip_instances = {}
         self.afip_data = {}
+        self.pool_connection: QueuePool = pool_connection
 
     def get_afip_instance(self, cuit: str):
         if cuit not in self.afip_instances:
 
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-
-            cert_path = os.path.join(current_dir, "certificado.crt")
-            key_path = os.path.join(current_dir, "key.key")
-
-            cert = open(cert_path).read()
-            key = open(key_path).read()
+            cert = self.get_certificado(1)
+            key = self.get_key(1)
 
             tax_id = 27185949260
 
             self.afip_instances[cuit] = Afip({"CUIT": tax_id, "cert": cert, "key": key})
-            self.afip_data[cuit] = {"COMPANY": "LFK SRL","ADDRESS": "Tucuman 3333","CITY":"Lanus Este", "STATE":"Buenos Aires","TAX_ID": "30-71091491-1", "GROSS_INCOME":"30-71091491-1", "INICIO": "01/05/2009", "TAXCONDITION": "Responsable Inscripto"}
+            self.afip_data[cuit] = {"COMPANY": "LFK SRL","ADDRESS": "Tucuman 3333","CITY":"Lanus Este", "STATE":"Buenos Aires","TAX_ID": tax_id, "GROSS_INCOME":"30-71091491-1", "INICIO": "01/05/2009", "TAXCONDITION": "Responsable Inscripto"}
 
         return self.afip_instances[cuit]
 
@@ -204,7 +204,6 @@ class SdkAfipRepository:
 
     def create_certificado(self):
 
-
         tax_id = 27185949260
 
         username = "27185949260"
@@ -222,4 +221,37 @@ class SdkAfipRepository:
         print(res["key"])
 
         return
+
+    def get_certificado(self,id):
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+
+                sql = f"SELECT * FROM companies WHERE company_id = %s"
+
+                cur.execute(sql, (id,))
+                row = cur.fetchone()
+
+                cert_base64 = base64.b64encode(row['company_cert']).decode('utf-8')
+                cert_return = base64.b64decode(cert_base64).decode('utf-8')
+
+                return cert_return
+
+
+    def get_key(self,id):
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+
+                sql = f"SELECT * FROM companies WHERE company_id = %s"
+
+                cur.execute(sql, (id,))
+                row = cur.fetchone()
+
+                key_base64 = base64.b64encode(row['company_key']).decode('utf-8')
+                key = base64.b64decode(key_base64).decode('utf-8')
+
+                return key
+
+
 
