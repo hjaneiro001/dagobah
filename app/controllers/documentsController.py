@@ -29,9 +29,6 @@ def create():
                           .pos(post_document_dto["pos"])
                           .document_type(DocumentType.get_document_type(post_document_dto["document_type"]))
                           .document_concept(DocumentConcept.get_document_concept(post_document_dto["document_concept"]))
-                          .client_type_id(TypeId.get_type_id(post_document_dto["client_type_id"]))
-                          .client_tax_id(post_document_dto["client_id_number"])
-                          .date(post_document_dto["date"])
                           .expiration_date(post_document_dto["expiration_date"])
                           .total_amount((post_document_dto["total_amount"]))
                           .taxable_amount(post_document_dto["taxable_amount"])
@@ -111,8 +108,15 @@ def get_qr(id: int):
 
     base64_image = documentService.get_qr(id)
 
-    image_data = base64.b64decode(base64_image.split(",")[1])  # Eliminamos "data:image/png;base64,"
+    image_data = base64.b64decode(base64_image.split(",")[1])
     image_io = io.BytesIO(image_data)
     image_io.seek(0)
 
     return send_file(image_io, mimetype='image/png')
+
+@documentsBp.route("/certificado/", methods=['GET'])
+@handle_exceptions
+def get_certificado():
+
+   return documentService.get_certificado()
+

@@ -33,7 +33,6 @@ class ClientRepository:
                 )
 
                 cur.execute(sql, values)
-
                 client_id = cur.lastrowid
 
                 conn.commit()
