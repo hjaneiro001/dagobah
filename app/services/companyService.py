@@ -1,6 +1,7 @@
 import os
 
-from app.entities.company import Company
+from app.entities.company import Company, CompanyBuilder
+from app.entities.cuentaArca import CuentaArca
 from app.entities.enums.status import Status
 from app.exceptions.companyTaxIdAlreadyExistsException import CompanyTaxIdAlreadyExistsException
 from app.exceptions.companytAlreadytExistsException import CompanyAlreadyExistsException
@@ -9,14 +10,14 @@ from app.exceptions.companytNotFoundException import CompanyNotFoundException
 
 class CompanyService:
 
-    def __init__(self, company_repository ):
+    def __init__(self, company_repository,sdk_afip_repository):
         self.company_repository = company_repository
+        self.sdk_afip_repository = sdk_afip_repository
 
     def create(self, company :Company):
 
         company.company_status = Status.ACTIVE
-        company :Company = self.company_repository.get_tax_id(company.company_tax_id)
-        if company:
+        if self.company_repository.get_tax_id(company.company_tax_id):
             raise CompanyAlreadyExistsException
         company_id = self.company_repository.create(company)
 
@@ -69,28 +70,9 @@ class CompanyService:
 
         return companies
 
+    def create_certificado(self,cuentaArca :CuentaArca ):
 
-    def create_certificado(self):
-
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-
-        cert_path = os.path.join(current_dir, "certificado.crt")
-
-        cert = open(cert_path).read()
-
-        return self.company_repository.save_certificado(1,cert)
-
-
-    def create_key(self):
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-
-        key_path = os.path.join(current_dir, "key.key")
-
-        key = open(key_path).read()
-
-        return self.company_repository.save_key(1,key)
-
-
-
-
+        company = self.company_repository.get_id(cuentaArca.company_id)
+        cert = self.sdk_afip_repository.create_certificado(company,cuentaArca)
+        return self.company_repository.save_certificado(cuentaArca.company_id,cert["cert"],cert["key"])
 

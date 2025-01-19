@@ -2,8 +2,10 @@
 from flask import Blueprint, request, jsonify
 
 from app.dtos.requestCompanyDto import RequestCompanyDto
+from app.dtos.requestCuentaArcaDto import RequestCuentaArcaDto
 from app.dtos.responseCompanyDto import ResponseCompanyDto
 from app.entities.company import Company, CompanyBuilder
+from app.entities.cuentaArca import CuentaArca, CuentaArcaBuilder
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 from app.exceptions.wrapperExceptions import handle_exceptions
@@ -15,7 +17,7 @@ companyBp = Blueprint('company', __name__)
 @handle_exceptions
 def create():
 
-    post_company_dto = RequestCompanyDto().load(request.json)
+    post_company_dto :RequestCompanyDto= RequestCompanyDto().load(request.json)
 
     company :Company = (CompanyBuilder()
             .company_name(post_company_dto["company_name"])
@@ -45,7 +47,7 @@ def delete(id: int):
 @handle_exceptions
 def modify(id:int):
 
-    post_company_dto = RequestCompanyDto().load(request.json)
+    post_company_dto :RequestCompanyDto= RequestCompanyDto().load(request.json)
 
     company :Company = (CompanyBuilder()
             .company_name(post_company_dto["company_name"])
@@ -97,17 +99,17 @@ def get_tax_id(taxId :str):
 @handle_exceptions
 def create_certificado():
 
-    result = companyService.create_certificado()
+    post_cuenta_arca :RequestCuentaArcaDto = RequestCuentaArcaDto().load(request.json)
 
-    return ("Hola Mundo")
+    cuentaArca :CuentaArca = (CuentaArcaBuilder()
+                        .user(post_cuenta_arca["user"])
+                        .password(post_cuenta_arca["password"])
+                        .cert_name(post_cuenta_arca["cert_name"])
+                        .company_id(post_cuenta_arca["company_id"])
+                        .build())
 
 
+    result = companyService.create_certificado(cuentaArca)
 
-@companyBp.route("/key", methods=['PUT'])
-@handle_exceptions
-def create_key():
-
-    result = companyService.create_key()
-
-    return ("Hola Key")
+    return "",204
 

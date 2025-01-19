@@ -1,4 +1,3 @@
-from itertools import product
 
 from app.entities.enums.productIva import ProductIva
 

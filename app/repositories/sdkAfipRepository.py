@@ -4,11 +4,14 @@ from sqlalchemy import QueuePool
 
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
+from app.entities.company import Company, CompanyBuilder
+from app.entities.cuentaArca import CuentaArca
 from app.entities.document import Document
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.typeId import TypeId
 from app.entities.item import Item
+from app.exceptions.certificateNotFoundException import CertificateNotFoundException
 from app.exceptions.errorCreateDocumentAfipException import ErrorCreateDocumentAfipException
 
 import json
@@ -21,6 +24,7 @@ import requests
 
 from jinja2 import Template
 
+from app.exceptions.keyNotFoundException import KeyNotFoundException
 from app.utils.connection_manager import ConnectionManager
 from app.utils.cursor_manager import CursorManager
 
@@ -29,36 +33,30 @@ class SdkAfipRepository:
 
     def __init__(self, pool_connection :QueuePool):
         self.afip_instances = {}
-        self.afip_data = {}
         self.pool_connection: QueuePool = pool_connection
 
-    def get_afip_instance(self, cuit: str):
-        if cuit not in self.afip_instances:
+    def get_afip_instance(self, company: Company):
+        if company.company_tax_id not in self.afip_instances:
 
-            cert = self.get_certificado(1)
-            key = self.get_key(1)
+            cert = self.get_certificado(company.company_id)
 
-            tax_id = 27185949260
+            tax_id = company.company_tax_id
 
-            self.afip_instances[cuit] = Afip({"CUIT": tax_id, "cert": cert, "key": key})
-            self.afip_data[cuit] = {"COMPANY": "LFK SRL","ADDRESS": "Tucuman 3333","CITY":"Lanus Este", "STATE":"Buenos Aires","TAX_ID": tax_id, "GROSS_INCOME":"30-71091491-1", "INICIO": "01/05/2009", "TAXCONDITION": "Responsable Inscripto"}
+            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id, "cert": cert["cert"], "key": cert["key"]})
 
-        return self.afip_instances[cuit]
+        return self.afip_instances[company.company_tax_id]
 
-    def get_company_info(self, cuit: str):
-        return self.afip_data.get(cuit, {})
+    def next_number(self,document :Document, items :list[Item], company:Company):
 
-    def next_number(self,document :Document, items :list[Item]):
-
-        afip_instance = self.get_afip_instance("20409378472")
+        afip_instance = self.get_afip_instance(company)
         document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
         next_number = document_number + 1
 
         return next_number
 
-    def create_document_afip(self,documentDTO :DocumentAfipDto):
+    def create_document_afip(self,documentDTO :DocumentAfipDto, company :Company):
 
-        afip_instance = self.get_afip_instance("20409378472")
+        afip_instance = self.get_afip_instance(company)
         return_full_response = False
 
         try:
@@ -69,10 +67,9 @@ class SdkAfipRepository:
 
         return(res)
 
-    def create_pdf(self, document : ResponseDocumentMM, mode="bill"):
+    def create_pdf(self, document : ResponseDocumentMM,company :Company, mode ):
 
-        afip_instance = self.get_afip_instance("20409378472")
-        company_info = self.get_company_info("20409378472")
+        afip_instance = self.get_afip_instance(company)
 
         page_width = 8
         margins = 0.4
@@ -83,12 +80,12 @@ class SdkAfipRepository:
 
 
         business_data = {
-            'business_name': company_info["COMPANY"],
-            'address': company_info["ADDRESS"] +" " + company_info["CITY"] + " " + company_info["STATE"],
-            'tax_id': company_info["TAX_ID"],
-            'gross_income_id': company_info["GROSS_INCOME"],
-            'start_date': company_info["INICIO"],
-            'vat_condition': company_info["TAXCONDITION"]
+            'business_name': company.company_name,
+            'address': company.company_address +" " + company.company_city + " " + company.company_state,
+            'tax_id': company.company_tax_id,
+            'gross_income_id': company.company_tax_id,
+            'start_date': "",
+            'vat_condition': company.company_tax_condition.get_condition()
         }
 
         bill = {
@@ -202,25 +199,23 @@ class SdkAfipRepository:
 
         return(qr_code_image)
 
-    def create_certificado(self):
+    def create_certificado(self, company :Company,cuentaArca :CuentaArca ):
 
-        tax_id = 27185949260
+        tax_id = int(company.company_tax_id)
+        username = cuentaArca.user
 
-        username = "27185949260"
+        password = cuentaArca.password
 
-        password = "Crodriguez002"
-
-        cert_alias = "afipsdkCR"
+        cert_alias = cuentaArca.cert_name
 
         afip = Afip({"CUIT": tax_id})
-
         res = afip.createCert(username, password, cert_alias)
 
         print(res["cert"])
 
         print(res["key"])
 
-        return
+        return res
 
     def get_certificado(self,id):
 
@@ -232,26 +227,24 @@ class SdkAfipRepository:
                 cur.execute(sql, (id,))
                 row = cur.fetchone()
 
-                cert_base64 = base64.b64encode(row['company_cert']).decode('utf-8')
-                cert_return = base64.b64decode(cert_base64).decode('utf-8')
+                company :Company = (CompanyBuilder()
+                                    .company_cert(row["company_cert"])
+                                    .company_key(row["company_key"])
+                                    .build()
+                                    )
+                if company.company_cert is None:
+                    raise CertificateNotFoundException
 
-                return cert_return
+                if company.company_key is None:
+                    raise KeyNotFoundException
 
+                cert_base64 = base64.b64encode(company.company_cert ).decode('utf-8')
+                cert = base64.b64decode(cert_base64).decode('utf-8')
 
-    def get_key(self,id):
-
-        with ConnectionManager(self.pool_connection) as conn:
-            with CursorManager(conn) as cur:
-
-                sql = f"SELECT * FROM companies WHERE company_id = %s"
-
-                cur.execute(sql, (id,))
-                row = cur.fetchone()
-
-                key_base64 = base64.b64encode(row['company_key']).decode('utf-8')
+                key_base64 = base64.b64encode(company.company_key).decode('utf-8')
                 key = base64.b64decode(key_base64).decode('utf-8')
 
-                return key
+                return {"cert": cert, "key": key}
 
 
 

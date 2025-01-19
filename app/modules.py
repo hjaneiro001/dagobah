@@ -38,8 +38,8 @@ itemRepository = ItemRepository(pool_connection)
 
 sdkAfipRepository = SdkAfipRepository(pool_connection)
 
-documentRepository = DocumentRepository(pool_connection)
-documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository)
-
 companyRepository = CompanyRepository(pool_connection)
-companyService = CompanyService(companyRepository)
+companyService = CompanyService(companyRepository, sdkAfipRepository)
+
+documentRepository = DocumentRepository(pool_connection)
+documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository, companyRepository, clientRepository)
