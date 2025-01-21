@@ -1,8 +1,18 @@
 from enum import Enum
 
 class DocumentType(Enum):
-    FACTURA = ['FACTURA', 1]
-    NOTADECREDITO = ['NOTA DE CREDITO', 2]
+    FACTURAA = ['FACTURAA', 1,'A']
+    NOTADECREDITOA = ['NOTA DE CREDITOA', 2,'A']
+    NOTADEDEBITOA = ['NOTA DE DEBITOA', 3,'A']
+    RECIBOA = ['RECIBOA', 4, 'A']
+    FACTURAB = ['FACTURAB', 5, 'B']
+    NOTADECREDITOB = ['NOTA DE CREDITOB', 6, 'B']
+    NOTADEDEBITOB = ['NOTA DE DEBITOB', 7, 'B']
+    RECIBOB = ['RECIBOB', 8, 'B']
+    FACTURAC = ['FACTURAC', 9, 'C']
+    NOTADECREDITOC = ['NOTA DE CREDITOC', 10, 'C']
+    NOTADEDEBITOC = ['NOTA DE DEBITOC', 11, 'C']
+    RECIBOC = ['RECIBOC', 12, 'C']
 
     def get_document_type( value):
         for item in DocumentType:
@@ -15,3 +25,7 @@ class DocumentType(Enum):
 
     def get_value(self):
         return self.value[1]
+
+    def get_letra(self):
+        return self.value[2]
+

@@ -11,7 +11,6 @@ from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.productIva import ProductIva
-from app.entities.enums.typeId import TypeId
 from app.entities.item import Item, ItemBuilder
 from app.exceptions.wrapperExceptions import handle_exceptions
 from app.modules import documentService
@@ -27,8 +26,9 @@ def create():
     document :Document = (DocumentBuilder()
                           .client_id(post_document_dto["client_id"])
                           .pos(post_document_dto["pos"])
-                          .document_type(DocumentType.get_document_type(post_document_dto["document_type"]))
+                          # .document_type(DocumentType.get_document_type((post_document_dto["document_type"])))
                           .document_concept(DocumentConcept.get_document_concept(post_document_dto["document_concept"]))
+                          .date(post_document_dto["date"])
                           .expiration_date(post_document_dto["expiration_date"])
                           .total_amount((post_document_dto["total_amount"]))
                           .taxable_amount(post_document_dto["taxable_amount"])

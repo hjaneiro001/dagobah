@@ -4,6 +4,7 @@ import pymysql
 from flask import jsonify
 from marshmallow import ValidationError
 from app.exceptions.baseException import BaseException
+from app.exceptions.validationError import ValidationError
 
 def handle_exceptions(f):
 
@@ -12,10 +13,8 @@ def handle_exceptions(f):
             return f(*args, **kwargs)
         except BaseException as e:
             return jsonify({"error": e.getMessage()}), e.getCode()
-        except ValidationError as err:
-            print(err)
-            message = list(err.messages.values())[0][0]
-            return jsonify({"error": message}), 400
+        except ValidationError as e:
+            return jsonify({"error": e.getMessage()}), e.getCode()
         except ValueError as e:
             print("Error: An error ocurred when convert enum")
             return jsonify({"error": "An enum convert error"}), 500
