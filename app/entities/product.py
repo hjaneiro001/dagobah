@@ -59,6 +59,12 @@ class Product:
                     self.status == other.status)
         return False
 
+    def __repr__(self):
+        return (f"Product(product_id={self.product_id}, code='{self.code}', "
+                f"bar_code='{self.bar_code}', name='{self.name}', "
+                f"price={self.price}, currency='{self.currency.value}',product_type='{self.product_type.get_type()}', "
+                f"status='{self.status.value}')")
+
 class ProductBuilder:
     def __init__(self):
         self._product_id = None

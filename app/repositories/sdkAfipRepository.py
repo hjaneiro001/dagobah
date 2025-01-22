@@ -10,7 +10,6 @@ from app.entities.document import Document
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.typeId import TypeId
-from app.entities.item import Item
 from app.exceptions.certificateNotFoundException import CertificateNotFoundException
 from app.exceptions.errorCreateDocumentAfipException import ErrorCreateDocumentAfipException
 
@@ -46,7 +45,7 @@ class SdkAfipRepository:
 
         return self.afip_instances[company.company_tax_id]
 
-    def next_number(self,document :Document, items :list[Item], company:Company):
+    def next_number(self,document :Document, company:Company):
 
         afip_instance = self.get_afip_instance(company)
         document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
@@ -59,11 +58,14 @@ class SdkAfipRepository:
         afip_instance = self.get_afip_instance(company)
         return_full_response = False
 
-        try:
-            res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
-            return(res)
-        except Exception as e:
-            raise ErrorCreateDocumentAfipException
+        # try:
+        #     res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
+        #     return(res)
+        # except Exception as e:
+        #     raise ErrorCreateDocumentAfipException
+        res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
+
+        #     return(res)
 
         return(res)
 

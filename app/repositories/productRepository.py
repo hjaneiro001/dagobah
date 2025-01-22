@@ -160,3 +160,46 @@ class ProductRepository:
                 cur.close()
                 conn.close()
 
+    def get_by_list(self, list_product):
+        if not list_product:
+            return []
+
+        placeholders = ', '.join(['%s'] * len(list_product))
+
+        sql = f"""
+            SELECT * 
+            FROM products 
+            WHERE product_id IN ({placeholders}) 
+              AND product_status = %s
+        """
+
+        with ConnectionManager(self.pool_connection) as conn:
+            with CursorManager(conn) as cur:
+
+                params = list_product + [Status.ACTIVE.get_value()]
+                cur.execute(sql, params)
+                rows = cur.fetchall()
+
+                products = [
+                    ProductBuilder()
+                    .product_id(row.get('product_id'))
+                    .code(row.get('product_code'))
+                    .bar_code(row.get('product_bar_code'))
+                    .name(row.get('product_name'))
+                    .description(row.get('product_description'))
+                    .pack(row.get('product_pack'))
+                    .price(row.get('product_price'))
+                    .currency(Currency.get_currency(row.get('product_currency')))
+                    .iva(ProductIva.get_product_iva(row.get('product_iva')))
+                    .product_type(ProductType.get_product_type(row.get('product_type')))
+                    .status(Status.get_status(row.get('product_status')))
+                    .build()
+                    for row in rows
+                ]
+
+                return products
+
+
+
+
+
