@@ -32,6 +32,17 @@ class ResponseDocumentMM(Schema):
         serialize="format_date",
         error_messages={'required': 'The field date is required.'}
     )
+
+    date_serv_from = fields.Method(
+        required=False,
+        serialize="format_date_serv_from",
+    )
+
+    date_serv_to = fields.Method(
+        required=False,
+        serialize="format_date_serv_to",
+    )
+
     expiration_date = fields.Method(
         required=False,
         serialize="format_expiration_date",
@@ -77,6 +88,18 @@ class ResponseDocumentMM(Schema):
     def format_pos(self, obj):
 
         return f"{obj.get('pos'):05}"
+
+    def format_date(self, obj):
+        expiration_date = obj.get('expiration_date')
+        return expiration_date.strftime('%d-%m-%Y') if expiration_date else "N/A"
+
+    def format_date_serv_from(self, obj):
+        date_serv_from = obj.get('date_serv_from')
+        return date_serv_from.strftime('%d-%m-%Y') if date_serv_from else "N/A"
+
+    def format_date_serv_to(self, obj):
+        date_serv_to = obj.get('date_serv_to')
+        return date_serv_to.strftime('%d-%m-%Y') if date_serv_to else "N/A"
 
     def format_expiration_date(self, obj):
         expiration_date = obj.get('expiration_date')

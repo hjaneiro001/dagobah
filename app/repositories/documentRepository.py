@@ -39,14 +39,14 @@ class DocumentRepository:
             with CursorManager(conn) as cur:
 
                 sql :str = """ 
-                INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, 
+                INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, date_serv_from,date_serv_to,
                 expiration_date, total_amount, taxable_amount, exempt_amount, tax_amount, currency, exchange_rate, cae, cae_vto, status ) 
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
                 """
 
                 values = (
                     document.client_id, document.pos, document.document_type.get_type(), document.document_concept.get_concept(), document.number,
-                    document.date,  document.expiration_date, document.total_amount, document.taxable_amount,
+                    document.date,document.date_serv_from,document.date_serv_to, document.expiration_date, document.total_amount, document.taxable_amount,
                     document.exempt_amount, document.tax_amount, document.currency.get_value(), document.exchange_rate, document.cae, document.cae_vto, document.status
                 )
 
@@ -122,16 +122,17 @@ class DocumentRepository:
 
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
+                print(document.document_id)
 
                 sql: str = ("""UPDATE documents SET pos = %s, document_type= %s, document_concept= %s, number= %s, 
-                               date = %s, expiration_date = %s, total_amount= %s, taxable_amount = %s, exempt_amount = %s,
+                               date = %s,date_serv_from = %s, date_serv_to = %s, expiration_date = %s, total_amount= %s, taxable_amount = %s, exempt_amount = %s,
                                tax_amount = %s, currency = %s, exchange_rate = %s, cae = %s, cae_vto = %s, status = %s
                                WHERE document_id = %s """)
 
                 values = (
                     document.pos, document.document_type.get_type(),
                     document.document_concept.get_concept(), document.number,
-                    document.date, document.expiration_date, document.total_amount, document.taxable_amount,
+                    document.date,document.date_serv_from,document.date_serv_to, document.expiration_date, document.total_amount, document.taxable_amount,
                     document.exempt_amount, document.tax_amount, document.currency.get_value(), document.exchange_rate,
                     document.cae, document.cae_vto, document.status, document.document_id
                 )

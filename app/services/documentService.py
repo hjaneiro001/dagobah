@@ -97,7 +97,7 @@ class DocumentService:
         _concept :DocumentConcept = DocumentConcept.get_document_concept(self.concept_selection(products))
         document.document_concept = _concept
 
-        if document.document_concept.get_concept() == DocumentConcept.PR.get_concept():
+        if document.document_concept.get_value() == 1:
             document.date_serv_from = None
             document.date_serv_to = None
             document.expiration_date = None
@@ -129,6 +129,7 @@ class DocumentService:
             document.cae = res["CAE"]
             document.cae_vto = res["CAEFchVto"]
 
+            document.document_id = document_id
             self.document_repository.save(document)
 
         return res
@@ -137,7 +138,7 @@ class DocumentService:
 
         company_id = 1  # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
-        document_list = self.document_repository.get_all(company)
+        document_list = self.document_repository.get_all()
 
         return(document_list)
 
