@@ -11,6 +11,7 @@ from app.entities.enums.productType import ProductType
 from app.entities.enums.status import Status
 from app.entities.item import Item
 from app.entities.product import Product
+from app.exceptions.dateServValdationException import DateServValidationException
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
 from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.exceptions.documentTypeForbidenException import DocumentTypeForbidenException
@@ -94,8 +95,18 @@ class DocumentService:
         product_ids = [item.product_id for item in items]
         products :list[Product] = self.product_repository.get_by_list(product_ids)
         _concept :DocumentConcept = DocumentConcept.get_document_concept(self.concept_selection(products))
-
         document.document_concept = _concept
+
+        if document.document_concept.get_concept() == DocumentConcept.PR.get_concept():
+            document.date_serv_from = None
+            document.date_serv_to = None
+            document.expiration_date = None
+        else:
+            if (document.date_serv_to == None or
+                document.date_serv_to == None or
+                document.expiration_date == None):
+                    raise DateServValidationException
+
 
         self.execute_method(company.company_tax_condition.get_condition(), client.tax_condition.get_condition(),document)
 

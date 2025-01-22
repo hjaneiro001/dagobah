@@ -8,7 +8,6 @@ from app.dtos.requestDocument import RequestDocumentDTO
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
-from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
 from app.entities.enums.productIva import ProductIva
 from app.entities.item import Item, ItemBuilder
@@ -28,6 +27,8 @@ def create():
                           .pos(post_document_dto["pos"])
                           .document_type(DocumentType.get_document_type((post_document_dto["document_type"])))
                           .date(post_document_dto["date"])
+                          .date_serv_from(post_document_dto["date_serv_from"])
+                          .date_serv_to(post_document_dto["date_serv_to"])
                           .expiration_date(post_document_dto["expiration_date"])
                           .total_amount((post_document_dto["total_amount"]))
                           .taxable_amount(post_document_dto["taxable_amount"])
