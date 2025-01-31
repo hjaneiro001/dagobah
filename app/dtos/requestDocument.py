@@ -4,7 +4,6 @@ from app.dtos.requestItemDto import RequestItemDTO
 
 class RequestDocumentDTO(Schema):
     client_id = fields.Integer(required=True, error_messages={'required': 'The field client_id is required.'})
-    pos = fields.Integer(required=True, error_messages={'required': 'The field pos is required.'})
     document_type = fields.String(required=True, error_messages={'required': 'The field document_type is required.'})
     date = fields.String(required=True, error_messages={'required': 'The field date is required.'})
     date_serv_from = fields.String(required=False, allow_none=True)

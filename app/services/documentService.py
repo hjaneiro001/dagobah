@@ -132,7 +132,7 @@ class DocumentService:
 
         self.execute_method(company.company_tax_condition.get_condition(), client.tax_condition.get_condition(),document, items)
 
-
+        document.pos = company.company_pos
         number = self.sdk_afip_repository.next_number(document, company)
         document.number = number
         document.status = Status.ACTIVE.get_value()
