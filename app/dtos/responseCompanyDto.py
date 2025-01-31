@@ -13,5 +13,6 @@ class ResponseCompanyDto(Schema):
     company_tax_id = fields.String(required=True, error_messages={'required' : 'The field company_tax_id is required.'})
     company_type_id = fields.String(required=True, error_messages={'required' : 'The field company_type_id is required.'})
     company_tax_condition = fields.String(required=True, error_messages={'required': 'The field company_tax_condition is required.'})
+    company_pos = fields.String(required=True, error_messages={'required': 'The field company_pos is required.'})
     company_status = fields.String(required=False,error_messages=({'Error' : 'Dto Error'}))
 

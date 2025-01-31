@@ -54,6 +54,7 @@ class SdkAfipRepository:
 
         afip_instance = self.get_afip_instance(company)
         document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
+
         next_number = document_number + 1
 
         return next_number

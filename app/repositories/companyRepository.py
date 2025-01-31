@@ -112,6 +112,7 @@ class CompanyRepository:
                               .company_type_id(TypeId.get_type_id(row.get('company_type_id')))
                               .company_tax_id(row.get('company_tax_id'))
                               .company_tax_condition(TaxCondition.get_tax_condition(row.get('company_tax_condition')))
+                              .company_pos(row.get('company_pos'))
                               .company_status(Status.get_status(row.get('company_status')))
                               .build())
                     companies.append(company)
@@ -141,6 +142,7 @@ class CompanyRepository:
                           .company_type_id(TypeId.get_type_id(row.get('company_type_id')))
                           .company_tax_id(row.get('company_tax_id'))
                           .company_tax_condition(TaxCondition.get_tax_condition(row.get('company_tax_condition')))
+                          .company_pos(row.get('company_pos'))
                           .company_status(Status.get_status(row.get('company_status')))
                           .build())
 

@@ -3,7 +3,6 @@ from marshmallow import fields, Schema
 
 class RequestCompanyDto(Schema):
 
-
     company_name = fields.String(required=True, error_messages={'required': 'The field company_name is required.'})
     company_address = fields.String(required=True, error_messages={'required' : 'The field company_address is required.'})
     company_city = fields.String(required=True, error_messages={'required' : 'The field company_city is required.'})
