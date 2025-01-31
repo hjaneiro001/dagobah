@@ -37,11 +37,16 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            cert = self.get_certificado(company.company_id)
+            # cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
-            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id, "cert": cert["cert"], "key": cert["key"]})
+            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
+                                                                # "cert": cert["cert"],
+                                                                # "key": cert["key"],
+                                                                # "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                                                                # "production": True
+                                                                })
 
         return self.afip_instances[company.company_tax_id]
 
@@ -58,14 +63,7 @@ class SdkAfipRepository:
         afip_instance = self.get_afip_instance(company)
         return_full_response = False
 
-        # try:
-        #     res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
-        #     return(res)
-        # except Exception as e:
-        #     raise ErrorCreateDocumentAfipException
         res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
-
-        #     return(res)
 
         return(res)
 
@@ -210,7 +208,10 @@ class SdkAfipRepository:
 
         cert_alias = cuentaArca.cert_name
 
-        afip = Afip({"CUIT": tax_id})
+        afip = Afip({"CUIT": tax_id,
+                     "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                     "production": True
+                     })
         res = afip.createCert(username, password, cert_alias)
 
         print(res["cert"])

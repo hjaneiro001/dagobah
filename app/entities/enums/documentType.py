@@ -9,10 +9,10 @@ class DocumentType(Enum):
     NOTADECREDITOB = ['NOTA DE CREDITOB', 6, 'B']
     NOTADEDEBITOB = ['NOTA DE DEBITOB', 7, 'B']
     RECIBOB = ['RECIBOB', 8, 'B']
-    FACTURAC = ['FACTURAC', 9, 'C']
-    NOTADECREDITOC = ['NOTA DE CREDITOC', 10, 'C']
-    NOTADEDEBITOC = ['NOTA DE DEBITOC', 11, 'C']
-    RECIBOC = ['RECIBOC', 12, 'C']
+    FACTURAC = ['FACTURAC', 11, 'C']
+    NOTADECREDITOC = ['NOTA DE CREDITOC', 12, 'C']
+    NOTADEDEBITOC = ['NOTA DE DEBITOC', 13, 'C']
+    RECIBOC = ['RECIBOC', 14, 'C']
 
     def get_document_type( value):
         for item in DocumentType:

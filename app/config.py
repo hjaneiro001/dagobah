@@ -5,5 +5,6 @@ class Config:
     USER = 'root'
     PASSWORD = 'Lefkas00'
     DB = 'dagobahDB'
+    MODE = 1
 
 

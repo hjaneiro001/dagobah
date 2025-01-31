@@ -1,5 +1,3 @@
-from itertools import product
-
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.client import Client
@@ -11,6 +9,7 @@ from app.entities.enums.productType import ProductType
 from app.entities.enums.status import Status
 from app.entities.item import Item
 from app.entities.product import Product
+from app.exceptions.currencySetNotValidException import CurrencySetNotValidException
 from app.exceptions.dateServValdationException import DateServValidationException
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
 from app.exceptions.documentNotFoundException import DocumentNotFoundException
@@ -54,19 +53,30 @@ class DocumentService:
             raise DocumentTypeForbidenException
         return print("Logica Factura B")
 
-    def _create_document_C(self,document :Document):
+    def _create_document_C(self,document :Document, items :list[Item]):
         if document.document_type != (DocumentType.FACTURAC or
                                       DocumentType.NOTADECREDITOC or
                                       DocumentType.NOTADEDEBITOC):
             raise DocumentTypeForbidenException
 
-        return print("Logica Factura C")
+        total = 0
+        for item in items:
+            total = total + (item.quantity * item.unit_price)
 
-    def execute_method(self, action_company, action_client, document: Document):
+        document.tributes_amount = 0
+        document.no_grav_amount = 0
+        document.tax_amount = 0
+        document.exempt_amount = 0
+        document.taxable_amount = total
+        document.total_amount = total
+
+        return
+
+    def execute_method(self, action_company, action_client, document: Document, items :list[Item]):
         key = (action_company, action_client)
         method = self._document_methods.get(key)
         if method:
-            return method(document)
+            return method(document,items)
         else:
             raise DocumentTypeForbidenException
 
@@ -76,16 +86,27 @@ class DocumentService:
         _servicio = 0
 
         for product in products:
-            if product.product_type.get_type() == "PRODUCTO":
-                _producto = ProductType.get_product_type("PRODUCTO").get_value()
-            if product.product_type.get_type() == "SERVICIO":
-                _servicio = ProductType.get_product_type("SERVICIO").get_value()
+            if product.product_type.get_type() == ProductType.PRODUCTO.get_type():
+                _producto = ProductType.PRODUCTO.get_value()
+            if product.product_type.get_type() == ProductType.SERVICIO.get_type():
+                _servicio = ProductType.SERVICIO.get_value()
 
         return _producto + _servicio
 
+    def currency_validation(self, products :list[Product]):
+
+        aux = products[0].currency
+        for product in products:
+            if product.currency == aux:
+                aux = product.currency
+            else:
+                raise CurrencySetNotValidException
+
+        return aux
+
     def create(self, document: Document, items :list[Item]):
 
-        company_id = 1 # Leo company_id del token
+        company_id = 4 # Leo company_id del token
         company :Company = self.company_repository.get_id(company_id)
 
         client :Client = self.client_repository.get_id(document.client_id)
@@ -107,8 +128,9 @@ class DocumentService:
                 document.expiration_date == None):
                     raise DateServValidationException
 
+        document.currency = self.currency_validation(products)
 
-        self.execute_method(company.company_tax_condition.get_condition(), client.tax_condition.get_condition(),document)
+        self.execute_method(company.company_tax_condition.get_condition(), client.tax_condition.get_condition(),document, items)
 
         number = self.sdk_afip_repository.next_number(document, company)
         document.number = number
@@ -121,6 +143,9 @@ class DocumentService:
 
         if document_id:
             self.item_repository.create(items, document_id)
+
+            if document.document_type.get_letra() == 'C':
+               items = []
 
             documentDTO :DocumentAfipDto = DocumentAfipDTOFactory.from_entity(document,items)
 
@@ -136,7 +161,7 @@ class DocumentService:
 
     def get_all(self):
 
-        company_id = 1  # Leo company_id del token
+        company_id = 4  # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
         document_list = self.document_repository.get_all()
 
@@ -157,7 +182,7 @@ class DocumentService:
 
     def get_pdf(self, id: int, mode :str):
 
-        company_id = 1  # Leo company_id del token
+        company_id = 4  # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
 
         document = self.document_repository.get_id(id)
@@ -195,5 +220,4 @@ class DocumentService:
     def get_certificado(self):
 
         return self.sdk_afip_repository.create_certificado()
-
 

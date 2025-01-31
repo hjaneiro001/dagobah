@@ -14,7 +14,7 @@ class CompanyRepository:
         self.pool_connection: QueuePool = pool_connection
 
     def create(self, company :Company):
-        print(company)
+
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
@@ -86,7 +86,6 @@ class CompanyRepository:
 
     def get_all(self):
 
-        print("entro repositorio")
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
@@ -148,12 +147,11 @@ class CompanyRepository:
             return company
 
 
-
     def save_certificado(self, id, cert,key):
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = ("""UPDATE companies SET company_cert, company_key = %s
+                sql: str = ("""UPDATE companies SET company_cert = %s, company_key = %s
                                  WHERE company_id = %s """)
 
                 values = (
