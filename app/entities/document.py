@@ -4,11 +4,12 @@ from typing import List
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
+from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
-                  client_type_id :TypeId, client_tax_id :str, client_name :str, client_address :str, client_city :str, client_state :str, number :int,
+                  client_type_id :TypeId, client_tax_id :str,client_tax_condition: TaxCondition, client_name :str, client_address :str, client_city :str, client_state :str, number :int,
                   date :datetime, date_serv_from :datetime, date_serv_to : datetime, expiration_date :datetime,total_amount :float,
                   taxable_amount :float, exempt_amount :float, no_grav_amount: float, tributes_amount :float, tax_amount :float,
                   currency :Currency, exchange_rate :float, cae :str, cae_vto :datetime, items :List = None):
@@ -24,6 +25,7 @@ class Document:
         self.client_address :str = client_address
         self.client_city :str = client_city
         self.client_state :str = client_state
+        self.client_tax_condition: TaxCondition = client_tax_condition
         self.number :int = number
         self.date: datetime = date
         self.date_serv_from = date_serv_from
@@ -55,6 +57,7 @@ class Document:
                 f"Direccion del Cliente : {self.client_address}\n"
                 f"Ciudad del Cliente : {self.client_city}\n"
                 f"Estado del Cliente : {self.client_state}\n"
+                f"Condicion Fiscal : {self.client_tax_condition}\n"
                 f"Fecha : {self.date}\n"
                 f"Fecha Servicio desde : {self.date_serv_from}\n"
                 f"Fecha Servicio hasta : {self.date_serv_to}\n"
@@ -87,6 +90,7 @@ class Document:
             "client_address" : self.client_address,
             "client_city": self.client_city,
             "client_state": self.client_state,
+            "client_tax_condition": self.client_tax_condition,
             "number": self.number,
             "date": self.date if self.date else None,
             "date_serv_from": self.date_serv_from if self.date_serv_from else None,
@@ -118,6 +122,7 @@ class Document:
                     self.client_address == other.client_address and
                     self.client_city == other.client_city and
                     self.client_state == other.client_state and
+                    self.client_tax_condition == other.client_tax_condition and
                     self.number == other.number and
                     self.date == other.date and
                     self.date_serv_from == other.date_serv_to and
@@ -151,6 +156,7 @@ class DocumentBuilder:
         self._client_address = None
         self._client_city = None
         self._client_state = None
+        self._client_tax_condition = None
         self._number = None
         self._date = None
         self._date_serv_from = None
@@ -211,6 +217,10 @@ class DocumentBuilder:
 
     def client_state(self, client_state: str):
         self._client_state: str = client_state
+        return self
+
+    def client_tax_condition(self, client_tax_condition: str):
+        self._client_tax_condition: str = client_tax_condition
         return self
 
     def number(self, number):
@@ -290,6 +300,7 @@ class DocumentBuilder:
             client_address=self._client_address,
             client_city=self._client_city,
             client_state=self._client_state,
+            client_tax_condition=self._client_tax_condition,
             number=self._number,
             date=self._date,
             date_serv_from=self._date_serv_from,

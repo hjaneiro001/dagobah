@@ -37,6 +37,7 @@ class DocumentAfipDTOFactory:
                         .concept(document.document_concept.get_value())
                         .client_type_id((document.client_type_id.get_code()))
                         .id_number(document.client_tax_id)
+                        .client_tax_condition((document.client_tax_condition.get_value()))
                         .document_from(document.number)
                         .document_to(document.number)
                         .document_date(document.date)

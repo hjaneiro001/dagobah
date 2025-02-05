@@ -1,3 +1,5 @@
+from afip import Afip
+
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.client import Client
@@ -73,6 +75,7 @@ class DocumentService:
         return
 
     def execute_method(self, action_company, action_client, document: Document, items :list[Item]):
+
         key = (action_company, action_client)
         method = self._document_methods.get(key)
         if method:
@@ -112,6 +115,7 @@ class DocumentService:
         client :Client = self.client_repository.get_id(document.client_id)
         document.client_type_id = client.type_id
         document.client_tax_id = client.tax_id
+        document.client_tax_condition = client.tax_condition
 
         product_ids = [item.product_id for item in items]
         products :list[Product] = self.product_repository.get_by_list(product_ids)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class DocumentAfipDto:
-    def __init__(self, cant_reg: int, pos: int, document_type :int, concept :int, client_type_id : int, id_number :str,
+    def __init__(self, cant_reg: int, pos: int, document_type :int, concept :int, client_type_id : int, id_number :str, client_tax_condition :str,
             document_from :int, document_to :int, document_date :datetime,document_date_serv_from :datetime,document_date_serv_to :datetime,
             document_expiration_date :datetime, total_amount :float, no_grav_amount :float,
             taxable_amount :float, exempt_amount: float, tax_amount :float, tributes_amount: float, currency :str,
@@ -13,6 +13,7 @@ class DocumentAfipDto:
         self.concept = concept
         self.client_type_id = client_type_id
         self.id_number = id_number
+        self.client_tax_condition = client_tax_condition
         self.document_from = document_from
         self.document_to = document_to
         self.document_date = document_date
@@ -39,6 +40,7 @@ class DocumentAfipDto:
                 self.concept == other.concept and
                 self.client_type_id == other.client_type_id and
                 self.id_number == other.id_number and
+                self.client_tax_condition == other.client_tax_condition and
                 self.document_from == other.document_from and
                 self.document_to == other.document_to and
                 self.document_date == other.document_date and
@@ -62,6 +64,7 @@ class DocumentAfipDto:
                 f"Concepto={self.concept}\n"
                 f"Tipo Documento={self.client_type_id}\n"
                 f"Numero de ID Cliente={self.id_number}\n"
+                f"Condicion Fiscal={self.client_tax_condition}\n"
                 f"Documento desde={self.document_from}\n"
                 f"Documento hasta={self.document_to}\n"
                 f"Fecha del Documento={self.document_date}\n"
@@ -85,6 +88,7 @@ class DocumentAfipDto:
                 "Concepto":self.concept,
                 "DocTipo": self.client_type_id,
                 "DocNro": self.id_number,
+                "CondicionIVAReceptorId": self.client_tax_condition,
                 "CbteDesde": self.document_from,
                 "CbteHasta": self.document_to,
                 "CbteFch": self.document_date,
@@ -113,6 +117,7 @@ class DocumentAfipDto:
             self._concept = None
             self._client_type_id = None
             self._id_number = None
+            self._client_tax_condition = None
             self._document_from = None
             self._document_to = None
             self._document_date = None
@@ -151,6 +156,10 @@ class DocumentAfipDto:
 
         def id_number(self,id_number :str):
             self._id_number = id_number
+            return self
+
+        def client_tax_condition(self,client_tax_condition :str):
+            self._client_tax_condition = client_tax_condition
             return self
 
         def document_from(self,document_from :int):
@@ -222,6 +231,7 @@ class DocumentAfipDto:
                 concept=self._concept,
                 client_type_id=self._client_type_id,
                 id_number=self._id_number,
+                client_tax_condition=self._client_tax_condition,
                 document_from=self._document_from,
                 document_to=self._document_to,
                 document_date=self._document_date,
