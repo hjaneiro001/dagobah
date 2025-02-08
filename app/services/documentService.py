@@ -1,4 +1,3 @@
-from afip import Afip
 
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
@@ -16,6 +15,7 @@ from app.exceptions.dateServValdationException import DateServValidationExceptio
 from app.exceptions.documentAlreadyExistException import DocumentAlreadyExistsException
 from app.exceptions.documentNotFoundException import DocumentNotFoundException
 from app.exceptions.documentTypeForbidenException import DocumentTypeForbidenException
+from app.exceptions.itemsValidationException import ItemValidationException
 from app.factories.documentAfipDTOFactory  import DocumentAfipDTOFactory
 
 
@@ -116,6 +116,9 @@ class DocumentService:
         document.client_type_id = client.type_id
         document.client_tax_id = client.tax_id
         document.client_tax_condition = client.tax_condition
+
+        if len(items) == 0:
+            raise ItemValidationException
 
         product_ids = [item.product_id for item in items]
         products :list[Product] = self.product_repository.get_by_list(product_ids)
