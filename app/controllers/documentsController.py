@@ -40,7 +40,7 @@ def create():
             ItemBuilder()
             .product(item_data["product_id"])
             .quantity(item_data["quantity"])
-            .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
+            # .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
             .unit_price(item_data["unit_price"])
             .build()
         )

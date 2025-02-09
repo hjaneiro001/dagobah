@@ -4,5 +4,4 @@ class RequestItemDTO(Schema):
     document_id = fields.Integer(required=True, error_messages={'required': 'The field document_id is required.'})
     product_id = fields.Integer(required=True, error_messages={'required': 'The field product_id is required.'})
     quantity = fields.Float(required=True, error_messages={'required': 'The field quantity is required.'})
-    tax_rate = fields.String(required=True, error_messages={'required': 'The field tax_rate is required.'})
     unit_price = fields.Float(required=True, error_messages={'required': 'The field unit_price is required.'})

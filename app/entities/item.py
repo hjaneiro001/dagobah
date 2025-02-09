@@ -2,13 +2,12 @@
 from app.entities.enums.productIva import ProductIva
 
 class Item:
-    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, tax_rate :ProductIva, unit_price :float, product_name :str, product_code :str):
+    def __init__(self,item_id :int,document_id :int, product_id :int, quantity: float, unit_price :float, product_name :str, product_code :str):
 
         self.item_id :int = item_id
         self.document_id :int = document_id
         self.product_id :int = product_id
         self.quantity :float = quantity
-        self.tax_rate :ProductIva = tax_rate
         self.unit_price :float = unit_price
         self.product_name :str = product_name
         self.product_code :str = product_code
@@ -18,7 +17,6 @@ class Item:
         return (f"Producto: {self.product_id}\n"
                 f"Documento: {self.document_id}\n"
                 f"Cantidad: {self.quantity}\n"
-                f"Iva: {self.tax_rate}\n"
                 f"Precio uniario: {self.unit_price}\n"
                 f"Nombre producto : {self.product_name}\n"
                 f"Codigo producto : {self.product_code}\n"
@@ -26,7 +24,7 @@ class Item:
 
     def __repr__(self):
         return (f"Item(product_id={self.product_id}, document_id={self.document_id}, "
-                f"quantity={self.quantity}, tax_rate={self.tax_rate}, "
+                f"quantity={self.quantity},"
                 f"unit_price={self.unit_price})")
 
     def to_dict(self):
@@ -35,7 +33,6 @@ class Item:
             "document_id": self.document_id,
             "product": self.product_id,
             "quantity": self.quantity,
-            "tax_rate": self.tax_rate.get_value(),
             "unit_price": self.unit_price,
             "product_name": self.product_name,
             "product_code": self.product_code
@@ -47,7 +44,6 @@ class Item:
                     self.document_id == other.document_id and
                     self.product_id == other.product_id and
                     self.quantity == other.quantity and
-                    self.tax_rate == other.tax_rate and
                     self.unit_price == other.unit_price and
                     self.product_name == other.product_name and
                     self.product_code == other.product_code
@@ -61,7 +57,6 @@ class ItemBuilder:
             self._document_id = None
             self._product_id = None
             self._quantity = None
-            self._tax_rate = None
             self._unit_price = None
             self._product_name = None
             self._product_code = None
@@ -82,10 +77,6 @@ class ItemBuilder:
             self._quantity :float = quantity
             return self
 
-        def tax_rate(self,tax_rate):
-            self._tax_rate :ProductIva = tax_rate
-            return self
-
         def unit_price(self,unit_price):
             self._unit_price :float = unit_price
             return self
@@ -104,7 +95,6 @@ class ItemBuilder:
                 document_id=self._document_id,
                 product_id = self._product_id,
                 quantity = self._quantity,
-                tax_rate = self._tax_rate,
                 unit_price = self._unit_price,
                 product_name = self._product_name,
                 product_code =self._product_code
