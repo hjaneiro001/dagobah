@@ -122,7 +122,6 @@ class DocumentRepository:
 
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                print(document.document_id)
 
                 sql: str = ("""UPDATE documents SET pos = %s, document_type= %s, document_concept= %s, number= %s, 
                                date = %s,date_serv_from = %s, date_serv_to = %s, expiration_date = %s, total_amount= %s, taxable_amount = %s, exempt_amount = %s,

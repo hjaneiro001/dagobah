@@ -9,7 +9,6 @@ from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentType import DocumentType
-from app.entities.enums.productIva import ProductIva
 from app.entities.item import Item, ItemBuilder
 from app.exceptions.wrapperExceptions import handle_exceptions
 from app.modules import documentService
@@ -40,7 +39,6 @@ def create():
             ItemBuilder()
             .product(item_data["product_id"])
             .quantity(item_data["quantity"])
-            # .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
             .unit_price(item_data["unit_price"])
             .build()
         )

@@ -133,10 +133,6 @@ class DocumentService:
         for item in items:
             item.tax_rate = iva_mapping.get(item.product_id, ProductIva.I21)
 
-        # print(products)
-        # print(items)
-        # return
-
         if document.document_concept.get_value() == 1:
             document.date_serv_from = None
             document.date_serv_to = None
@@ -162,6 +158,7 @@ class DocumentService:
         document_id = self.document_repository.create(document)
 
         if document_id:
+
             self.item_repository.create(items, document_id)
 
             if document.document_type.get_letra() == 'C':
