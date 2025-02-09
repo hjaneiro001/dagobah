@@ -40,6 +40,7 @@ def create():
             .product(item_data["product_id"])
             .quantity(item_data["quantity"])
             .unit_price(item_data["unit_price"])
+            .discount((item_data["discount"]))
             .build()
         )
         items.append(item)

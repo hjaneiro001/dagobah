@@ -64,7 +64,7 @@ class DocumentService:
 
         total = 0
         for item in items:
-            total = total + (item.quantity * item.unit_price)
+            total = total + (item.quantity * item.unit_price * ((100 - item.discount)/100))
 
         document.tributes_amount = 0
         document.no_grav_amount = 0
