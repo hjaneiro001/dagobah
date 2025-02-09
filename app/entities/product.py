@@ -60,9 +60,14 @@ class Product:
         return False
 
     def __repr__(self):
-        return (f"Product(product_id={self.product_id}, code='{self.code}', "
-                f"bar_code='{self.bar_code}', name='{self.name}', "
-                f"price={self.price}, currency='{self.currency.value}',product_type='{self.product_type.get_type()}', "
+        return (f"Product(product_id={self.product_id}, "
+                f"code='{self.code}', "
+                f"bar_code='{self.bar_code}', "
+                f"name='{self.name}', "
+                f"price='{self.price}', "
+                f"currency='{self.currency.value}',"
+                f"product_type='{self.product_type.get_type()}', "
+                f"iva='{self.iva.get_iva()}', "
                 f"status='{self.status.value}')")
 
 class ProductBuilder:

@@ -6,6 +6,7 @@ from app.entities.company import Company
 from app.entities.document import Document
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
+from app.entities.enums.productIva import ProductIva
 from app.entities.enums.productType import ProductType
 from app.entities.enums.status import Status
 from app.entities.item import Item
@@ -117,13 +118,24 @@ class DocumentService:
         document.client_tax_id = client.tax_id
         document.client_tax_condition = client.tax_condition
 
+
         if len(items) == 0:
             raise ItemValidationException
 
         product_ids = [item.product_id for item in items]
+
         products :list[Product] = self.product_repository.get_by_list(product_ids)
         _concept :DocumentConcept = DocumentConcept.get_document_concept(self.concept_selection(products))
         document.document_concept = _concept
+
+        iva_mapping = {p.product_id: p.iva for p in products}
+
+        for item in items:
+            item.tax_rate = iva_mapping.get(item.product_id, ProductIva.I21)
+
+        # print(products)
+        # print(items)
+        # return
 
         if document.document_concept.get_value() == 1:
             document.date_serv_from = None
