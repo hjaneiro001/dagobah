@@ -28,8 +28,6 @@ def create():
                           .date_serv_from(post_document_dto["date_serv_from"])
                           .date_serv_to(post_document_dto["date_serv_to"])
                           .expiration_date(post_document_dto["expiration_date"])
-                          .currency(Currency.get_currency(post_document_dto["currency"]))
-                          .exchange_rate(post_document_dto["exchange_rate"])
                           .build())
 
     items = []

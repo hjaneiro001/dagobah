@@ -144,6 +144,7 @@ class DocumentService:
                     raise DateServValidationException
 
         document.currency = self.currency_validation(products)
+        document.exchange_rate = 1 # Hardcodeado, en el futuro obtenerlo de una api
 
         self.execute_method(company.company_tax_condition.get_condition(), client.tax_condition.get_condition(),document, items)
 
