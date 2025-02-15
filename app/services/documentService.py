@@ -175,7 +175,7 @@ class DocumentService:
             document.document_id = document_id
             self.document_repository.save(document)
 
-        return res
+        return document.document_id
 
     def get_all(self):
 

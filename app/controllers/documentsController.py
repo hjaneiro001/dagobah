@@ -7,7 +7,6 @@ import base64
 from app.dtos.requestDocument import RequestDocumentDTO
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
-from app.entities.enums.currency import Currency
 from app.entities.enums.documentType import DocumentType
 from app.entities.item import Item, ItemBuilder
 from app.exceptions.wrapperExceptions import handle_exceptions

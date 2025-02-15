@@ -52,10 +52,8 @@ class ItemRepository:
                     item = (
                         ItemBuilder()
                         .item_id(item_data["item_id"])
-                        .document(item_data["document_id"])
                         .product(item_data["product_id"])
                         .quantity(item_data["quantity"])
-                        .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
                         .unit_price(item_data["unit_price"])
                         .product_name(item_data["product_name"])
                         .product_code(item_data["product_code"])

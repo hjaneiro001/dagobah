@@ -107,7 +107,7 @@ class SdkAfipRepository:
                 'quantity': f"{item['quantity']:.2f}".replace('.', ','),
                 'measurement_unit': item.get('unit_measurement', 'Unidad'),
                 'price': f"{item['unit_price']:.2f}".replace('.', ','),
-                'tax_percent': item['tax_rate'],
+                # 'tax_percent': item['tax_rate'],
                 'percent_subsidized': "0,00",
                 'impost_subsidized': "0,00",
                 'subtotal': f"{item['unit_price']:.2f}".replace('.', ',')
