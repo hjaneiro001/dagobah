@@ -50,22 +50,29 @@ def create():
 
     return jsonify(document_response), 200
 
-
-    # return jsonify({"Document id": document_id}), 201
-
-
 @documentsBp.route("/", methods=['GET'])
 @handle_exceptions
 def get_all():
 
-    document_data = documentService.get_all()
+    documents: list[Document] = documentService.get_all()
+    if len(documents) == 0:
+      return "", 204
 
-    if not document_data:
-        return "", 204
-
-    response = [dto.to_dict() for dto in document_data]
-
+    documents_data = [documents.to_dict() for document in documents]
+    response = ResponseDocumentMM(many=True).dump(documents_data)
     return jsonify(response), 200
+
+
+# def get_all():
+#
+#     document_data = documentService.get_all()
+#
+#     if not document_data:
+#         return "", 204
+#
+#     response = [dto.to_dict() for dto in document_data]
+#
+#     return jsonify(response), 200
 
 @documentsBp.route("/<int:id>", methods=['GET'])
 @handle_exceptions

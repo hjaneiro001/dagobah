@@ -6,6 +6,7 @@ from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
+from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 from app.factories.documentDTOFactory import ResponseDocumentDtoFactory
 from app.entities.enums.status import Status
@@ -58,22 +59,75 @@ class DocumentRepository:
 
             return document_id
 
+    # def get_all(self):
+    #
+    #     with ConnectionManager(self.pool_connection) as conn:
+    #         with CursorManager(conn) as cur:
+    #
+    #             sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE  client_status = '{Status.ACTIVE.get_value()}'"
+    #
+    #             cur.execute(sql)
+    #             rows = cur.fetchall()
+    #
+    #             if len(rows) == 0:
+    #                 return(None)
+    #
+    #             data =  ResponseDocumentDtoFactory.from_list(rows)
+    #
+    #
+    #     return (data)
+
     def get_all(self):
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE  client_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE client_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql)
                 rows = cur.fetchall()
+                print(rows)
 
                 if len(rows) == 0:
-                    return(None)
+                    return None
 
-                data =  ResponseDocumentDtoFactory.from_list(rows)
+                # Using the DocumentBuilder to create instances of Document
+                documents = []
+                for row in rows:
+                    document = DocumentBuilder() \
+                        .document_id(row['document_id']) \
+                        .client_id(row['client_id']) \
+                        .pos(row['pos']) \
+                        .document_type(DocumentType(row['document_type'])) \
+                        .document_concept(DocumentConcept(row['document_concept'])) \
+                        .client_type_id(TypeId(row['client_type_id'])) \
+                        .client_tax_id(row['client_tax_id']) \
+                        .client_name(row['client_name']) \
+                        .client_address(row['client_address']) \
+                        .client_city(row['client_city']) \
+                        .client_state(row['client_state']) \
+                        .client_tax_condition(TaxCondition(row['client_tax_condition'])) \
+                        .number(row['number']) \
+                        .date(row['date']) \
+                        .date_serv_from(row['date_serv_from']) \
+                        .date_serv_to(row['date_serv_to']) \
+                        .expiration_date(row['expiration_date']) \
+                        .total_amount(row['total_amount']) \
+                        .taxable_amount(row['taxable_amount']) \
+                        .exempt_amount(row['exempt_amount']) \
+                        .no_grav_amount(row['no_grav_amount']) \
+                        .tributes_amount(row['tributes_amount']) \
+                        .tax_amount(row['tax_amount']) \
+                        .currency(Currency(row['currency'])) \
+                        .exchange_rate(row['exchange_rate']) \
+                        .cae(row['cae']) \
+                        .cae_vto(row['cae_vto']) \
+                        .items(row['items']) \
+                        .build()
+                    documents.append(document)
 
-        return (data)
+        print(documents)
+        return documents
 
     def get_id(self, id: int):
 

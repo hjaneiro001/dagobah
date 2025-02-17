@@ -2,6 +2,8 @@
 from marshmallow import Schema, fields
 
 from app.dtos.responseItemDtoMM import ResponseItemDTO
+from app.entities.enums.documentType import DocumentType
+
 
 class ResponseDocumentMM(Schema):
 
@@ -17,7 +19,13 @@ class ResponseDocumentMM(Schema):
         serialize="format_number",
         error_messages={'required': 'The field number is required.'}
     )
-    document_type = fields.String(required=True, error_messages={'required': 'The field document_type is required.'})
+    # document_type = fields.String(required=True, error_messages={'required': 'The field document_type is required.'})
+    document_type = fields.Method(
+        required=True,
+        serialize="format_document_type",
+        error_messages={'required': 'The field document_type is required.'}
+    )
+
     document_concept = fields.String(required=True, error_messages={'required': 'The field document_concept is required.'})
     client_type_id = fields.String(required=True, error_messages={'required': 'The field client_type_id is required.'})
     client_tax_id = fields.String(required=True,error_messages={'required': 'The field client_id_number is required.'})
@@ -86,7 +94,6 @@ class ResponseDocumentMM(Schema):
         return f"{obj.get('number'):08}"
 
     def format_pos(self, obj):
-
         return f"{obj.get('pos'):05}"
 
     def format_date(self, obj):
@@ -125,5 +132,24 @@ class ResponseDocumentMM(Schema):
 
     def format_tax_amount(self, obj):
         return f" {float(obj.get('tax_amount')):,.2f}"
+
+    def format_document_type(self, obj):
+        document_type = obj.get('document_type')
+
+        if isinstance(document_type, str):
+            try:
+                document_type = DocumentType[document_type]
+            except KeyError:
+                return {"document": "UNKNOWN", "letter": "?", "value": "?"}
+
+        if not isinstance(document_type, DocumentType):
+            return {"document": "UNKNOWN", "letter": "?","value": "?"}
+
+        return {
+            "document": document_type.get_document(),
+            "letter": document_type.get_letra(),
+            "value":document_type.get_value()
+        }
+
 
 

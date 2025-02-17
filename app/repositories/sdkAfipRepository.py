@@ -175,12 +175,13 @@ class SdkAfipRepository:
 
     def create_qr(self, document : ResponseDocumentMM):
 
+        print(document)
         qr_code_data = {
             'ver': 1,  # Versión del formato de los datos (1 por defecto)
             'fecha': document["date"],  # Fecha de emisión del comprobante
             'cuit': document["client_tax_id"],  # Cuit del Emisor del comprobante
             'ptoVta': document["pos"],  # Punto de venta utilizado para emitir el comprobante
-            'tipoCmp': DocumentType.get_document_type(document["document_type"]).get_value(),  # Tipo de comprobante
+            'tipoCmp': document["document_type"]["value"],
             'nroCmp': document["number"],  # Tipo de comprobante
             'importe': document["total_amount"],  # Importe Total del comprobante (en la moneda en la que fue emitido)
             'moneda': Currency.get_currency(document["currency"]).get_id(),  # Moneda del comprobante
