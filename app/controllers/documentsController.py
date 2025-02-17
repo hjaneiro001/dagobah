@@ -5,6 +5,7 @@ import io
 import base64
 
 from app.dtos.requestDocument import RequestDocumentDTO
+from app.dtos.responseDocumentIssued import ResponseDocumentIssued
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
 from app.entities.enums.documentType import DocumentType
@@ -42,8 +43,15 @@ def create():
         )
         items.append(item)
 
-    document_id :int  = documentService.create(document,items)
-    return jsonify({"Document id": document_id}), 201
+    document :Document  = documentService.create(document,items)
+
+    response_schema = ResponseDocumentIssued()
+    document_response = response_schema.dump(document.to_dict())
+
+    return jsonify(document_response), 200
+
+
+    # return jsonify({"Document id": document_id}), 201
 
 
 @documentsBp.route("/", methods=['GET'])
