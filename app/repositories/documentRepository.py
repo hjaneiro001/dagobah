@@ -91,42 +91,38 @@ class DocumentRepository:
                 if len(rows) == 0:
                     return None
 
-                # Using the DocumentBuilder to create instances of Document
                 documents = []
                 for row in rows:
-                    document = DocumentBuilder() \
-                        .document_id(row['document_id']) \
-                        .client_id(row['client_id']) \
-                        .pos(row['pos']) \
-                        .document_type(DocumentType(row['document_type'])) \
-                        .document_concept(DocumentConcept(row['document_concept'])) \
-                        .client_type_id(TypeId(row['client_type_id'])) \
-                        .client_tax_id(row['client_tax_id']) \
-                        .client_name(row['client_name']) \
-                        .client_address(row['client_address']) \
-                        .client_city(row['client_city']) \
-                        .client_state(row['client_state']) \
-                        .client_tax_condition(TaxCondition(row['client_tax_condition'])) \
-                        .number(row['number']) \
-                        .date(row['date']) \
-                        .date_serv_from(row['date_serv_from']) \
-                        .date_serv_to(row['date_serv_to']) \
-                        .expiration_date(row['expiration_date']) \
-                        .total_amount(row['total_amount']) \
-                        .taxable_amount(row['taxable_amount']) \
-                        .exempt_amount(row['exempt_amount']) \
-                        .no_grav_amount(row['no_grav_amount']) \
-                        .tributes_amount(row['tributes_amount']) \
-                        .tax_amount(row['tax_amount']) \
-                        .currency(Currency(row['currency'])) \
-                        .exchange_rate(row['exchange_rate']) \
-                        .cae(row['cae']) \
-                        .cae_vto(row['cae_vto']) \
-                        .items(row['items']) \
-                        .build()
+                    document: Document = (DocumentBuilder()
+                                          .document_id((row["document_id"]))
+                                          .client_id(row["client_id"])
+                                          .pos(row["pos"])
+                                          .document_type(DocumentType.get_document_type(row["document_type"]))
+                                          .document_concept(
+                                           DocumentConcept.get_document_concept(row["document_concept"]))
+                                          .client_type_id(TypeId.get_type_id(row["client_type_id"]))
+                                          .client_tax_id(row["client_tax_id"])
+                                          .client_name(row["client_name"])
+                                          .client_address(row["client_address"])
+                                          .client_city(row["client_city"])
+                                          .client_state(row["client_state"])
+                                          .date(row["date"])
+                                          .expiration_date(row["expiration_date"])
+                                          .total_amount((row["total_amount"]))
+                                          .taxable_amount(row["taxable_amount"])
+                                          .exempt_amount(row["exempt_amount"])
+                                          .no_grav_amount(row["no_grav_amount"])
+                                          .tributes_amount(row["tributes_amount"])
+                                          .tax_amount(row["tax_amount"])
+                                          .currency(Currency.get_currency(row["currency"]))
+                                          .exchange_rate(row["exchange_rate"])
+                                          .cae(row["cae"])
+                                          .cae_vto(row["cae_vto"])
+                                          .number(row["number"])
+                                          .build())
+
                     documents.append(document)
 
-        print(documents)
         return documents
 
     def get_id(self, id: int):

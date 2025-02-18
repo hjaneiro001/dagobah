@@ -175,7 +175,6 @@ class SdkAfipRepository:
 
     def create_qr(self, document : ResponseDocumentMM):
 
-        print(document)
         qr_code_data = {
             'ver': 1,  # Versión del formato de los datos (1 por defecto)
             'fecha': document["date"],  # Fecha de emisión del comprobante
@@ -217,7 +216,6 @@ class SdkAfipRepository:
         res = afip.createCert(username, password, cert_alias)
 
         print(res["cert"])
-
         print(res["key"])
 
         return res

@@ -16,6 +16,7 @@ def handle_exceptions(f):
         except ValidationError as e:
             return jsonify({"error": e.getMessage()}), e.getCode()
         except ValueError as e:
+            print(traceback.format_exc())
             print("Error: An error ocurred when convert enum")
             return jsonify({"error": "An enum convert error"}), 500
         except pymysql.MySQLError as e:

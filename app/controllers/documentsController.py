@@ -58,21 +58,9 @@ def get_all():
     if len(documents) == 0:
       return "", 204
 
-    documents_data = [documents.to_dict() for document in documents]
+    documents_data = [document.to_dict() for document in documents]
     response = ResponseDocumentMM(many=True).dump(documents_data)
     return jsonify(response), 200
-
-
-# def get_all():
-#
-#     document_data = documentService.get_all()
-#
-#     if not document_data:
-#         return "", 204
-#
-#     response = [dto.to_dict() for dto in document_data]
-#
-#     return jsonify(response), 200
 
 @documentsBp.route("/<int:id>", methods=['GET'])
 @handle_exceptions
@@ -82,8 +70,6 @@ def get_id(id :int):
     response_schema = ResponseDocumentMM()
     document_response = response_schema.dump(document.to_dict())
     return jsonify(document_response), 200
-
-
 
 @documentsBp.route("/bill/<int:id>", methods=['GET'])
 @handle_exceptions

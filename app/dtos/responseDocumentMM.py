@@ -19,13 +19,11 @@ class ResponseDocumentMM(Schema):
         serialize="format_number",
         error_messages={'required': 'The field number is required.'}
     )
-    # document_type = fields.String(required=True, error_messages={'required': 'The field document_type is required.'})
     document_type = fields.Method(
         required=True,
         serialize="format_document_type",
         error_messages={'required': 'The field document_type is required.'}
     )
-
     document_concept = fields.String(required=True, error_messages={'required': 'The field document_concept is required.'})
     client_type_id = fields.String(required=True, error_messages={'required': 'The field client_type_id is required.'})
     client_tax_id = fields.String(required=True,error_messages={'required': 'The field client_id_number is required.'})
