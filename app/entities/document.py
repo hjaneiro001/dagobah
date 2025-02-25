@@ -82,7 +82,6 @@ class Document:
             "document_id": self.document_id,
             "client_id": self.client_id,
             "pos": self.pos,
-            # "document_type": self.document_type.get_type(),
             "document_type": self.document_type,
             "document_concept": self.document_concept.get_concept(),
             "client_type_id": self.client_type_id.get_type(),
