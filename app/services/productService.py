@@ -44,6 +44,10 @@ class ProductService:
         if product_to_modify is None:
             raise ProductNotFoundException
 
+        # existing_client: Client = self.client_repository.get_tax_id(client.tax_id)
+        # if existing_client and existing_client.pk_client != id:
+        #     raise ClientTaxIdAlreadyExistsException
+
         product.product_id = product_to_modify.product_id
         product.status = product_to_modify.status
 

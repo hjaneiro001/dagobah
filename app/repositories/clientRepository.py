@@ -80,14 +80,15 @@ class ClientRepository:
                         UPDATE clients
                         SET client_name = %s, client_address = %s, client_city = %s, client_state = %s,
                             client_country = %s, client_email = %s, client_phone = %s, client_type_id = %s,
-                            client_tax_id = %s, client_tax_condition = %s, client_type = %s, client_status = %s
+                            client_tax_condition = %s, client_type = %s, client_status = %s
                         WHERE client_id = %s
                     """
 
                 values = (
                     client.name, client.address, client.city, client.state, client.country,
-                    client.email, client.phone, client.type_id.get_type(), client.tax_id,
-                    client.tax_condition.get_condition() , client.client_type.get_type(), client.status.get_value(), client.pk_client
+                    client.email, client.phone, client.type_id.get_type(),
+                    client.tax_condition.get_condition() , client.client_type.get_type(),
+                    client.status.get_value(), client.pk_client
                 )
 
                 cur.execute(sql, values)
