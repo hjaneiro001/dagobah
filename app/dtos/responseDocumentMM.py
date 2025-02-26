@@ -103,7 +103,6 @@ class ResponseDocumentMM(Schema):
         return date_serv_from.strftime('%d-%m-%Y') if date_serv_from else "N/A"
 
     def format_date_serv_to(self, obj):
-
         date_serv_to = obj.get('date_serv_to')
         return date_serv_to.strftime('%d-%m-%Y') if date_serv_to else "N/A"
 

@@ -128,6 +128,7 @@ class DocumentRepository:
                                       .document_concept(DocumentConcept.get_document_concept(row["document_concept"]))
                                       .client_type_id(TypeId.get_type_id(row["client_type_id"]))
                                       .client_tax_id(row["client_tax_id"])
+                                      .client_tax_condition(row['client_tax_condition'])
                                       .client_name(row["client_name"])
                                       .client_address(row["client_address"])
                                       .client_city(row["client_city"])

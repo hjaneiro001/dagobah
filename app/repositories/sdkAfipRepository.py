@@ -119,7 +119,7 @@ class SdkAfipRepository:
         billing_data = {
             'tax_id': document["client_tax_id"],
             'name': document["client_name"],
-            'vat_condition': document["client_type_id"],
+            'vat_condition': document["client_tax_condition"],
             'address': document["client_address"]  + " - " + document["client_city"] + " - " + document["client_state"],
             'payment_method':  'N/A'
         }
