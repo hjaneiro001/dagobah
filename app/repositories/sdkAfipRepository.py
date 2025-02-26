@@ -94,7 +94,8 @@ class SdkAfipRepository:
             'point_of_sale': str(document["pos"]),
             'date':  document["date"],
             'expiration':  document["expiration_date"] ,
-            'type': 'B',
+            'type':  document["document_type"]["letter"],
+            'document': document["document_type"]["document"],
             'concept': document["document_concept"],
             'CAE': document["cae"],
             'CAE_expiration': document["cae_vto"]
@@ -108,9 +109,12 @@ class SdkAfipRepository:
                 'measurement_unit': item.get('unit_measurement', 'Unidad'),
                 'price': f"{item['unit_price']:.2f}".replace('.', ','),
                 # 'tax_percent': item['tax_rate'],
-                'percent_subsidized': "0,00",
-                'impost_subsidized': "0,00",
-                'subtotal': f"{item['unit_price']:.2f}".replace('.', ',')
+                'percent_subsidized': item["discount"],
+                # 'impost_subsidized': (impost := item['unit_price'] * (item['discount'] / 100)) and f"{impost:.2f}".replace('.', ','),
+                'impost_subsidized': (impost := item['unit_price'] * ((100 - item['discount']) / 100)) and f"{impost:.2f}".replace('.', ','),
+
+                'subtotal': f"{(item['quantity'] * impost):.2f}".replace('.', ',')
+                 # 'subtotal': f"{(item['quantity'] * (item['unit_price'] - impost)):.2f}".replace('.', ',')
             }
             for item in document["items"]
         ]

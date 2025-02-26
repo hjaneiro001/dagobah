@@ -94,7 +94,7 @@ class Document:
             "number": self.number,
             "date": self.date if self.date else None,
             "date_serv_from": self.date_serv_from if self.date_serv_from else None,
-            "dtae_serv_to": self.date_serv_to if self.date_serv_to else None,
+            "date_serv_to": self.date_serv_to if self.date_serv_to else None,
             "expiration_date": self.expiration_date if self.expiration_date else None,
             "total_amount": self.total_amount,
             "taxable_amount": self.taxable_amount,
@@ -105,7 +105,7 @@ class Document:
             "currency": self.currency.get_value(),
             "exchange_rate": self.exchange_rate,
             "cae": self.cae,
-            "Vencimiento CAE": self.cae_vto if self.cae_vto else None,
+            "cae_vto": self.cae_vto if self.cae_vto else None,
             "items": [item.to_dict() for item in self.items] if self.items else [],
         }
 

@@ -49,12 +49,13 @@ class ItemRepository:
 
                 items = []
                 for item_data in rows:
-                    item = (
+                    item :Item = (
                         ItemBuilder()
                         .item_id(item_data["item_id"])
                         .product(item_data["product_id"])
                         .quantity(item_data["quantity"])
                         .unit_price(item_data["unit_price"])
+                        .discount(item_data["discount"])
                         .product_name(item_data["product_name"])
                         .product_code(item_data["product_code"])
                         .build()

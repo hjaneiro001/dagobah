@@ -59,24 +59,6 @@ class DocumentRepository:
 
             return document_id
 
-    # def get_all(self):
-    #
-    #     with ConnectionManager(self.pool_connection) as conn:
-    #         with CursorManager(conn) as cur:
-    #
-    #             sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE  client_status = '{Status.ACTIVE.get_value()}'"
-    #
-    #             cur.execute(sql)
-    #             rows = cur.fetchall()
-    #
-    #             if len(rows) == 0:
-    #                 return(None)
-    #
-    #             data =  ResponseDocumentDtoFactory.from_list(rows)
-    #
-    #
-    #     return (data)
-
     def get_all(self):
 
         with ConnectionManager(self.pool_connection) as conn:
@@ -86,7 +68,6 @@ class DocumentRepository:
 
                 cur.execute(sql)
                 rows = cur.fetchall()
-                print(rows)
 
                 if len(rows) == 0:
                     return None
