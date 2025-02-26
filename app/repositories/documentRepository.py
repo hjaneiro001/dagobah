@@ -133,6 +133,8 @@ class DocumentRepository:
                                       .client_city(row["client_city"])
                                       .client_state(row["client_state"])
                                       .date(row["date"])
+                                      .date_serv_from(row['date_serv_from'])
+                                      .date_serv_to(row['date_serv_to'])
                                       .expiration_date(row["expiration_date"])
                                       .total_amount((row["total_amount"]))
                                       .taxable_amount(row["taxable_amount"])

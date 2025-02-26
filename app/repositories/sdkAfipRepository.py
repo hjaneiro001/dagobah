@@ -35,15 +35,15 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            cert = self.get_certificado(company.company_id)
+            # cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
             self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
-                                                                "cert": cert["cert"],
-                                                                "key": cert["key"],
-                                                                "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
-                                                                "production": True
+                                                                # "cert": cert["cert"],
+                                                                # "key": cert["key"],
+                                                                # "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                                                                # "production": True
                                                                 })
 
         return self.afip_instances[company.company_tax_id]
@@ -91,6 +91,8 @@ class SdkAfipRepository:
             'number': str(document["number"]),
             'point_of_sale': str(document["pos"]),
             'date':  document["date"],
+            'since':document["date_serv_from"],
+            'until':document["date_serv_to"],
             'expiration':  document["expiration_date"] ,
             'type':  document["document_type"]["letter"],
             'document': document["document_type"]["document"],
