@@ -32,10 +32,8 @@ class ProductRepository:
                     product = (ProductBuilder()
                             .product_id(row.get('product_id'))
                             .code(row.get('product_code'))
-                            .bar_code(row.get('product_bar_code'))
                             .name(row.get('product_name'))
                             .description(row.get('product_description'))
-                            .pack(row.get('product_pack'))
                             .price(row.get('product_price'))
                             .currency(Currency.get_currency(row.get('product_currency')))
                             .iva(ProductIva.get_product_iva(row.get('product_iva')))
@@ -64,10 +62,8 @@ class ProductRepository:
                 product = (ProductBuilder()
                             .product_id(row.get('product_id'))
                             .code(row.get('product_code'))
-                            .bar_code(row.get('product_bar_code'))
                             .name(row.get('product_name'))
                             .description(row.get('product_description'))
-                            .pack(row.get('product_pack'))
                             .price(row.get('product_price'))
                             .currency(Currency.get_currency(row.get('product_currency')))
                             .iva(ProductIva.get_product_iva(row.get('product_iva')))
@@ -85,12 +81,12 @@ class ProductRepository:
             with CursorManager(conn) as cur:
 
                 sql: str = """
-                    INSERT INTO products (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    INSERT INTO products (product_code, product_name, product_description, product_price, product_currency, product_iva, product_type, product_status)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """
 
                 values = (
-                    product.code, product.bar_code, product.name, product.description, product.pack,
+                    product.code, product.name, product.description,
                     product.price,product.currency.get_value() , product.iva.get_iva(),
                     product.product_type.get_type(), product.status.get_value()
                 )
@@ -119,10 +115,8 @@ class ProductRepository:
                 product = (ProductBuilder()
                            .product_id(row.get('product_id'))
                            .code(row.get('product_code'))
-                           .bar_code(row.get('product_bar_code'))
                            .name(row.get('product_name'))
                            .description(row.get('product_description'))
-                           .pack(row.get('product_pack'))
                            .price(row.get('product_price'))
                            .currency(Currency.get_currency(row.get('product_currency')))
                            .iva(ProductIva.get_product_iva(row.get('product_iva')))
@@ -143,15 +137,16 @@ class ProductRepository:
 
                 sql: str = """
                     UPDATE products
-                    SET product_code = %s, product_name = %s, product_description = %s, product_bar_code = %s, product_pack = %s,
+                    SET product_code = %s, product_name = %s, product_description = %s, 
                         product_price = %s, product_currency = %s, product_iva = %s, product_type = %s,
                         product_status = %s
                     WHERE product_id = %s
                 """
 
                 values = (
-                    product.code, product.name, product.description, product.bar_code, product.pack,
-                    product.price, product.currency.get_value() , product.iva.get_iva(), product.product_type.get_type(), product.status.get_value(),
+                    product.code, product.name, product.description,
+                    product.price, product.currency.get_value() ,
+                    product.iva.get_iva(), product.product_type.get_type(), product.status.get_value(),
                     product.product_id
                 )
 
@@ -184,10 +179,8 @@ class ProductRepository:
                     ProductBuilder()
                     .product_id(row.get('product_id'))
                     .code(row.get('product_code'))
-                    .bar_code(row.get('product_bar_code'))
                     .name(row.get('product_name'))
                     .description(row.get('product_description'))
-                    .pack(row.get('product_pack'))
                     .price(row.get('product_price'))
                     .currency(Currency.get_currency(row.get('product_currency')))
                     .iva(ProductIva.get_product_iva(row.get('product_iva')))

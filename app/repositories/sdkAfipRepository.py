@@ -8,10 +8,8 @@ from app.entities.company import Company, CompanyBuilder
 from app.entities.cuentaArca import CuentaArca
 from app.entities.document import Document
 from app.entities.enums.currency import Currency
-from app.entities.enums.documentType import DocumentType
 from app.entities.enums.typeId import TypeId
 from app.exceptions.certificateNotFoundException import CertificateNotFoundException
-from app.exceptions.errorCreateDocumentAfipException import ErrorCreateDocumentAfipException
 
 import json
 import base64
@@ -37,15 +35,15 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            # cert = self.get_certificado(company.company_id)
+            cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
             self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
-                                                                # "cert": cert["cert"],
-                                                                # "key": cert["key"],
-                                                                # "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
-                                                                # "production": True
+                                                                "cert": cert["cert"],
+                                                                "key": cert["key"],
+                                                                "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                                                                "production": True
                                                                 })
 
         return self.afip_instances[company.company_tax_id]
@@ -110,11 +108,8 @@ class SdkAfipRepository:
                 'price': f"{item['unit_price']:.2f}".replace('.', ','),
                 # 'tax_percent': item['tax_rate'],
                 'percent_subsidized': item["discount"],
-                # 'impost_subsidized': (impost := item['unit_price'] * (item['discount'] / 100)) and f"{impost:.2f}".replace('.', ','),
                 'impost_subsidized': (impost := item['unit_price'] * ((100 - item['discount']) / 100)) and f"{impost:.2f}".replace('.', ','),
-
                 'subtotal': f"{(item['quantity'] * impost):.2f}".replace('.', ',')
-                 # 'subtotal': f"{(item['quantity'] * (item['unit_price'] - impost)):.2f}".replace('.', ',')
             }
             for item in document["items"]
         ]

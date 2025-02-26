@@ -200,7 +200,7 @@ class DocumentService:
 
     def get_pdf(self, id: int, mode :str):
 
-        company_id = 4  # Leo company_id del token
+        company_id = 4 # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
 
         document: Document = self.document_repository.get_id(id)
