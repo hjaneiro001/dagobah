@@ -42,7 +42,8 @@ class SdkAfipRepository:
             self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
                                                                 # "cert": cert["cert"],
                                                                 # "key": cert["key"],
-                                                                # "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                                                                # "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX"
+                                                                #FJ "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
                                                                 # "production": True
                                                                 })
 

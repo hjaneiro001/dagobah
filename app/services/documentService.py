@@ -41,13 +41,25 @@ class DocumentService:
     }
 
 
-    def _create_document_A(self,document :Document):
+    def _create_document_A(self,document :Document, items :list[Item]):
+
         if document.document_type != (DocumentType.FACTURAA or
                                       DocumentType.NOTADECREDITOA or
                                       DocumentType.NOTADEDEBITOA):
             raise DocumentTypeForbidenException
 
-        return print("Logica Factura A")
+        total = 0
+        for item in items:
+            total = total + (item.quantity * item.unit_price * ((100 - item.discount) / 100))
+
+        document.tributes_amount = 0
+        document.no_grav_amount = 0
+        document.tax_amount = 0
+        document.exempt_amount = 0
+        document.taxable_amount = total
+        document.total_amount = total
+
+        return
 
     def _create_document_B(self,document :Document):
         if document.document_type != (DocumentType.FACTURAB or
