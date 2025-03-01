@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
 
@@ -28,4 +30,5 @@ def create_app():
 
 
 if __name__ == '__main__':
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     create_app().run(debug=False)
