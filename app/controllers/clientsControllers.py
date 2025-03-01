@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import request, jsonify
 from app.dtos.clientDto import ClientDto
+from app.dtos.modifyClientDto import ModifyClientDto
 from app.dtos.responseClientDto import ResponseClientDto
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.clientType import ClientType
@@ -14,7 +15,12 @@ clientsBp = Blueprint('clients', __name__)
 @clientsBp.route("/", methods=['GET'])
 @handle_exceptions
 def get_all():
+
     clients :list[Client]= clientService.get_all()
+
+    if len(clients) == 0:
+        return "", 204
+
     clients_data = [client.to_dict() for client in clients]
     response = ResponseClientDto(many=True).dump(clients_data)
     return jsonify(response), 200
@@ -33,7 +39,6 @@ def get_taxId(taxId :int):
     client: Client = clientService.get_taxId(taxId)
     result = ResponseClientDto().dump(client.to_dict())
     return jsonify(result), 200
-
 
 
 @clientsBp.route("/", methods=['POST'])
@@ -61,7 +66,7 @@ def create():
 @clientsBp.route("/<int:id>", methods=['PUT'])
 @handle_exceptions
 def modify(id :int):
-    modify_client_dto = ClientDto().load(request.json)
+    modify_client_dto = ModifyClientDto().load(request.json)
     client: Client = (ClientBuilder()
                       .name(modify_client_dto["name"])
                       .address(modify_client_dto["address"])
@@ -71,7 +76,6 @@ def modify(id :int):
                       .email(modify_client_dto["email"])
                       .phone(modify_client_dto["phone"])
                       .type_id(TypeId.get_type_id(modify_client_dto["type_id"]))
-                      .tax_id(modify_client_dto["tax_id"])
                       .tax_condition(TaxCondition.get_tax_condition(modify_client_dto["tax_condition"]))
                       .client_type(ClientType.get_clienttype(modify_client_dto["client_type"]))
                       .build())

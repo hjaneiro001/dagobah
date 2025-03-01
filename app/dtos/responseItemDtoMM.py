@@ -1,0 +1,21 @@
+from marshmallow import Schema, fields
+
+class ResponseItemDTO(Schema):
+    item_id = fields.Int(required=True)
+    document_id = fields.Int(required=True)
+    product_id = fields.Int(required=True)
+    quantity = fields.Float(required=True)
+    discount = fields.Float(required=True)
+    tax_rate = fields.Float(required=True)
+    unit_price = fields.Float(required=True)
+    status = fields.Str(required=True)
+    product_code = fields.Str(required=True)
+    product_bar_code = fields.Str(required=True)
+    product_name = fields.Str(required=True)
+    product_description = fields.Str(required=True)
+    product_pack = fields.Float(required=True)
+    product_price = fields.Float(required=True)
+    product_currency = fields.Str(required=True)
+    product_iva = fields.Str(required=True)
+    product_type = fields.Str(required=True)
+    product_status = fields.Str(required=True)

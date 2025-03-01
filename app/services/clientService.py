@@ -2,8 +2,6 @@ from app.entities.client import Client
 from app.entities.enums.status import Status
 from app.exceptions.clientAlreadyExistsException import ClientAlreadyExistsException
 from app.exceptions.clientNotFoundException import ClientNotFoundException
-from app.exceptions.clientTaxIdAlreadyExistsException import ClientTaxIdAlreadyExistsException
-
 
 class ClientService:
     def __init__(self, client_repository):
@@ -36,13 +34,10 @@ class ClientService:
         if client_to_modify is None:
             raise ClientNotFoundException
 
-        existing_client: Client = self.client_repository.get_tax_id(client.tax_id)
-        if existing_client and existing_client.pk_client != id:
-            raise ClientTaxIdAlreadyExistsException
-
         client.pk_client = client_to_modify.pk_client
         client.status = Status.ACTIVE
         self.client_repository.save(client)
+
         return
 
     def delete(self, id):
@@ -52,3 +47,5 @@ class ClientService:
         client.status = Status.INACTIVE
         self.client_repository.save(client)
         return
+
+

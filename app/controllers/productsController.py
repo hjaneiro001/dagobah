@@ -16,6 +16,8 @@ productsBp = Blueprint('products', __name__)
 @handle_exceptions
 def get_all():
     products :list[Product] = productService.get_all()
+    if len(products) == 0:
+        return "",204
     products_data = [product.to_dict() for product in products]
     response = ResponseProductDTO(many=True).dump(products_data)
     return jsonify(response), 200
@@ -40,10 +42,8 @@ def create():
     request_product_dto = RequestProductDTO().load(request.json)
     product = (ProductBuilder()
                .code(request_product_dto['code'])
-               .bar_code(request_product_dto['bar_code'])
                .name(request_product_dto['name'])
                .description(request_product_dto['description'])
-               .pack(request_product_dto['pack'])
                .price(request_product_dto['price'])
                .currency(Currency.get_currency(request_product_dto['currency']))
                .iva(ProductIva.get_product_iva(request_product_dto['iva']))
@@ -60,10 +60,8 @@ def modify(id :int):
     modify_product_dto = RequestProductDTO().load(request.json)
     product = (ProductBuilder()
                .code(modify_product_dto['code'])
-               .bar_code(modify_product_dto['bar_code'])
                .name(modify_product_dto['name'])
                .description(modify_product_dto['description'])
-               .pack(modify_product_dto['pack'])
                .price(modify_product_dto['price'])
                .currency(Currency.get_currency(modify_product_dto['currency']))
                .iva(ProductIva.get_product_iva(modify_product_dto["iva"]))
