@@ -1,7 +1,3 @@
-from dis import disco
-
-from app.entities.enums.productIva import ProductIva
-
 class Item:
     def __init__(self,item_id :int, product_id :int, quantity: float, unit_price :float, discount :float, product_name :str, product_code :str):
 
