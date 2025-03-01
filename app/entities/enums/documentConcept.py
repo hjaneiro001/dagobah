@@ -1,9 +1,9 @@
 from enum import Enum
 
 class DocumentConcept(Enum):
-    BI = ['BIENES', 1]
+    PR = ['PRODUCTOS', 1]
     SE = ['SERVICIOS', 2]
-    BS = ['BIENES Y SERVICIOS', 3]
+    PS = ['PRODUCTOS Y SERVICIOS', 3]
 
     def get_document_concept(value):
         for item in DocumentConcept:
@@ -13,7 +13,6 @@ class DocumentConcept(Enum):
 
     def get_concept(self):
         return self.value[0]
-
 
     def get_value(self):
         return self.value[1]

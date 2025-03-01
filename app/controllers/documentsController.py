@@ -5,13 +5,10 @@ import io
 import base64
 
 from app.dtos.requestDocument import RequestDocumentDTO
+from app.dtos.responseDocumentIssued import ResponseDocumentIssued
 from app.dtos.responseDocumentMM import ResponseDocumentMM
 from app.entities.document import Document, DocumentBuilder
-from app.entities.enums.currency import Currency
-from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
-from app.entities.enums.productIva import ProductIva
-from app.entities.enums.typeId import TypeId
 from app.entities.item import Item, ItemBuilder
 from app.exceptions.wrapperExceptions import handle_exceptions
 from app.modules import documentService
@@ -26,18 +23,11 @@ def create():
 
     document :Document = (DocumentBuilder()
                           .client_id(post_document_dto["client_id"])
-                          .pos(post_document_dto["pos"])
-                          .document_type(DocumentType.get_document_type(post_document_dto["document_type"]))
-                          .document_concept(DocumentConcept.get_document_concept(post_document_dto["document_concept"]))
+                          .document_type(DocumentType.get_document_type((post_document_dto["document_type"])))
+                          .date(post_document_dto["date"])
+                          .date_serv_from(post_document_dto["date_serv_from"])
+                          .date_serv_to(post_document_dto["date_serv_to"])
                           .expiration_date(post_document_dto["expiration_date"])
-                          .total_amount((post_document_dto["total_amount"]))
-                          .taxable_amount(post_document_dto["taxable_amount"])
-                          .exempt_amount(post_document_dto["exempt_amount"])
-                          .no_grav_amount(post_document_dto["no_grav_amount"])
-                          .tributes_amount(post_document_dto["tributes_amount"])
-                          .tax_amount(post_document_dto["tax_amount"])
-                          .currency(Currency.get_currency(post_document_dto["currency"]))
-                          .exchange_rate(post_document_dto["exchange_rate"])
                           .build())
 
     items = []
@@ -47,27 +37,29 @@ def create():
             ItemBuilder()
             .product(item_data["product_id"])
             .quantity(item_data["quantity"])
-            .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
             .unit_price(item_data["unit_price"])
+            .discount((item_data["discount"]))
             .build()
         )
         items.append(item)
 
-    document_id :int  = documentService.create(document,items)
-    return jsonify({"Document id": document_id}), 201
+    document :Document  = documentService.create(document,items)
 
+    response_schema = ResponseDocumentIssued()
+    document_response = response_schema.dump(document.to_dict())
+
+    return jsonify(document_response), 200
 
 @documentsBp.route("/", methods=['GET'])
 @handle_exceptions
 def get_all():
 
-    document_data = documentService.get_all()
+    documents: list[Document] = documentService.get_all()
+    if len(documents) == 0:
+      return "", 204
 
-    if not document_data:
-        return "", 204
-
-    response = [dto.to_dict() for dto in document_data]
-
+    documents_data = [document.to_dict() for document in documents]
+    response = ResponseDocumentMM(many=True).dump(documents_data)
     return jsonify(response), 200
 
 @documentsBp.route("/<int:id>", methods=['GET'])
@@ -78,8 +70,6 @@ def get_id(id :int):
     response_schema = ResponseDocumentMM()
     document_response = response_schema.dump(document.to_dict())
     return jsonify(document_response), 200
-
-
 
 @documentsBp.route("/bill/<int:id>", methods=['GET'])
 @handle_exceptions

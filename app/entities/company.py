@@ -7,8 +7,8 @@ from app.entities.enums.typeId import TypeId
 
 class Company:
     def __init__(self,company_id :int, company_name :str,company_address :str, company_city :str, company_state :str, company_country :str,
-                 company_email :str, company_phone :str, company_tax_id :str, company_tax_condition :TaxCondition, company_type_id :TypeId, company_cert :bytes,
-                 company_key :bytes, company_status  :Status ):
+                 company_email :str, company_phone :str, company_tax_id :str, company_tax_condition :TaxCondition, company_type_id :TypeId, company_pos :int,
+                 company_cert :bytes, company_key :bytes, company_status  :Status ):
 
         self.company_id :int = company_id
         self.company_name = company_name
@@ -21,6 +21,7 @@ class Company:
         self.company_tax_id :str = company_tax_id
         self.company_type_id :TypeId = company_type_id
         self.company_tax_condition :TaxCondition = company_tax_condition
+        self.company_pos :company_pos = company_pos
         self.company_cert: bytes = company_cert
         self.company_key :bytes = company_key
         self.company_status :Status = company_status
@@ -37,7 +38,9 @@ class Company:
                 f"Tipo id: {self.company_type_id}\n"
                 f"Tax id: {self.company_tax_id}\n"
                 f"Tax Condition: {self.company_tax_condition}\n"
-                f"Status : {self.company_status}\n")
+                f"Status : {self.company_status}\n"
+                f"Comapny_id : {self.company_id}\n"
+                f"Company_pos : {self.company_pos}\n")
 
 
     def __eq__(self,other):
@@ -50,7 +53,8 @@ class Company:
              self.company_state == other.company_state and
              self.company_country == other.company_country and
              self.company_email == other.company_email and
-             self.company_phone == other.company_phone
+             self.company_phone == other.company_phone and
+             self.company_pos == other.company_pos
              )
         return False
 
@@ -69,6 +73,7 @@ class Company:
             "company_tax_condition":self.company_tax_condition.get_condition(),
             "company_cert": self.company_cert,
             "company_key": self.company_cert,
+            "company_pos": self.company_pos,
             "company_status":self.company_status.get_value()
         }
 
@@ -85,6 +90,7 @@ class CompanyBuilder:
             self._company_type_id = None
             self._company_tax_id = None
             self._company_tax_condition = None
+            self._company_pos = None
             self._company_cert = None
             self._company_key = None
             self._company_status = None
@@ -133,6 +139,10 @@ class CompanyBuilder:
             self._company_tax_condition = company_tax_condition
             return self
 
+        def company_pos(self, company_pos):
+            self._company_pos = company_pos
+            return self
+
         def company_cert(self,company_cert):
             self._company_cert = company_cert
             return self
@@ -158,6 +168,7 @@ class CompanyBuilder:
                 company_type_id=self._company_type_id,
                 company_tax_id=self._company_tax_id,
                 company_tax_condition=self._company_tax_condition,
+                company_pos=self._company_pos,
                 company_cert=self._company_cert,
                 company_key=self._company_key,
                 company_status=self._company_status

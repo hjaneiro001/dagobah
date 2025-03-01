@@ -17,8 +17,8 @@ class ItemRepository:
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
                 sql: str = """
-                    INSERT INTO items (document_id, product_id, quantity, tax_rate, unit_price, status)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO ITEMS (document_id, product_id, quantity, tax_rate, unit_price,discount, status)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """
 
                 values = [
@@ -28,6 +28,7 @@ class ItemRepository:
                         item.quantity,
                         item.tax_rate.get_value(),
                         item.unit_price,
+                        item.discount,
                         Status.ACTIVE.get_value()
                     )
                     for item in items
@@ -41,21 +42,20 @@ class ItemRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql = f"SELECT * FROM Items i inner join Products p on i.product_id = p.product_id WHERE  document_id = %s and status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM ITEMS i inner join PRODUCTS p on i.product_id = p.product_id WHERE  document_id = %s and status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql, (id))
                 rows = cur.fetchall()
 
                 items = []
                 for item_data in rows:
-                    item = (
+                    item :Item = (
                         ItemBuilder()
                         .item_id(item_data["item_id"])
-                        .document(item_data["document_id"])
                         .product(item_data["product_id"])
                         .quantity(item_data["quantity"])
-                        .tax_rate(ProductIva.get_product_iva(item_data["tax_rate"]))
                         .unit_price(item_data["unit_price"])
+                        .discount(item_data["discount"])
                         .product_name(item_data["product_name"])
                         .product_code(item_data["product_code"])
                         .build()

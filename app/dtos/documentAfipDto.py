@@ -1,8 +1,9 @@
 from datetime import datetime
 
 class DocumentAfipDto:
-    def __init__(self, cant_reg: int, pos: int, document_type :int, concept :int, client_type_id : int, id_number :str,
-            document_from :int, document_to :int, document_date :datetime, total_amount :float, no_grav_amount :float,
+    def __init__(self, cant_reg: int, pos: int, document_type :int, concept :int, client_type_id : int, id_number :str, client_tax_condition :str,
+            document_from :int, document_to :int, document_date :datetime,document_date_serv_from :datetime,document_date_serv_to :datetime,
+            document_expiration_date :datetime, total_amount :float, no_grav_amount :float,
             taxable_amount :float, exempt_amount: float, tax_amount :float, tributes_amount: float, currency :str,
             exchange_rate :float, iva_list=None):
 
@@ -12,9 +13,13 @@ class DocumentAfipDto:
         self.concept = concept
         self.client_type_id = client_type_id
         self.id_number = id_number
+        self.client_tax_condition = client_tax_condition
         self.document_from = document_from
         self.document_to = document_to
         self.document_date = document_date
+        self.document_date_serv_from = document_date_serv_from
+        self.document_date_serv_to = document_date_serv_to
+        self.document_expiration_date = document_expiration_date
         self.total_amount = total_amount
         self.no_grav_amount = no_grav_amount
         self.taxable_amount = taxable_amount
@@ -35,9 +40,13 @@ class DocumentAfipDto:
                 self.concept == other.concept and
                 self.client_type_id == other.client_type_id and
                 self.id_number == other.id_number and
+                self.client_tax_condition == other.client_tax_condition and
                 self.document_from == other.document_from and
                 self.document_to == other.document_to and
                 self.document_date == other.document_date and
+                self.document_date_serv_from == other.document_date_serv_from and
+                self.document_date_serv_to == other.document_date_serv_to and
+                self.document_expiration_date == other.document_expiration_date and
                 self.total_amount == other.total_amount and
                 self.no_grav_amount == other.no_grav_amount and
                 self.taxable_amount == other.taxable_amount and
@@ -55,9 +64,13 @@ class DocumentAfipDto:
                 f"Concepto={self.concept}\n"
                 f"Tipo Documento={self.client_type_id}\n"
                 f"Numero de ID Cliente={self.id_number}\n"
+                f"Condicion Fiscal={self.client_tax_condition}\n"
                 f"Documento desde={self.document_from}\n"
                 f"Documento hasta={self.document_to}\n"
                 f"Fecha del Documento={self.document_date}\n"
+                f"Fecha Servicio desde={self.document_date_serv_from}\n"
+                f"Fecha Servicio hasta={self.document_date_serv_to}\n"
+                f"Fecha vencimiento documento={self.document_expiration_date}\n"
                 f"Importe Total={self.total_amount}\n"
                 f"Importe no Gravado={self.no_grav_amount}\n"
                 f"Importe Neto={self.taxable_amount}\n"
@@ -75,9 +88,13 @@ class DocumentAfipDto:
                 "Concepto":self.concept,
                 "DocTipo": self.client_type_id,
                 "DocNro": self.id_number,
+                "CondicionIVAReceptorId": self.client_tax_condition,
                 "CbteDesde": self.document_from,
                 "CbteHasta": self.document_to,
                 "CbteFch": self.document_date,
+                "FchServDesde": self.document_date_serv_from,
+                "FchServHasta": self.document_date_serv_to,
+                "FchVtoPago": self.document_expiration_date,
                 "ImpTotal": self.total_amount,
                 "ImpTotConc": self.no_grav_amount,
                 "ImpNeto": self.taxable_amount,
@@ -100,9 +117,13 @@ class DocumentAfipDto:
             self._concept = None
             self._client_type_id = None
             self._id_number = None
+            self._client_tax_condition = None
             self._document_from = None
             self._document_to = None
             self._document_date = None
+            self._document_date_serv_from = None
+            self._document_date_serv_to = None
+            self._document_expiration_date = None
             self._total_amount = None
             self._no_grav_amount = None
             self._taxable_amount = None
@@ -137,6 +158,10 @@ class DocumentAfipDto:
             self._id_number = id_number
             return self
 
+        def client_tax_condition(self,client_tax_condition :str):
+            self._client_tax_condition = client_tax_condition
+            return self
+
         def document_from(self,document_from :int):
             self._document_from = document_from
             return self
@@ -147,6 +172,18 @@ class DocumentAfipDto:
 
         def document_date(self,document_date :datetime):
             self._document_date = document_date
+            return self
+
+        def document_date_serv_from(self, document_date_serv_from: datetime):
+            self._document_date_serv_from = document_date_serv_from
+            return self
+
+        def document_date_serv_to(self, document_date_serv_to: datetime):
+            self._document_date_serv_to = document_date_serv_to
+            return self
+
+        def document_expiration_date(self, document_expiration_date: datetime):
+            self._document_expiration_date = document_expiration_date
             return self
 
         def total_amount(self,total_amount):
@@ -194,9 +231,13 @@ class DocumentAfipDto:
                 concept=self._concept,
                 client_type_id=self._client_type_id,
                 id_number=self._id_number,
+                client_tax_condition=self._client_tax_condition,
                 document_from=self._document_from,
                 document_to=self._document_to,
                 document_date=self._document_date,
+                document_date_serv_from=self._document_date_serv_from,
+                document_date_serv_to=self._document_date_serv_to,
+                document_expiration_date=self._document_expiration_date,
                 total_amount=self._total_amount,
                 no_grav_amount=self._no_grav_amount,
                 taxable_amount=self._taxable_amount,

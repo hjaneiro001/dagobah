@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_cors import CORS
+
 
 from app.controllers.clientsControllers import clientsBp
 from app.controllers.companyController import companyBp
@@ -7,6 +9,14 @@ from app.controllers.documentsController import documentsBp
 
 def create_app():
     app = Flask(__name__)
+
+    CORS(app, resources={
+        r"/*": {
+            "origins": "http://127.0.0.1:5500",
+            "methods": ["GET", "POST", "PUT", "DELETE"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
 
     app.register_blueprint(clientsBp, url_prefix='/clients')
     app.register_blueprint(productsBp, url_prefix='/products')
