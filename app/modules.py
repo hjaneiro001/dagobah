@@ -42,4 +42,5 @@ companyRepository = CompanyRepository(pool_connection)
 companyService = CompanyService(companyRepository, sdkAfipRepository)
 
 documentRepository = DocumentRepository(pool_connection)
-documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository, companyRepository, clientRepository)
+documentService = DocumentService(documentRepository, itemRepository, sdkAfipRepository, companyRepository, clientRepository,
+                                  productRepository)

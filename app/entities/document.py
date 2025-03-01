@@ -4,12 +4,14 @@ from typing import List
 from app.entities.enums.currency import Currency
 from app.entities.enums.documentConcept import DocumentConcept
 from app.entities.enums.documentType import DocumentType
+from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId
 
 class Document:
     def  __init__(self, document_id :int, client_id :int, pos :int, document_type :DocumentType, document_concept :DocumentConcept,
-                  client_type_id :TypeId, client_tax_id :str, client_name :str, client_address :str, client_city :str, client_state :str, number :int, date :datetime,
-                  expiration_date :datetime,total_amount :float, taxable_amount :float, exempt_amount :float, no_grav_amount: float, tributes_amount :float, tax_amount :float,
+                  client_type_id :TypeId, client_tax_id :str,client_tax_condition: TaxCondition, client_name :str, client_address :str, client_city :str, client_state :str, number :int,
+                  date :datetime, date_serv_from :datetime, date_serv_to : datetime, expiration_date :datetime,total_amount :float,
+                  taxable_amount :float, exempt_amount :float, no_grav_amount: float, tributes_amount :float, tax_amount :float,
                   currency :Currency, exchange_rate :float, cae :str, cae_vto :datetime, items :List = None):
 
         self.document_id :int = document_id
@@ -23,8 +25,11 @@ class Document:
         self.client_address :str = client_address
         self.client_city :str = client_city
         self.client_state :str = client_state
+        self.client_tax_condition: TaxCondition = client_tax_condition
         self.number :int = number
         self.date: datetime = date
+        self.date_serv_from = date_serv_from
+        self.date_serv_to = date_serv_to
         self.expiration_date :datetime = expiration_date
         self.total_amount :float = total_amount
         self.taxable_amount :float = taxable_amount
@@ -52,7 +57,10 @@ class Document:
                 f"Direccion del Cliente : {self.client_address}\n"
                 f"Ciudad del Cliente : {self.client_city}\n"
                 f"Estado del Cliente : {self.client_state}\n"
+                f"Condicion Fiscal : {self.client_tax_condition}\n"
                 f"Fecha : {self.date}\n"
+                f"Fecha Servicio desde : {self.date_serv_from}\n"
+                f"Fecha Servicio hasta : {self.date_serv_to}\n"
                 f"Fecha de vencimiento : {self.expiration_date}\n"
                 f"Total de la factura : {self.total_amount}\n"
                 f"Importe antes de Iva : {self.taxable_amount}\n"
@@ -74,7 +82,7 @@ class Document:
             "document_id": self.document_id,
             "client_id": self.client_id,
             "pos": self.pos,
-            "document_type": self.document_type.get_type(),
+            "document_type": self.document_type,
             "document_concept": self.document_concept.get_concept(),
             "client_type_id": self.client_type_id.get_type(),
             "client_tax_id" : self.client_tax_id,
@@ -82,8 +90,11 @@ class Document:
             "client_address" : self.client_address,
             "client_city": self.client_city,
             "client_state": self.client_state,
+            "client_tax_condition": self.client_tax_condition,
             "number": self.number,
             "date": self.date if self.date else None,
+            "date_serv_from": self.date_serv_from if self.date_serv_from else None,
+            "date_serv_to": self.date_serv_to if self.date_serv_to else None,
             "expiration_date": self.expiration_date if self.expiration_date else None,
             "total_amount": self.total_amount,
             "taxable_amount": self.taxable_amount,
@@ -94,7 +105,7 @@ class Document:
             "currency": self.currency.get_value(),
             "exchange_rate": self.exchange_rate,
             "cae": self.cae,
-            "Vencimiento CAE": self.cae_vto if self.cae_vto else None,
+            "cae_vto": self.cae_vto if self.cae_vto else None,
             "items": [item.to_dict() for item in self.items] if self.items else [],
         }
 
@@ -111,8 +122,11 @@ class Document:
                     self.client_address == other.client_address and
                     self.client_city == other.client_city and
                     self.client_state == other.client_state and
+                    self.client_tax_condition == other.client_tax_condition and
                     self.number == other.number and
                     self.date == other.date and
+                    self.date_serv_from == other.date_serv_to and
+                    self.date_serv_from == other.date_serv_from and
                     self.expiration_date == other.expiration_date and
                     self.total_amount == other.total_amount and
                     self.taxable_amount == other.taxable_amount and
@@ -142,8 +156,11 @@ class DocumentBuilder:
         self._client_address = None
         self._client_city = None
         self._client_state = None
+        self._client_tax_condition = None
         self._number = None
         self._date = None
+        self._date_serv_from = None
+        self._date_serv_to = None
         self._expiration_date = None
         self._total_amount = None
         self._taxable_amount = None
@@ -202,12 +219,24 @@ class DocumentBuilder:
         self._client_state: str = client_state
         return self
 
+    def client_tax_condition(self, client_tax_condition: str):
+        self._client_tax_condition: str = client_tax_condition
+        return self
+
     def number(self, number):
         self._number :int = number
         return self
 
     def date(self, date):
         self._date :datetime = date
+        return self
+
+    def date_serv_from(self, date_serv_from):
+        self._date_serv_from :datetime = date_serv_from
+        return self
+
+    def date_serv_to(self, date_serv_to):
+        self._date_serv_to: datetime = date_serv_to
         return self
 
     def expiration_date(self, expiration_date):
@@ -271,8 +300,11 @@ class DocumentBuilder:
             client_address=self._client_address,
             client_city=self._client_city,
             client_state=self._client_state,
+            client_tax_condition=self._client_tax_condition,
             number=self._number,
             date=self._date,
+            date_serv_from=self._date_serv_from,
+            date_serv_to=self._date_serv_to,
             expiration_date=self._expiration_date,
             total_amount=self._total_amount,
             taxable_amount=self._taxable_amount,

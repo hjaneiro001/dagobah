@@ -14,11 +14,11 @@ class CompanyRepository:
         self.pool_connection: QueuePool = pool_connection
 
     def create(self, company :Company):
-        print(company)
+
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql :str = """INSERT INTO companies (company_name,company_address, company_city, company_state, company_country, company_email, 
+                sql :str = """INSERT INTO COMPANIES (company_name,company_address, company_city, company_state, company_country, company_email, 
                 company_phone, company_type_id, company_tax_id, company_tax_condition,company_status)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 
@@ -40,7 +40,7 @@ class CompanyRepository:
             with CursorManager(conn) as cur:
 
                 sql: str = """
-                        UPDATE companies
+                        UPDATE COMPANIES
                         SET company_name = %s, company_address = %s, company_city = %s, company_state = %s,
                             company_country = %s, company_email = %s, company_phone = %s, company_type_id = %s,
                             company_tax_id = %s, company_tax_condition = %s, company_status = %s
@@ -60,7 +60,7 @@ class CompanyRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql: str = f"SELECT * FROM companies WHERE company_tax_id = %s AND company_status = '{Status.ACTIVE.get_value()}'"
+                sql: str = f"SELECT * FROM COMPANIES WHERE company_tax_id = %s AND company_status = '{Status.ACTIVE.get_value()}'"
                 cur.execute(sql, taxId)
                 row = cur.fetchone()
 
@@ -86,12 +86,11 @@ class CompanyRepository:
 
     def get_all(self):
 
-        print("entro repositorio")
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = f"SELECT * FROM companies WHERE company_status = '{Status.ACTIVE.get_value()}'"
+                sql: str = f"SELECT * FROM COMPANIES WHERE company_status = '{Status.ACTIVE.get_value()}'"
                 cur.execute(sql)
                 rows = cur.fetchall()
 
@@ -113,6 +112,7 @@ class CompanyRepository:
                               .company_type_id(TypeId.get_type_id(row.get('company_type_id')))
                               .company_tax_id(row.get('company_tax_id'))
                               .company_tax_condition(TaxCondition.get_tax_condition(row.get('company_tax_condition')))
+                              .company_pos(row.get('company_pos'))
                               .company_status(Status.get_status(row.get('company_status')))
                               .build())
                     companies.append(company)
@@ -123,7 +123,7 @@ class CompanyRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql: str = f"SELECT * FROM companies WHERE company_id = %s AND company_status = '{Status.ACTIVE.get_value()}'"
+                sql: str = f"SELECT * FROM COMPANIES WHERE company_id = %s AND company_status = '{Status.ACTIVE.get_value()}'"
                 cur.execute(sql, id)
                 row = cur.fetchone()
 
@@ -142,18 +142,18 @@ class CompanyRepository:
                           .company_type_id(TypeId.get_type_id(row.get('company_type_id')))
                           .company_tax_id(row.get('company_tax_id'))
                           .company_tax_condition(TaxCondition.get_tax_condition(row.get('company_tax_condition')))
+                          .company_pos(row.get('company_pos'))
                           .company_status(Status.get_status(row.get('company_status')))
                           .build())
 
             return company
 
 
-
     def save_certificado(self, id, cert,key):
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = ("""UPDATE companies SET company_cert, company_key = %s
+                sql: str = ("""UPDATE COMPANIES SET company_cert = %s, company_key = %s
                                  WHERE company_id = %s """)
 
                 values = (

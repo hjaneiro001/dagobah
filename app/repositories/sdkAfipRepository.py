@@ -8,11 +8,8 @@ from app.entities.company import Company, CompanyBuilder
 from app.entities.cuentaArca import CuentaArca
 from app.entities.document import Document
 from app.entities.enums.currency import Currency
-from app.entities.enums.documentType import DocumentType
 from app.entities.enums.typeId import TypeId
-from app.entities.item import Item
 from app.exceptions.certificateNotFoundException import CertificateNotFoundException
-from app.exceptions.errorCreateDocumentAfipException import ErrorCreateDocumentAfipException
 
 import json
 import base64
@@ -42,14 +39,21 @@ class SdkAfipRepository:
 
             tax_id = company.company_tax_id
 
-            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id, "cert": cert["cert"], "key": cert["key"]})
+            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
+                                                                 "cert": cert["cert"],
+                                                                 "key": cert["key"],
+                                                                 "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                                                                 "production": True
+                                                                })
 
         return self.afip_instances[company.company_tax_id]
 
-    def next_number(self,document :Document, items :list[Item], company:Company):
+    def next_number(self,document :Document, company:Company):
 
         afip_instance = self.get_afip_instance(company)
+
         document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
+
         next_number = document_number + 1
 
         return next_number
@@ -59,11 +63,7 @@ class SdkAfipRepository:
         afip_instance = self.get_afip_instance(company)
         return_full_response = False
 
-        try:
-            res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
-            return(res)
-        except Exception as e:
-            raise ErrorCreateDocumentAfipException
+        res = afip_instance.ElectronicBilling.createVoucher(documentDTO.to_dict(), return_full_response)
 
         return(res)
 
@@ -92,8 +92,11 @@ class SdkAfipRepository:
             'number': str(document["number"]),
             'point_of_sale': str(document["pos"]),
             'date':  document["date"],
+            'since':document["date_serv_from"],
+            'until':document["date_serv_to"],
             'expiration':  document["expiration_date"] ,
-            'type': 'B',
+            'type':  document["document_type"]["letter"],
+            'document': document["document_type"]["document"],
             'concept': document["document_concept"],
             'CAE': document["cae"],
             'CAE_expiration': document["cae_vto"]
@@ -106,10 +109,10 @@ class SdkAfipRepository:
                 'quantity': f"{item['quantity']:.2f}".replace('.', ','),
                 'measurement_unit': item.get('unit_measurement', 'Unidad'),
                 'price': f"{item['unit_price']:.2f}".replace('.', ','),
-                'tax_percent': item['tax_rate'],
-                'percent_subsidized': "0,00",
-                'impost_subsidized': "0,00",
-                'subtotal': f"{item['unit_price']:.2f}".replace('.', ',')
+                # 'tax_percent': item['tax_rate'],
+                'percent_subsidized': item["discount"],
+                'impost_subsidized': (impost := item['unit_price'] * ((100 - item['discount']) / 100)) and f"{impost:.2f}".replace('.', ','),
+                'subtotal': f"{(item['quantity'] * impost):.2f}".replace('.', ',')
             }
             for item in document["items"]
         ]
@@ -117,7 +120,7 @@ class SdkAfipRepository:
         billing_data = {
             'tax_id': document["client_tax_id"],
             'name': document["client_name"],
-            'vat_condition': document["client_type_id"],
+            'vat_condition': document["client_tax_condition"],
             'address': document["client_address"]  + " - " + document["client_city"] + " - " + document["client_state"],
             'payment_method':  'N/A'
         }
@@ -179,7 +182,7 @@ class SdkAfipRepository:
             'fecha': document["date"],  # Fecha de emisión del comprobante
             'cuit': document["client_tax_id"],  # Cuit del Emisor del comprobante
             'ptoVta': document["pos"],  # Punto de venta utilizado para emitir el comprobante
-            'tipoCmp': DocumentType.get_document_type(document["document_type"]).get_value(),  # Tipo de comprobante
+            'tipoCmp': document["document_type"]["value"],
             'nroCmp': document["number"],  # Tipo de comprobante
             'importe': document["total_amount"],  # Importe Total del comprobante (en la moneda en la que fue emitido)
             'moneda': Currency.get_currency(document["currency"]).get_id(),  # Moneda del comprobante
@@ -208,11 +211,13 @@ class SdkAfipRepository:
 
         cert_alias = cuentaArca.cert_name
 
-        afip = Afip({"CUIT": tax_id})
+        afip = Afip({"CUIT": tax_id,
+                     "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                     "production": True
+                     })
         res = afip.createCert(username, password, cert_alias)
 
         print(res["cert"])
-
         print(res["key"])
 
         return res
@@ -222,7 +227,7 @@ class SdkAfipRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM companies WHERE company_id = %s"
+                sql = f"SELECT * FROM COMPANIES WHERE company_id = %s"
 
                 cur.execute(sql, (id,))
                 row = cur.fetchone()

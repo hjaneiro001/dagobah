@@ -3,7 +3,7 @@ from datetime import datetime
 class ResponseDocumentDto:
 
     def __init__(self, document_id: int, client_id: int, pos: int, document_type: str,
-                 document_concept: str, number: int, date: datetime,
+                 document_concept: str, number: int, date: datetime,date_serv_from :datetime,date_serv_to :datetime,
                  expiration_date: datetime, total_amount: float, taxable_amount: float, exempt_amount: float,
                  no_grav_amount: float, tributes_amount: float, tax_amount: float,
                  currency: str, exchange_rate: float, status: str, client_name: str, client_address: str,
@@ -23,6 +23,8 @@ class ResponseDocumentDto:
         self.document_concept = document_concept
         self.number = number
         self.date = date
+        self.date_serv_from = date_serv_from
+        self.date_serv_to = date_serv_to
         self.expiration_date = expiration_date
         self.total_amount = total_amount
         self.taxable_amount = taxable_amount
@@ -61,6 +63,8 @@ class ResponseDocumentDto:
             "document_concept": self.document_concept,
             "number": self.number,
             "date": self.date.isoformat() if isinstance(self.date, datetime) else self.date,
+            "date_serv_from": self.date_serv_from.isoformat() if isinstance(self.date_serv_from, datetime) else self.date_serv_from,
+            "date_serv_to": self.date_serv_to.isoformat() if isinstance(self.date_serv_to,datetime) else self.date_serv_to,
             "expiration_date": self.expiration_date.isoformat() if isinstance(self.expiration_date, datetime) else self.expiration_date,
             "total_amount": self.total_amount,
             "taxable_amount": self.taxable_amount,
@@ -88,6 +92,7 @@ class ResponseDocumentDto:
                 f"document_id={self.document_id}, client_id={self.client_id}, pos={self.pos}, "
                 f"document_type={self.document_type}, document_concept={self.document_concept}, "
                 f"number={self.number}, date={self.date}, expiration_date={self.expiration_date}, "
+                f"date_serv_from={self.date_serv_from},date_serv_to={self.date_serv_to},"
                 f"total_amount={self.total_amount}, taxable_amount={self.taxable_amount}, "
                 f"exempt_amount={self.exempt_amount}, no_grav_amount={self.no_grav_amount}, "
                 f"tributes_amount={self.tributes_amount}, tax_amount={self.tax_amount}, "
@@ -107,6 +112,8 @@ class ResponseDocumentDtoBuilder:
         self._document_concept = None
         self._number = None
         self._date = None
+        self._date_serv_from = None
+        self._date_serv_to = None
         self._expiration_date = None
         self._total_amount = None
         self._taxable_amount = None
@@ -154,6 +161,14 @@ class ResponseDocumentDtoBuilder:
 
     def date(self, date: datetime):
         self._date = date
+        return self
+
+    def date_serv_from(self, date_serv_from: datetime):
+        self._date_serv_from = date_serv_from
+        return self
+
+    def date_serv_to(self, date_serv_to: datetime):
+        self._date_serv_to = date_serv_to
         return self
 
     def expiration_date(self, expiration_date: datetime):
@@ -245,6 +260,8 @@ class ResponseDocumentDtoBuilder:
             document_concept=self._document_concept,
             number=self._number,
             date=self._date,
+            date_serv_from=self._date_serv_from,
+            date_serv_to=self._date_serv_to,
             expiration_date=self._expiration_date,
             total_amount=self._total_amount,
             taxable_amount=self._taxable_amount,
