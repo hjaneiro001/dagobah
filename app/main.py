@@ -7,6 +7,7 @@ from controllers.companyController import companyBp
 from controllers.productsController import productsBp
 from controllers.documentsController import documentsBp
 
+
 def create_app():
     app = Flask(__name__)
 
