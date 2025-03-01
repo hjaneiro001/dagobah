@@ -35,16 +35,15 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            # cert = self.get_certificado(company.company_id)
+            cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
             self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
-                                                                # "cert": cert["cert"],
-                                                                # "key": cert["key"],
-                                                                # "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX"
-                                                                #FJ "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
-                                                                # "production": True
+                                                                 "cert": cert["cert"],
+                                                                 "key": cert["key"],
+                                                                 "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                                                                 "production": True
                                                                 })
 
         return self.afip_instances[company.company_tax_id]
@@ -52,6 +51,7 @@ class SdkAfipRepository:
     def next_number(self,document :Document, company:Company):
 
         afip_instance = self.get_afip_instance(company)
+
         document_number = afip_instance.ElectronicBilling.getLastVoucher(document.pos,document.document_type.get_value())
 
         next_number = document_number + 1
@@ -227,7 +227,7 @@ class SdkAfipRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM companies WHERE company_id = %s"
+                sql = f"SELECT * FROM COMPANIES WHERE company_id = %s"
 
                 cur.execute(sql, (id,))
                 row = cur.fetchone()

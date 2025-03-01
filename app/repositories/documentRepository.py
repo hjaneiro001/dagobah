@@ -22,7 +22,7 @@ class DocumentRepository:
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = (f"SELECT * FROM documents WHERE number = %s AND pos = %s and "
+                sql: str = (f"SELECT * FROM DOCUMENTS WHERE number = %s AND pos = %s and "
                             f"document_type = %s AND status = %s")
 
                 values = (document.number, document.pos, document.document_type.get_type(), Status.ACTIVE.get_value())
@@ -40,7 +40,7 @@ class DocumentRepository:
             with CursorManager(conn) as cur:
 
                 sql :str = """ 
-                INSERT INTO documents (client_id, pos,  document_type, document_concept, number, date, date_serv_from,date_serv_to,
+                INSERT INTO DOCUMENTS (client_id, pos,  document_type, document_concept, number, date, date_serv_from,date_serv_to,
                 expiration_date, total_amount, taxable_amount, exempt_amount, tax_amount, currency, exchange_rate, cae, cae_vto, status ) 
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
                 """
@@ -64,7 +64,7 @@ class DocumentRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id WHERE client_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM DOCUMENTS d inner join CLIENTS c on d.client_id = c.client_id WHERE client_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql)
                 rows = cur.fetchall()
@@ -110,7 +110,7 @@ class DocumentRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql: str = f"SELECT * FROM documents d inner join clients c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s"
+                sql: str = f"SELECT * FROM DOCUMENTS d inner join CLIENTS c on d.client_id = c.client_id  WHERE document_id = %s AND status = %s"
 
                 values = (id, Status.ACTIVE.get_value())
 
@@ -158,7 +158,7 @@ class DocumentRepository:
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = ("""UPDATE documents SET pos = %s, document_type= %s, document_concept= %s, number= %s, 
+                sql: str = ("""UPDATE DOCUMENTS SET pos = %s, document_type= %s, document_concept= %s, number= %s, 
                                date = %s,date_serv_from = %s, date_serv_to = %s, expiration_date = %s, total_amount= %s, taxable_amount = %s, exempt_amount = %s,
                                tax_amount = %s, currency = %s, exchange_rate = %s, cae = %s, cae_vto = %s, status = %s
                                WHERE document_id = %s """)

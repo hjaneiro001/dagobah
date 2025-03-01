@@ -21,7 +21,7 @@ class ProductRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM PRODUCTS WHERE product_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql)
                 rows = cur.fetchall()
@@ -51,7 +51,7 @@ class ProductRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql :str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
+                sql :str = f"SELECT * FROM PRODUCTS WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql, (id,))
                 row = cur.fetchone()
@@ -81,7 +81,7 @@ class ProductRepository:
             with CursorManager(conn) as cur:
 
                 sql: str = """
-                    INSERT INTO products (product_code, product_name, product_description, product_price, product_currency, product_iva, product_type, product_status)
+                    INSERT INTO PRODUCTS (product_code, product_name, product_description, product_price, product_currency, product_iva, product_type, product_status)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """
 
@@ -104,7 +104,7 @@ class ProductRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql: str = f"SELECT * FROM products WHERE product_code = %s AND product_status = '{Status.ACTIVE.get_value()}'"
+                sql: str = f"SELECT * FROM PRODUCTS WHERE product_code = %s AND product_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql, (product_code,))
                 row = cur.fetchone()
@@ -136,7 +136,7 @@ class ProductRepository:
             with CursorManager(conn) as cur:
 
                 sql: str = """
-                    UPDATE products
+                    UPDATE PRODUCTS
                     SET product_code = %s, product_name = %s, product_description = %s, 
                         product_price = %s, product_currency = %s, product_iva = %s, product_type = %s,
                         product_status = %s
@@ -163,7 +163,7 @@ class ProductRepository:
 
         sql = f"""
             SELECT * 
-            FROM products 
+            FROM PRODUCTS 
             WHERE product_id IN ({placeholders}) 
               AND product_status = %s
         """

@@ -12,8 +12,10 @@ def handle_exceptions(f):
         try:
             return f(*args, **kwargs)
         except BaseException as e:
+            print(traceback.format_exc())
             return jsonify({"error": e.getMessage()}), e.getCode()
         except ValidationError as e:
+            print(traceback.format_exc())
             return jsonify({"error": e.getMessage()}), e.getCode()
         except ValueError as e:
             print(traceback.format_exc())

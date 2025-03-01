@@ -17,7 +17,7 @@ class ItemRepository:
          with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
                 sql: str = """
-                    INSERT INTO items (document_id, product_id, quantity, tax_rate, unit_price,discount, status)
+                    INSERT INTO ITEMS (document_id, product_id, quantity, tax_rate, unit_price,discount, status)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """
 
@@ -42,7 +42,7 @@ class ItemRepository:
 
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
-                sql = f"SELECT * FROM Items i inner join Products p on i.product_id = p.product_id WHERE  document_id = %s and status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM ITEMS i inner join PRODUCTS p on i.product_id = p.product_id WHERE  document_id = %s and status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql, (id))
                 rows = cur.fetchall()
