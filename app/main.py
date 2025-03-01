@@ -2,10 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 
 
-from app.controllers.clientsControllers import clientsBp
-from app.controllers.companyController import companyBp
-from app.controllers.productsController import productsBp
-from app.controllers.documentsController import documentsBp
+from controllers.clientsControllers import clientsBp
+from controllers.companyController import companyBp
+from controllers.productsController import productsBp
+from controllers.documentsController import documentsBp
+
 
 def create_app():
     app = Flask(__name__)

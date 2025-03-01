@@ -3,16 +3,16 @@ from sqlalchemy.pool import QueuePool
 from app.config import Config
 from pymysql import connect,cursors
 
-from app.repositories.clientRepository import ClientRepository
-from app.repositories.companyRepository import CompanyRepository
-from app.repositories.documentRepository import DocumentRepository
-from app.repositories.itemRepository import ItemRepository
-from app.repositories.productRepository import ProductRepository
-from app.repositories.sdkAfipRepository import SdkAfipRepository
-from app.services.clientService import ClientService
-from app.services.companyService import CompanyService
-from app.services.documentService import DocumentService
-from app.services.productService import ProductService
+from repositories.clientRepository import ClientRepository
+from repositories.companyRepository import CompanyRepository
+from repositories.documentRepository import DocumentRepository
+from repositories.itemRepository import ItemRepository
+from repositories.productRepository import ProductRepository
+from repositories.sdkAfipRepository import SdkAfipRepository
+from services.clientService import ClientService
+from services.companyService import CompanyService
+from services.documentService import DocumentService
+from services.productService import ProductService
 
 def get_connection():
     try:
