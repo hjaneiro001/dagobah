@@ -213,7 +213,7 @@ class SdkAfipRepository:
         cert_alias = cuentaArca.cert_name
 
         afip = Afip({"CUIT": tax_id,
-                     "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                     "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
                      "production": True
                      })
         res = afip.createCert(username, password, cert_alias)
@@ -235,7 +235,7 @@ class SdkAfipRepository:
         wsid = "wsfe"
 
         afip = Afip({"CUIT": tax_id,
-                     "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                     "access_token": "4FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
                      "production": True
                      })
 
