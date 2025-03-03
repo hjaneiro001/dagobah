@@ -113,3 +113,21 @@ def create_certificado():
 
     return "",204
 
+@companyBp.route("/autorizar", methods=['PUT'])
+@handle_exceptions
+def autorizar():
+
+    post_cuenta_arca :RequestCuentaArcaDto = RequestCuentaArcaDto().load(request.json)
+
+    cuentaArca :CuentaArca = (CuentaArcaBuilder()
+                        .user(post_cuenta_arca["user"])
+                        .password(post_cuenta_arca["password"])
+                        .cert_name(post_cuenta_arca["cert_name"])
+                        .company_id(post_cuenta_arca["company_id"])
+                        .build())
+
+
+    companyService.autorizar_certificado(cuentaArca)
+
+    return "",204
+

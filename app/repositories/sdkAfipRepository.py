@@ -1,3 +1,4 @@
+import logging
 
 from afip import Afip
 from sqlalchemy import QueuePool
@@ -219,6 +220,27 @@ class SdkAfipRepository:
 
         print(res["cert"])
         print(res["key"])
+
+        return res
+
+    def autorizar_certificado(self, company :Company,cuentaArca :CuentaArca ):
+
+        tax_id = int(company.company_tax_id)
+        username = cuentaArca.user
+
+        password = cuentaArca.password
+
+        cert_alias = cuentaArca.cert_name
+
+        wsid = "wsfe"
+
+        afip = Afip({"CUIT": tax_id,
+                     "access_token": "4FufbwHcegtwPnkwgJ1RfgHBOlkef5YQFH97sOqGoQpzqPPZMHqdMqj8Jk5a7XeA",
+                     "production": True
+                     })
+
+        res = afip.createWSAuth(username, password, cert_alias, wsid)
+        logging.error("Se autorizo correctamente")
 
         return res
 
