@@ -235,7 +235,7 @@ class SdkAfipRepository:
         wsid = "wsfe"
 
         afip = Afip({"CUIT": tax_id,
-                     "access_token": "4FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                     "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
                      "production": True
                      })
 
