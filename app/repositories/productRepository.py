@@ -21,7 +21,7 @@ class ProductRepository:
         with ConnectionManager(self.pool_connection) as conn:
             with CursorManager(conn) as cur:
 
-                sql = f"SELECT * FROM PRODUCTS WHERE product_status = '{Status.ACTIVE.get_value()}'"
+                sql = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
 
                 cur.execute(sql)
                 rows = cur.fetchall()
