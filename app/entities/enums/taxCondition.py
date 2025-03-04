@@ -5,7 +5,7 @@ class TaxCondition(Enum):
     NI = ['RESPONSABLE NO INSCRIPTO']
     NR = ['NO RESPONSABLE',15]
     EX = ['EXENTO',4]
-    CF = ['CONSUMIDOR FINAL',99]
+    CF = ['CONSUMIDOR FINAL',5]
     MT = ['MONOTRIBUTO',6]
     NC = ['NO CATEGORIZADO',15]
     PE = ['PROVEEDOR EXTERIOR',8]

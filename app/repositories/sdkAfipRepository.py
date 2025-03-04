@@ -35,15 +35,15 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            cert = self.get_certificado(company.company_id)
+            # cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
             self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
-                                                                 "cert": cert["cert"],
-                                                                 "key": cert["key"],
-                                                                 "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
-                                                                 "production": True
+                                                                 # "cert": cert["cert"],
+                                                                 # "key": cert["key"],
+                                                                 # "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                                                                 # "production": True
                                                                 })
 
         return self.afip_instances[company.company_tax_id]
