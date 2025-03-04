@@ -43,10 +43,7 @@ class DocumentService:
 
     def _create_document_A(self,document :Document, items :list[Item]):
 
-        if document.document_type != (DocumentType.FACTURAA or
-                                      DocumentType.NOTADECREDITOA or
-                                      DocumentType.NOTADEDEBITOA):
-            raise DocumentTypeForbidenException
+        document.document_type  = DocumentType.get_document_type('FACTURAA')
 
         total = 0
         for item in items:
@@ -62,17 +59,14 @@ class DocumentService:
         return
 
     def _create_document_B(self,document :Document):
-        if document.document_type != (DocumentType.FACTURAB or
-                                      DocumentType.NOTADECREDITOB or
-                                      DocumentType.NOTADEDEBITOB):
-            raise DocumentTypeForbidenException
+
+        document.document_type  = DocumentType.get_document_type('FACTURAB')
+
         return print("Logica Factura B")
 
     def _create_document_C(self,document :Document, items :list[Item]):
-        if document.document_type != (DocumentType.FACTURAC or
-                                      DocumentType.NOTADECREDITOC or
-                                      DocumentType.NOTADEDEBITOC):
-            raise DocumentTypeForbidenException
+
+        document.document_type  = DocumentType.get_document_type('FACTURAC')
 
         total = 0
         for item in items:
@@ -129,7 +123,6 @@ class DocumentService:
         document.client_type_id = client.type_id
         document.client_tax_id = client.tax_id
         document.client_tax_condition = client.tax_condition
-
 
         if len(items) == 0:
             raise ItemValidationException

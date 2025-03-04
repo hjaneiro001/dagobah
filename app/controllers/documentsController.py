@@ -23,7 +23,6 @@ def create():
 
     document :Document = (DocumentBuilder()
                           .client_id(post_document_dto["client_id"])
-                          .document_type(DocumentType.get_document_type((post_document_dto["document_type"])))
                           .date(post_document_dto["date"])
                           .date_serv_from(post_document_dto["date_serv_from"])
                           .date_serv_to(post_document_dto["date_serv_to"])
