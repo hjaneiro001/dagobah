@@ -11,7 +11,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
 
     def test_get_all(self):
         #Arrange
-        expected_sentence: str = f"SELECT * FROM Products WHERE product_status = '{Status.ACTIVE.get_value()}'"
+        expected_sentence: str = f"SELECT * FROM PRODUCTS WHERE product_status = '{Status.ACTIVE.get_value()}'"
         expected_product: Product = ProductMother.normal_product(1)
         expected_db_response = [
             {
@@ -47,7 +47,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
     def test_get_id(self):
         # Arrange
         expected_product: Product = ProductMother.normal_product(1)
-        expected_sentence: str = f"SELECT * FROM products WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
+        expected_sentence: str = f"SELECT * FROM PRODUCTS WHERE product_id = %s AND product_status = '{Status.ACTIVE.get_value()}'"
         expected_db_response = {
                     'product_id': expected_product.product_id,
                     'product_code': expected_product.code,
@@ -81,7 +81,7 @@ class ProductRepositoryTestCase(unittest.TestCase):
         expected_product_id = 1
         product_to_create = ProductMother.normal_product(expected_product_id)
         expected_sql = """
-                INSERT INTO products (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
+                INSERT INTO PRODUCTS (product_code, product_bar_code, product_name, product_description, product_pack, product_price, product_currency, product_iva, product_type, product_status)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
         expected_values = (
