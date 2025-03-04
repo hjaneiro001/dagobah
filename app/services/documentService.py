@@ -122,7 +122,7 @@ class DocumentService:
 
     def create(self, document: Document, items :list[Item]):
 
-        company_id = 2 # Leo company_id del token
+        company_id = 1 # Leo company_id del token
         company :Company = self.company_repository.get_id(company_id)
 
         client :Client = self.client_repository.get_id(document.client_id)
@@ -191,7 +191,7 @@ class DocumentService:
 
     def get_all(self):
 
-        company_id = 2  # Leo company_id del token
+        company_id = 1  # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
         document_list = self.document_repository.get_all()
 
@@ -212,7 +212,7 @@ class DocumentService:
 
     def get_pdf(self, id: int, mode :str):
 
-        company_id = 2 # Leo company_id del token
+        company_id = 1 # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
 
         document: Document = self.document_repository.get_id(id)
