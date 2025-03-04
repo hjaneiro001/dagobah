@@ -13,16 +13,24 @@ from controllers.productsController import productsBp
 from controllers.documentsController import documentsBp
 
 
+
 def create_app():
     app = Flask(__name__)
 
     CORS(app, resources={
         r"/*": {
-            "origins": "http://127.0.0.1:5500",
-            "methods": ["GET", "POST", "PUT", "DELETE"],
-            "allow_headers": ["Content-Type", "Authorization"]
+            # "origins": ["http://127.0.0.1:5500", "http://localhost:3000"],  # Agrega ambos orígenes si los usas
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Incluye OPTIONS
+            "allowed_headers": ["Content-Type", "Authorization"]  # Corrige a allowed_headers
         }
     })
+    # CORS(app, resources={
+    #     r"/*": {
+    #         "origins": "http://127.0.0.1:5500",
+    #         "methods": ["GET", "POST", "PUT", "DELETE"],
+    #         "allow_headers": ["Content-Type", "Authorization"]
+    #     }
+    # })
 
     app.register_blueprint(clientsBp, url_prefix='/clients')
     app.register_blueprint(productsBp, url_prefix='/products')
