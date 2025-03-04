@@ -1,5 +1,3 @@
-from symbol import and_expr
-
 from app.entities.enums.status import Status
 from app.entities.enums.taxCondition import TaxCondition
 from app.entities.enums.typeId import TypeId

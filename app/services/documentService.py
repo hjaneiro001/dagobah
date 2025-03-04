@@ -183,7 +183,6 @@ class DocumentService:
         return document
 
     def get_all(self):
-
         company_id = 4 # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
         document_list = self.document_repository.get_all()

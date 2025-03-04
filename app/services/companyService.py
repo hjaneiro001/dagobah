@@ -76,3 +76,7 @@ class CompanyService:
         cert = self.sdk_afip_repository.create_certificado(company,cuentaArca)
         return self.company_repository.save_certificado(cuentaArca.company_id,cert["cert"],cert["key"])
 
+
+    def autorizar_certificado(self, cuentaArca: CuentaArca):
+        company = self.company_repository.get_id(cuentaArca.company_id)
+        self.sdk_afip_repository.autorizar_certificado(company, cuentaArca)
