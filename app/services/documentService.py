@@ -47,7 +47,7 @@ class DocumentService:
 
     def _create_document_A(self,document :Document, items :list[Item]):
 
-        document.document_type  = DocumentType.get_document_type('FACTURAA')
+        document.document_type  = DocumentType.FACTURAA
 
         total = 0
         for item in items:
@@ -64,13 +64,13 @@ class DocumentService:
 
     def _create_document_B(self,document :Document):
 
-        document.document_type  = DocumentType.get_document_type('FACTURAB')
+        document.document_type  = DocumentType.FACTURAB
 
         return print("Logica Factura B")
 
     def _create_document_C(self,document :Document, items :list[Item]):
 
-        document.document_type  = DocumentType.get_document_type('FACTURAC')
+        document.document_type  = DocumentType.FACTURAC
 
         total = 0
         for item in items:
