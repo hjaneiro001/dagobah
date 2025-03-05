@@ -12,8 +12,6 @@ from controllers.companyController import companyBp
 from controllers.productsController import productsBp
 from controllers.documentsController import documentsBp
 
-
-
 def create_app():
     app = Flask(__name__)
 
@@ -24,13 +22,6 @@ def create_app():
             "allowed_headers": ["Content-Type", "Authorization"]  # Corrige a allowed_headers
         }
     })
-    # CORS(app, resources={
-    #     r"/*": {
-    #         "origins": "http://127.0.0.1:5500",
-    #         "methods": ["GET", "POST", "PUT", "DELETE"],
-    #         "allow_headers": ["Content-Type", "Authorization"]
-    #     }
-    # })
 
     app.register_blueprint(clientsBp, url_prefix='/clients')
     app.register_blueprint(productsBp, url_prefix='/products')

@@ -1,4 +1,8 @@
 import logging
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from afip import Afip
 from sqlalchemy import QueuePool
@@ -36,16 +40,20 @@ class SdkAfipRepository:
     def get_afip_instance(self, company: Company):
         if company.company_tax_id not in self.afip_instances:
 
-            # cert = self.get_certificado(company.company_id)
 
             tax_id = company.company_tax_id
 
-            self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
-                                                                 # "cert": cert["cert"],
-                                                                 # "key": cert["key"],
-                                                                 # "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
-                                                                 # "production": True
+            if os.getenv("MODE") == "PRODUCTION":
+               cert = self.get_certificado(company.company_id)
+               self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
+                                                                 "cert": cert["cert"],
+                                                                 "key": cert["key"],
+                                                                 "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                                                                 "access_token": os.getenv("ACCESS_TOKEN_AFIP_SDK") ,
+                                                                 "production": True
                                                                 })
+            else:
+                self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id})
 
         return self.afip_instances[company.company_tax_id]
 
