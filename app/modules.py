@@ -1,6 +1,8 @@
+import os
+from dotenv import load_dotenv
+
 from sqlalchemy.pool import QueuePool
 
-from app.config import Config
 from pymysql import connect,cursors
 
 from repositories.clientRepository import ClientRepository
@@ -16,12 +18,17 @@ from services.productService import ProductService
 
 def get_connection():
     try:
-        connection = connect(host=Config.HOST,
-                             port= Config.PORT,
-                             user= Config.USER,
-                             password= Config.PASSWORD,
-                             db= Config.DB,
-                             cursorclass=cursors.DictCursor)
+        load_dotenv()
+
+        connection = connect(
+            host=os.getenv("MYSQLHOST"),
+            port=int(os.getenv("MYSQLPORT")),
+            user=os.getenv("MYSQLUSER"),
+            password=os.getenv("MYSQL_ROOT_PASSWORD"),
+            db=os.getenv("MYSQL_ROOT_PASSWORD"),
+            cursorclass=cursors.DictCursor
+        )
+
     except Exception as e:
         connection = None
     return connection
