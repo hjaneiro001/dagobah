@@ -19,13 +19,12 @@ from services.productService import ProductService
 def get_connection():
     try:
         load_dotenv()
-
         connection = connect(
             host=os.getenv("MYSQLHOST"),
             port=int(os.getenv("MYSQLPORT")),
             user=os.getenv("MYSQLUSER"),
             password=os.getenv("MYSQL_ROOT_PASSWORD"),
-            db=os.getenv("MYSQL_ROOT_PASSWORD"),
+            db=os.getenv("MYSQL_DATABASE"),
             cursorclass=cursors.DictCursor
         )
 
