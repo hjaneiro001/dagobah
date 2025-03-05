@@ -20,8 +20,6 @@ import json
 import base64
 import segno
 
-import os
-
 import requests
 
 from jinja2 import Template
@@ -43,12 +41,12 @@ class SdkAfipRepository:
 
             tax_id = company.company_tax_id
 
-            if os.getenv("MODE") == "PRODUCTION":
+            if os.getenv("ENVIROMENT") == "production":
                cert = self.get_certificado(company.company_id)
                self.afip_instances[company.company_tax_id] = Afip({"CUIT": tax_id,
                                                                  "cert": cert["cert"],
                                                                  "key": cert["key"],
-                                                                 "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
+                                                                 # "access_token": "FbmLmEQHglCjc7qnibj0hAFsTrrry85BnXB1QfqEg1tNcryKUlRkRXEYYdRLndXX",
                                                                  "access_token": os.getenv("ACCESS_TOKEN_AFIP_SDK") ,
                                                                  "production": True
                                                                 })
