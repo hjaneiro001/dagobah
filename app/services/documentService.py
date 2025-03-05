@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from app.dtos.documentAfipDto import DocumentAfipDto
 from app.dtos.responseDocumentMM import ResponseDocumentMM
@@ -30,6 +33,7 @@ class DocumentService:
         self.company_repository = company_repository
         self.client_repository = client_repository
         self.product_repository = product_repository
+        self.company_id = int(os.getenv("COMPANY_ID"))
 
         self._document_methods = {
             ("RESPONSABLE INSCRIPTO", "RESPONSABLE INSCRIPTO"): self._create_document_A,
@@ -116,7 +120,7 @@ class DocumentService:
 
     def create(self, document: Document, items :list[Item]):
 
-        company_id = 4 # Leo company_id del token
+        company_id = self.company_id # Leo company_id del token
         company :Company = self.company_repository.get_id(company_id)
 
         client :Client = self.client_repository.get_id(document.client_id)
@@ -183,7 +187,7 @@ class DocumentService:
         return document
 
     def get_all(self):
-        company_id = 4 # Leo company_id del token
+        company_id = self.company_id # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
         document_list = self.document_repository.get_all()
 
@@ -204,7 +208,7 @@ class DocumentService:
 
     def get_pdf(self, id: int, mode :str):
 
-        company_id = 4 # Leo company_id del token
+        company_id = self.company_id # Leo company_id del token
         company: Company = self.company_repository.get_id(company_id)
 
         document: Document = self.document_repository.get_id(id)
